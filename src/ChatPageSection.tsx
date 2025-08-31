@@ -10,11 +10,7 @@ export const ChatPageSection = (props:any) => {
 
 
 
-interface activechat_{
-  username:string,
-  name:string
 
-}
 
   const [activeChat, setActiveChat]:any = useState({username:null,name:null});
 
