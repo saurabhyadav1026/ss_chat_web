@@ -11,7 +11,7 @@ const ProfileSection=(props:any)=>{
     
 
 
-  const sty1={
+  const sty1:any={
 height:'100%',
 width:'100%',
 backgroundColor:'black',

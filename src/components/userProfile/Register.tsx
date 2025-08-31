@@ -4,13 +4,13 @@ import {addUser,checkIsUsernameAvailble,getOtp} from './users'
 
 
 
-const Register=(props)=>{
+const Register=(props:any)=>{
 
 
 const [isUsernameAvailble,setIsAvailbleUsername]=useState(false);
 
 // {otp_code:54425,otp:123654}
-const [OTP,setotp]=useState({otp_code:null,otp:null})
+const [OTP,setotp]:any=useState({otp_code:null,otp:null})
   
 
 const [isReadOnly,setIsReadOnly]=useState(false);
@@ -18,7 +18,7 @@ const [otpDivVisibility,setOtpDivVisibility]=useState('none')
 
 const [User,setUser]=useState({name:"",username:"",userpassword:'', confirm_password:'',email:''})
 
-const updateUser=(e)=>{
+const updateUser=(e:any)=>{
     const {name,value}=e.target;
     
 setUser({...User,[name]:value})
@@ -35,13 +35,13 @@ if(!isUsernameAvailble){
         alert("password missmatch");
         return;
     }
-const new_otp= await getOtp(User.email);
+const new_otp:any= await getOtp(User.email);
 if(new_otp.status==='no_get')return;
 else if(new_otp.status==='ok'){
     setIsReadOnly(true)
     alert("We have send the otp on your register contact. otp code is : "+new_otp.otp_code);
     setotp(new_otp);
-    setOtpDivVisibility(null)
+    setOtpDivVisibility('visible')
      
   }
   else {alert("Enetr correct mail id")
@@ -52,7 +52,7 @@ else if(new_otp.status==='ok'){
 
 
     const resendOtp=async()=>{
-    const new_otp= await getOtp(User.email);
+    const new_otp:any= await getOtp(User.email);
     if(new_otp.status==='not_get')return;
 else if(new_otp.status==='ok'){
     alert("We have resend the otp on your register contact. otp code is : "+new_otp.otp_code);
@@ -67,8 +67,8 @@ else if(new_otp.status==='ok'){
 
     
     const edit=()=>{
-document.getElementById("otp_input").value=""
-      setOtpDivVisibility('none' )
+(document.getElementById("otp_input") as HTMLInputElement).value=""
+      setOtpDivVisibility('visible')
         setIsReadOnly(false)
 
     }
@@ -76,8 +76,8 @@ document.getElementById("otp_input").value=""
 
     const verifyRegisterDetail=async()=>{
 
-      const  otp_=document.getElementById("otp_input");
-const      otp=otp_.value;
+      const  otp_=(document.getElementById("otp_input")as HTMLInputElement);
+const      otp:any=otp_.value;
  otp_.value="";
  if(OTP.otp.toString()!==otp){    
     alert("Enter correct OTP  ");
@@ -120,7 +120,7 @@ return<>
     <td>Name</td><td><input    style={{height:'25px'}}  name='name' onChange={updateUser} readOnly={isReadOnly}   value={User.name}  required /></td>
 </tr>
 <tr>
-    <td>Username</td><td><input  style={{height:'25px'}}  name='username' onKeyUp={checkUsername} onChange={updateUser} readOnly={isReadOnly}   value={User.username} required /></td><td><UserNameAvailble value={isUsernameAvailble}></UserNameAvailble></td>
+    <td>Username</td><td><input  style={{height:'25px'}}  name='username' onKeyUp={checkUsername} onChange={updateUser} readOnly={isReadOnly}   value={User.username} required /></td><UserNameAvailble value={isUsernameAvailble}></UserNameAvailble>
 </tr>
 <tr>
     <td>Password :</td><td><input   style={{height:'25px'}} name='userpassword' onChange={updateUser} readOnly={isReadOnly}  type="password" value={User.userpassword} required></input></td>
@@ -164,7 +164,7 @@ export default Register;
 
 
 
-const UserNameAvailble=(props)=>{
+const UserNameAvailble=(props:any)=>{
     if(props.value) return <td id="username_availble_status"style={{fontSize:"small",color:'green'}}>Availble</td>
     else return <td id="username_availble_status" style={{fontSize:"small",color:'red'}}>not Availble</td>
 }
