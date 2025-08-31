@@ -9,14 +9,14 @@ props
 
 */
 
-const ReqShow=(props)=>{
+const ReqShow=(props:any)=>{
 
    
-const editReq=(r)=>{
-    const text=document.getElementsByClassName("req_cammand")[r].innerHTML;
-    document.getElementById("cammand_input").value=text;
+const editReq=(r:any)=>{
+    const text:any=document.getElementsByClassName("req_cammand"!)[r].innerHTML;
+    (document.getElementById("cammand_input"!) as HTMLInputElement).value=text;
     
-    const temp_chat=[...props.chats]
+    const temp_chat:any=[...props.chats]
 
     temp_chat[props.active_chat].reqs=temp_chat[props.active_chat].reqs.slice(0,r);
     temp_chat[props.active_chat].ress=temp_chat[props.active_chat].ress.slice(0,r);
@@ -69,12 +69,15 @@ const editReq=(r)=>{
 
 
     
-const copyReq=(r)=>{
+const copyReq=(r:any)=>{
+    alert("not coppied"+r)
+    return;
 
-    const text = document.getElementsByClassName("req_cammand")
+  /*   const text = document.getElementsByClassName("req_cammand"!);
+    text=text[r]
    navigator.clipboard.writeText(text[0].innerHTML).then(
     ()=>alert(" text coppied.")
-   ) 
+   )  */
   
     
   }

@@ -10,13 +10,13 @@ props
 
 */
 
-const ResShow=(props)=>{ 
+const ResShow=(props:any)=>{ 
 
 const [isSpeak,setSpeak]=useState(false);
 
   
     
-const speakRes=(r)=>{
+const speakRes=(r:any)=>{
 
 
   if(isSpeak){
@@ -86,22 +86,23 @@ export default ResShow;
 
 
 
-const copyRes=(r)=>{
-
+const copyRes=(r:any)=>{
+alert("not coppied"+r)
+  /* 
   const text = document.getElementsByClassName("res_output")
  navigator.clipboard.writeText(text[0].innerHTML).then(
   ()=>alert(" text coppied.")
- ) 
+ )  */
 
   
 }
 
-const likeRes=(r)=>{
-  alert("Its my pleasure sir,I am always here for your help.  ")
+const likeRes=(r:any)=>{
+  alert("Its my pleasure sir,I am always here for your help.  "+r)
 }
 
 
-const dislikeRes=(r)=>{
-  alert("I appolize, I will improve myself.Thanks for feedback.")
+const dislikeRes=(r:any)=>{
+  alert("I appolize, I will improve myself.Thanks for feedback."+r)
 }
 

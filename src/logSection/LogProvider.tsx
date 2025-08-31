@@ -4,7 +4,7 @@ import { Children,createContext } from "react"
 const LogContext:any=createContext(null);
 
 
-export const LogProvider:any=({Children}:any)=>{
+export const LogProvider:any=()=>{
 
 
 
