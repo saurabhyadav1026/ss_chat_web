@@ -10,15 +10,22 @@ export const App= () => {
 
 const [page,setPage]=useState('ChatPageSection');
 
-const luser=localStorage.getItem('activeUser')||'sbhunk'
+let luser:any={username:'sbhunk',name:"Loggin here",dp:"",loggin_token:""}
+
+if(localStorage.getItem('ssapp_activeUser')){
+    luser=localStorage.getItem('ssapp_activeUser');
+    luser=JSON.parse(luser);
+}
+
 
 const [activeUser,setActiveUser]=useState(luser);
  
 
 useEffect(()=>{
 
-localStorage.setItem('activeUser',activeUser)
+localStorage.setItem('ssapp_activeUser',JSON.stringify(activeUser))
 },[activeUser])
+
 
 
 

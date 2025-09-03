@@ -1,54 +1,55 @@
-# React + TypeScript + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-Currently, two official plugins are available:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-## Expanding the ESLint configuration
+# https://i.ibb.co/RpFQCCR8/light-start-logo.png
+# https://i.ibb.co/4g3Qrgj2/dark-start-logo.png
+# https://i.ibb.co/MDkQmsWN/dark-logo.png
+# https://i.ibb.co/WpB24TDH/light-logo.png
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+# "https://i.ibb.co/46G5pd8/sbh.jpg"
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+# https://i.ibb.co/QvwtKDYz/nodp.jpg
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+
+# Dark Theme logo:
+
+Background: The background is a very dark, desaturated blue/grey. A close hex code would be around #1F2228 or #25282D.
+
+Lock/Chat Bubble (Dark Blue/Grey part): This appears to be a gradient from a darker grey-blue to a lighter, metallic grey.
+
+Darker part: Around #3A414D
+
+Lighter/Metallic part: Around #8B95A1 to #C7D0DA
+
+Lock/Chat Bubble (Silver/White part): This also seems to be a gradient, giving it a metallic, reflective look.
+
+Darker silver: Around #6C757D
+
+Lighter silver/highlight: Around #D8DDE1 to pure white #FFFFFF in highlights.
+
+Text "SECRET SECURE": White (#FFFFFF)
+
+Text "PERSONAL APP": White (#FFFFFF)
+
+# Day Theme logo:
+
+Background: White (#FFFFFF)
+
+Lock/Chat Bubble (Dark Blue/Grey part): This appears to be a gradient from a darker grey-blue to a lighter, metallic grey.
+
+Darker part: Around #3A414D
+
+Lighter/Metallic part: Around #8B95A1 to #C7D0DA
+
+Lock/Chat Bubble (Silver/White part): This also seems to be a gradient, giving it a metallic, reflective look.
+
+Darker silver: Around #6C757D
+
+Lighter silver/highlight: Around #D8DDE1 to pure white #FFFFFF in highlights.
+
+Text "SECRET SECURE": A dark grey/black. Close to #2E343A.
+
+Text "PERSONAL APP": A slightly lighter dark grey. Close to #575B61.

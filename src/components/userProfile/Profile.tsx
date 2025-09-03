@@ -1,6 +1,3 @@
-import { useEffect, useState } from "react";
-import {getlogUser} from './users.ts'
-
 
 
 
@@ -8,33 +5,28 @@ import {getlogUser} from './users.ts'
   const Profile=(props:any)=>{
 
 
-const [user,setUser]=useState({username:"sbhyd",name:'Saurabhhhhh',email:"hsiudhfciush"})
-
-useEffect(()=>{
-  let us:any=getlogUser(props.activeUser)
- setUser(us) ;
-},[])  
 
  
 return<>
 
 <div id="profile_page">
- <div  >
+ <div  id="profile_top_nav">
    <span style={{color:'blue',margin:"3px"}}onClick={()=>props.setPage('ChatPageSection')}>Back</span>
   <span style={{color:'blue',margin:"3px"}}onClick={props.logOut}>Log Out</span>
  </div>
   
 
-<div>
-  <div style={{height:'100px',width:'100px',borderRadius:"50%",backgroundSize:"cover", backgroundImage:"url('/dp.jpg')"}}>DP</div>
-  <h3>{user.name}</h3>
+<div id="profile_dp_bar">
+  <div className="card_dp" style={{backgroundImage:'url('+props.activeUser.dp+')'}}></div>
+  <h3>{props.activeUser.name}</h3>
 </div>    
 
-<div>
-  <span>Username:</span><b>{user.username}</b>
+<div id="profile_field_bar">
+  <span>Username : <b>{props.activeUser.username}</b></span>
 </div>
-<div>
-  <span>Email:</span><b>{user.email}</b>
+<div id="profile_footer">
+ 
+
 </div>
 
   

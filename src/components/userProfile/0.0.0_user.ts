@@ -11,7 +11,7 @@ friend chat:   usn:[{t:"",by:1|2,text:" "}]
 */
 
 
-//import axios from 'axios'
+import axios from 'axios'
 import getRes from '../../getRes';
 
 
@@ -20,12 +20,24 @@ import getRes from '../../getRes';
 
 const responser:string=import.meta.env.VITE_API_KEY+'/users';
 export const addUser=async(u:any)=>{
-try{
-await fetch(responser+'/newuser?name='+u.name+"&&username="+u.username+"&&password="+u.userpassword);
- 
+
+    const user:any={
+    username:u.username,
+    name:u.name,
+    userpassword:u.userpassword,
+    contact:u.email,
+    chats:{},  
+    unread:{},
+    isReloade:false  
 }
+
+user.chats[u.username]=[{time:"11",by:1,text:"Hello!  "+u.username,status:3 }]
+user.unread[u.username]=0;
+
+try{
+await axios.post(responser+'/newuser',user);
+  }
     catch(error){
-    console.log("eror  "+error)
     }
 }
 
@@ -50,7 +62,6 @@ let res
 
 
 export const newChat=async(activeuser:string,activechat:string)=>{
-
 if(activeuser.includes('sbhunk')){
     sbhunk.chats.activechat={name:'unknown'+activechat[5],reqs:[],ress:[]}
 }
@@ -58,10 +69,8 @@ if(activeuser.includes('sbhunk')){
       await fetch(responser+'/newchat?activeuser='+activeuser+'&&activechat='+activechat)
     }catch{}
     
-     
+    
     }
-
-
 
 export const getlogUser:any=async (username:string)=>{
     
@@ -76,26 +85,26 @@ return us.value;
 }
 
 
-export const verifyUser=async(username:any,password:any)=>{
+export const verifyUser=async(username:any,userpassword:any)=>{
     let rr=false;
-    try  {let res:any=await fetch(responser+'/verifyuser?username='+username+'&&password='+password)
-        rr=await res.json();
-      
-    }catch(e:any){console.log(e)}
+    try  {let res:any=await fetch(responser+'/verifyuser?username='+username+'&&userpassword='+userpassword)
+        res=await res.json();
+        rr=res.value;
+    }catch(e){}
 return rr;
 
 }
 
- 
+
 export const reloaded=async(username:string)=>{
-    
   try{  await fetch(responser+'/reloaded?username='+username)
 
-}catch(e:any){console.log(e)}
+}catch{}
 
 }
 
 export const getChatList=async(u:any)=>{
+    //return [{username:'ss',name:'sbh singh.',unread:3}]
 let chat_list:any=[]
 if(u.includes('sbhunk')){
     
@@ -105,26 +114,39 @@ chat_list.push({username:x,name:sbhunk.chats[x]['name']})
 }else try{
 let res:any=await fetch(responser+'/getchatslist?activeuser='+u)
  res= await res.json();
- chat_list=res.value}catch(e:any){ console.log(e)}
+ chat_list=res.value}catch{ }
 return chat_list;
 }
 
+export const getName=async(user:string)=>{
+    if(user.includes('sbhunk'))return 'Log In';
+    let name;
+     try{ let res:any=await fetch(responser+'/getname?username='+user)
+   
+     res= await res.json()
+       name=res.value}
+       catch{}
+       return name||'Loading...';
+}
 
 
 export const getIsReloade=async(username:string)=>{
-    if(username==='sbhunk'||!username)return false;
+    if(username==='sbhunk')return false;
     let is_reloade={value:false}
    try {const res=await fetch(responser+'/getisreloade?username='+username)
-       is_reloade= await res.json()
-    }catch(e){console.log(e)}
+        is_reloade= await res.json()
+    }catch{}
     return is_reloade.value;
 }
 
 
 
 export const getChat=async(activeuser:string,activechat:string)=>{
-    let chat=[];  
+    let chat;  
+    if(activechat===null)return [];
     if(activeuser==='sbhunk'){
+chat=[];
+
         if(sbhunk.chats.activechat){
             sbhunk.chats.activechat.reqs.forEach((r:any,i:any)=>{
             let rr=sbhunk.chats.activechat.ress[i]
@@ -140,7 +162,7 @@ else{
    }catch{}
  } 
  
- return chat;
+ return chat||[{by:1,text:'Loading your chat.....'}];
 
 }
 
@@ -152,8 +174,9 @@ export const sendToAI=async(activeuser:string,activechat:string,req:string)=>{
         sbhunk.chats.activechat.ress.push(await getRes(req))
     }
 else try    {
-  await fetch(responser+'/sendtoai?activeuser='+activeuser+'&&activechat='+activechat+'&&req='+req)
-}catch(e){console.log(e)}
+    await fetch(responser+'/sendtoai?activeuser='+activeuser+'&&activechat='+activechat+'&&req='+req)
+
+}catch(e){}
 }
 
 
@@ -207,7 +230,3 @@ export const getOtp=async (mail:string)=>{
      otp=await res.json();}catch{}
     return otp;    
 }
-
-
-
-

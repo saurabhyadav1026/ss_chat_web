@@ -21,12 +21,13 @@ const Loggin=(props:any)=>{
 
 const usname_:string=(document.getElementById('log_usname_input'!)as HTMLInputElement).value;
 const uspassword_:string=(document.getElementById('log_uspassword_input'!)as HTMLInputElement).value;
-if(!(await verifyUser(usname_,uspassword_))){
+const a_user:any=(await verifyUser(usname_,uspassword_))
+if(!a_user.status){
     alert("usernae or password is incorrect");
     return;
 }
 else{
-    props.setActiveUser(usname_)
+    props.setActiveUser(a_user.value)
         alert("Loggin Successfully.")
 props.setPage('ChatPageSection')
 }

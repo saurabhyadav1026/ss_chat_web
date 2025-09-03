@@ -13,9 +13,39 @@ width:100%;
 padding:0;
 
 }
+#logo_icon{
+  background-image: url('https://i.ibb.co/WpB24TDH/light-logo.png');}
 
 
+  #user_dp,#chat_dp{
+     background-image: url('https://i.ibb.co/QvwtKDYz/nodp.jpg');
+  }
 
+.chatlist_dp,.card_dp{
+  background-image: url('https://i.ibb.co/QvwtKDYz/nodp.jpg');
+   background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  height: 100px;
+  width: 100px;
+  border-radius: 50%;
+}
+.chatlist_dp{
+  height: 30px;
+  width: 30px;
+}
+
+
+#user_dp,#chat_dp,#logo_icon{
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  border-radius: 50%;
+  height: 40px;
+  width: 40px;
+  margin: 0;
+  padding: 5PX;
+}
 
 
 
@@ -93,11 +123,11 @@ padding-left: 5%;
   height: 10%;
 }
 #left_nav_top_icon,#left_nav_top{
-  background-color: rgb(43, 242, 175);
+  background-color: rgb(202, 209, 207);
 }
 
 #logo_bar,#logo_bar_icon{
-  background-color: rgb(88, 244, 192);
+  background-color: rgb(255, 255, 255);
 }
 
 .left_nav_icons{
@@ -285,16 +315,6 @@ align-items:center;
 }
 
 
-#profile_page{
-
-height: 100%;
-width: 100%;
-display: flex;
-margin: 0;
-padding:0;
-
-}
-
 
 
 .scrollbar-only-rod {
@@ -314,6 +334,62 @@ padding:0;
   border-radius: 10px;
 }
      
+
+#profile_page{
+
+height: 100%;
+width: 100%;
+display: flex;
+flex-direction: column;
+
+margin: 0;
+padding:0;
+
+
+}
+
+
+#profile_footer,#profile_field_bar,#profile_dp_bar,#profile_top_nav{
+  position: relative;
+height: 10%;
+width: 100%;
+margin: 0;
+
+display: flex;
+align-items: center;
+justify-content: center;
+flex-direction: column;
+
+}
+
+#profile_top_nav{
+  flex-direction: row;
+  justify-content: space-between;
+}
+#profile_dp_bar{
+
+width: 100%;
+height: 30%;
+}
+
+
+#profile_field_bar{
+  justify-content: flex-start;
+  align-items: flex-start;
+height: 55%;
+
+}
+
+#profile_footer{
+
+  height: 5%;
+}
+
+
+
+
+
+
 
 
 

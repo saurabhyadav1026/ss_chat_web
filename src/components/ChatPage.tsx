@@ -6,20 +6,8 @@ import BlankChatPage from "./userProfile/BlankChatPage.tsx";
 
 
 
-interface prop_{
-activeChat:string,
-chat:[]
-}
 
-interface chat_{
-  by:Number,
-status:Number,
-text:string,
-time:string}
-
-
-
-const ChatPage :any= (props:prop_)=> {
+const ChatPage = (props:any)=> {
 
 
 const chatPageRef=useRef(null);
@@ -45,7 +33,7 @@ useEffect(()=>{
 else if (props.chat === null) return <div className="scrollbar-only-rod" ref={chatPageRef} id="chat_page"></div>
     return <div className="scrollbar-only-rod"   ref={chatPageRef} id="chat_page">{
      
-       props.chat.map((u:chat_, i) :any=> {
+       props.chat.map((u:any, i:any) :any=> {
             return <React.Fragment key={i}>
               
         {u.by=== 1? <ReqShow status={u['status']} req_={u['text']} r_no={i} time={u['time']}> </ReqShow> : <ResShow  time={u['time']} res_={u['text']} r_no={i}></ResShow>}

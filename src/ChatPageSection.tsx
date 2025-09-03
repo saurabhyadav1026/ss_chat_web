@@ -12,7 +12,7 @@ export const ChatPageSection = (props:any) => {
 
 
 
-  const [activeChat, setActiveChat]:any = useState({username:null,name:null});
+  const [activeChat, setActiveChat]:any = useState({username:null,name:null,dp:""});
 
   const [chatsList, setChatList] = useState([]);
 
@@ -30,7 +30,7 @@ const updateSearchInput=(e:any)=>{
 
   useEffect(()=>{
 const reloadeInterval=setInterval(async()=>{
- const  is_reloade=await getIsReloade(props.activeUser);
+ const  is_reloade=await getIsReloade(props.activeUser.username);
  if(!(isReloade===is_reloade)) setIsReloade(is_reloade)
 },1000)
     return ()=>clearInterval(reloadeInterval)
@@ -44,16 +44,17 @@ const reloadeInterval=setInterval(async()=>{
     
     
 
-    let c = await getChat(props.activeUser, activeChat.username);
-
-
+    let c = await getChat(props.activeUser.username, activeChat.username);
      let c_list;
-    if(searchInput!=="")  c_list=await getSearchList(props.activeUser,searchInput);
-     else c_list = await getChatList(props.activeUser);
+    if(searchInput!=="")  c_list=await getSearchList(props.activeUser.username,searchInput);
+     else {c_list = await getChatList(props.activeUser.username);
+    
+
+    } 
     setchat(c)
     setChatList(c_list);
-    reloaded(props.activeUser);
-  },[props.activeUser,activeChat,searchInput])
+    reloaded(props.activeUser.username);
+  },[props.activeUser.username,activeChat,searchInput])
 
 
 useEffect(()=>{
@@ -104,19 +105,17 @@ const leftNavControl=()=>{
   }, []);
 
 
-   
-
 
 
   return (
 
     <>
-      <LeftNav searchInput={searchInput} updateSearchInput={updateSearchInput} sty_lft={controProperty.left} activeChat={activeChat.username}  chatsList={chatsList} activeUser={props.activeUser} setPage={props.setPage} setActiveChat={setActiveChat} ></LeftNav>
+      <LeftNav searchInput={searchInput} updateSearchInput={updateSearchInput} sty_lft={controProperty.left} activeChat={activeChat}  chatsList={chatsList} activeUser={props.activeUser} setPage={props.setPage} setActiveChat={setActiveChat} ></LeftNav>
       <div id="main_page" style={controProperty.main}>
         <TopNav  leftNavControl={leftNavControl} activeChat={activeChat.name}></TopNav>
-        <ChatPage  chat={chat} activeChat={activeChat.username} activeUser={props.activeUser}></ChatPage>
+        <ChatPage  chat={chat} activeChat={activeChat.username} activeUser={props.activeUser.username}></ChatPage>
 
-        <InputBar sty_input={controProperty.input}updateChatChatList={updateChatChatList} activeChat={activeChat.username} activeUser={props.activeUser} ></InputBar>
+        <InputBar sty_input={controProperty.input}updateChatChatList={updateChatChatList} activeChat={activeChat.username} activeUser={props.activeUser.username} ></InputBar>
 
 
       </div>

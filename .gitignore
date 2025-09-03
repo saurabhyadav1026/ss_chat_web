@@ -12,6 +12,7 @@ dist
 dist-ssr
 *.local
 
+./src/icons/*
 
 .env
 # Editor directories and files

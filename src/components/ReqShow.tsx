@@ -1,6 +1,10 @@
 
 import {Edit,Copy,DoubleTickIcon,UnsendIcon,SingleTickIcon, BlueTickIcon} from './icons'
 
+import Markdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+
+
 /* 
 props 
         req_
@@ -32,8 +36,8 @@ const editReq=(r:any)=>{
                         <div className="req_cammand">
                             
                             {/* <!-- for your cammand displaying --> */}
-                            {props.req_}
-   
+
+                     <Markdown remarkPlugins={[remarkGfm]}>{props.req_}</Markdown>       
         <sub className='msg_time'>
             {props.time?props.time.slice(0,5):""}
             

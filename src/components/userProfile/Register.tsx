@@ -14,7 +14,7 @@ const [OTP,setotp]:any=useState({otp_code:null,otp:null})
   
 
 const [isReadOnly,setIsReadOnly]=useState(false);
-const [otpDivVisibility,setOtpDivVisibility]=useState('none')
+const [otpDivVisibility,setOtpDivVisibility]=useState(false)
 
 const [User,setUser]=useState({name:"",username:"",userpassword:'', confirm_password:'',email:''})
 
@@ -41,7 +41,7 @@ else if(new_otp.status==='ok'){
     setIsReadOnly(true)
     alert("We have send the otp on your register contact. otp code is : "+new_otp.otp_code);
     setotp(new_otp);
-    setOtpDivVisibility('visible')
+    setOtpDivVisibility(true)
      
   }
   else {alert("Enetr correct mail id")
@@ -68,7 +68,7 @@ else if(new_otp.status==='ok'){
     
     const edit=()=>{
 (document.getElementById("otp_input") as HTMLInputElement).value=""
-      setOtpDivVisibility('visible')
+      setOtpDivVisibility(true)
         setIsReadOnly(false)
 
     }
@@ -106,6 +106,17 @@ setIsAvailbleUsername(true);
 
 
 
+const OtpDiv=()=>{
+   return <>
+    <tr ><td>Enter OTP</td><td><input type='Number' id="otp_input" required /></td><td onClick={resendOtp} style={{color:"blue",fontSize:"small"}} >Resend OTP</td></tr>
+<tr ><td colSpan={2}><button style={{margin:"3px",width:'100%',height:"30px",backgroundColor:"blue",color:'white',borderRadius:'10px'}} id='otp_verify_btn' onClick={verifyRegisterDetail}>Register</button></td></tr>
+<tr ><td colSpan={2}>To edit Email/ Contact no. <span onClick={edit} style={{color:'blue'}}>click here</span> </td></tr>
+</>
+}
+
+
+
+
 return<>
 
 <h2 style={{color:'green'}}>Register...</h2>
@@ -138,10 +149,7 @@ return<>
 {/* 
 <tr id='otp_verify_div' style={{backgroundColor:'red',visibility:'hidden',position:'absolute',height:"100%",width:'100%'}}>
  */}
-<tr style={{display:otpDivVisibility}}><td>Enter OTP</td><td><input type='Number' id="otp_input" required /></td><td onClick={resendOtp} style={{color:"blue",fontSize:"small"}} >Resend OTP</td></tr>
-<tr style={{display:otpDivVisibility}}><td colSpan={2}><button style={{margin:"3px",width:'100%',height:"30px",backgroundColor:"blue",color:'white',borderRadius:'10px'}} id='otp_verify_btn' onClick={verifyRegisterDetail}>Register</button></td></tr>
-<tr style={{display:otpDivVisibility}}><td colSpan={2}>To edit Email/ Contact no. <span onClick={edit} style={{color:'blue'}}>click here</span> </td></tr>
-
+{otpDivVisibility?<OtpDiv></OtpDiv>:<></>}
 {/* 
 <tr><td colSpan={2}>or loggin with</td></tr>
 <tr><td colSpan={2} style={{display:'flex',alignItems:'center',justifyContent:'space-evenly'}}><span>g</span><span>m</span><span>t</span></td></tr>

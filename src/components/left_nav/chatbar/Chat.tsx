@@ -23,7 +23,6 @@ const Chat = (props:any) => {
 
 
 
-
   return (
     <>
       <div id="left_nav_center" className="left_bar">

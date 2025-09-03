@@ -2,6 +2,12 @@
 
 import { useState } from 'react';
 import {Dislike,Copy,LikeRes,SpeakerIcon} from './icons'
+
+
+import Markdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+
+
 /* 
 props 
         req_
@@ -50,7 +56,8 @@ return;
    <div className="res">
                 <div className="res_output">                 
                 {/*     <!-- for ai  response displaying  --> */}
-                    {props.res_}
+                  <Markdown remarkPlugins={[remarkGfm]}>{props.res_}</Markdown> 
+                    
     <span className='msg_time'><sub> {props.time?props.time.slice(0,5):""}</sub></span>
                 </div>
 

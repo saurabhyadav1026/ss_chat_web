@@ -25,11 +25,11 @@ flexDirection:'column'
 
 
 const [profilePage,setProfileSectionPage]=useState('log');
-useEffect(()=>{if(props.activeUser!=='sbhunk')setProfileSectionPage('profile')},[props.activeUser])
+useEffect(()=>{if(props.activeUser.username!=='sbhunk')setProfileSectionPage('profile')},[props.activeUser])
 
 const logOut=()=>{
 
-       props.setActiveUser('sbhunk')
+       props.setActiveUser({username:'sbhunk',name:"Loggin here",dp:"",loggin_token:""})
         alert("logout successfully")
         props.setPage('ChatPageSection')
         
@@ -42,8 +42,8 @@ const logOut=()=>{
 
 
 
-
-
+console.log(profilePage)
+console.log(props.activeUser)
 
 
 return <div id="profile_section" style={sty1}>
@@ -52,7 +52,7 @@ return <div id="profile_section" style={sty1}>
 <div id="profile_section_div2" >
 
 {profilePage==='log' && <Loggin  activeUser={props.activeUser} setActiveUser={props.setActiveUser} setPage={props.setPage} setProfileSectionPage={setProfileSectionPage}/>}
-{profilePage==='reg'  && <Register   activeUser={props.activeUser} setActiveUser={props.setActiveUser} setPage={props.setPage} setProfileSectionPage={setProfileSectionPage}/>}
+{profilePage==='reg'  && <Register   setPage={props.setPage} setProfileSectionPage={setProfileSectionPage}/>}
 {profilePage==='profile'&& <Profile logOut={logOut}  activeUser={props.activeUser} setActiveUser={props.setActiveUser} setPage={props.setPage} setProfileSectionPage={setProfileSectionPage}/>}
 
 
