@@ -12,7 +12,7 @@ dist
 dist-ssr
 *.local
 
-./src/icons/*
+
 
 .env
 # Editor directories and files
@@ -25,4 +25,4 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-./testing/*
+.testing/*
