@@ -112,7 +112,7 @@ const leftNavControl=()=>{
     <>
       <LeftNav searchInput={searchInput} updateSearchInput={updateSearchInput} sty_lft={controProperty.left} activeChat={activeChat}  chatsList={chatsList} activeUser={props.activeUser} setPage={props.setPage} setActiveChat={setActiveChat} ></LeftNav>
       <div id="main_page" style={controProperty.main}>
-        <TopNav  leftNavControl={leftNavControl} activeChat={activeChat.name}></TopNav>
+        <TopNav  leftNavControl={leftNavControl} activeChat={activeChat}></TopNav>
         <ChatPage  chat={chat} activeChat={activeChat.username} activeUser={props.activeUser.username}></ChatPage>
 
         <InputBar chat={chat} setchat={setchat} sty_input={controProperty.input}updateChatChatList={updateChatChatList} activeChat={activeChat.username} activeUser={props.activeUser.username} ></InputBar>
