@@ -5,6 +5,7 @@ import LeftNav from './components/left_nav/LeftNav.tsx';
 import ChatPage from './components/ChatPage.tsx';
 import InputBar from './components/InputBar.tsx';
 import { getChat,getChatList,getIsReloade ,reloaded,getSearchList} from "./components/userProfile/users.ts";
+import { set } from "mongoose";
 export const ChatPageSection = (props:any) => {
 
 
@@ -115,7 +116,7 @@ const leftNavControl=()=>{
         <TopNav  leftNavControl={leftNavControl} activeChat={activeChat.name}></TopNav>
         <ChatPage  chat={chat} activeChat={activeChat.username} activeUser={props.activeUser.username}></ChatPage>
 
-        <InputBar sty_input={controProperty.input}updateChatChatList={updateChatChatList} activeChat={activeChat.username} activeUser={props.activeUser.username} ></InputBar>
+        <InputBar chat={chat} setchat={setchat} sty_input={controProperty.input}updateChatChatList={updateChatChatList} activeChat={activeChat.username} activeUser={props.activeUser.username} ></InputBar>
 
 
       </div>

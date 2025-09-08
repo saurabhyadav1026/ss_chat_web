@@ -28,8 +28,15 @@ const InputBar = (props:any) => {
 
  if(reqk.length===0)return;          // return if blank input
  if(props.activeChat.includes('sbhai'))await sendToAI(props.activeUser,props.activeChat,req);
-else await sendToF(props.activeUser,props.activeChat,req)
-   props.updateChatChatList();
+else{ 
+  console.log("jjjj")
+let old_chat=props.chat;
+old_chat.push({by:1,text:req,status:2,time:"12:12:12"})
+console.log(old_chat)
+props.setchat(old_chat)
+props.updateChatChatList();
+  sendToF(props.activeUser,props.activeChat,req)
+   props.updateChatChatList();}
 }
 
 

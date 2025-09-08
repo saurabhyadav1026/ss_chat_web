@@ -42,8 +42,6 @@ const logOut=()=>{
 
 
 
-console.log(profilePage)
-console.log(props.activeUser)
 
 
 return <div id="profile_section" style={sty1}>

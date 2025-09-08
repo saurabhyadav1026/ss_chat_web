@@ -1,4 +1,5 @@
 
+const responser:string=import.meta.env.VITE_API_KEY;
 
 
 
@@ -9,7 +10,7 @@ const Profile=(props:any)=>{
         <>
           <div id="left_nav_top" className="left_bar">
                 <div id="left_nav_top_icon" className="left_nav_icons">
-                  { props.activeUser.dp!==""? <div  id="user_dp" style={{backgroundImage:'url('+props.activeUser.dp+')'}} onClick={()=>{props.setPage('ProfileSection')}}></div>:  <div  id="user_dp"  onClick={()=>{props.setPage('ProfileSection')}}></div>}
+                  { props.activeUser.dp!==""? <div  id="user_dp" style={{backgroundImage:`url(${responser}/user/getdp/${props.activeUser.username})`}} onClick={()=>{props.setPage('ProfileSection')}}></div>:  <div  id="user_dp"  onClick={()=>{props.setPage('ProfileSection')}}></div>}
                     
                 </div>
                 <div className="left_nav_bar">
