@@ -1,5 +1,5 @@
 
-import { ChatIcon } from '../../icons.tsx';
+
 import { useState } from 'react';
 import { newChat } from '../../userProfile/users.ts';
 
