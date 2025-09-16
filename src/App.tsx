@@ -4,6 +4,8 @@
 import { useEffect,  useState } from 'react';
 import ChatPageSection from './ChatPageSection'
 import ProfileSection from './components/userProfile/ProfileSection'
+import { IKContext } from 'imagekitio-react';
+import {getMediaAuthinticator} from './components/userProfile/users'
 
 
 export const App= () => { 
@@ -28,15 +30,18 @@ localStorage.setItem('ssapp_activeUser',JSON.stringify(activeUser))
 
 
 
-
 return <>
-
+<IKContext  publicKey={import.meta.env.VITE_MEDIA_PUBLIC_KEY} 
+            urlEndpoint={import.meta.env.VITE_MEDIA_ENDPOINTURL}
+            authenticator={getMediaAuthinticator}
+>
     <div id="main_content" >
 {page==='ProfileSection'&&<ProfileSection activeUser={activeUser} setActiveUser={setActiveUser} setPage={setPage}/>}
 {page==='ChatPageSection'&& <ChatPageSection   activeUser={activeUser} setPage={setPage}/>}
 
 
 </div>
+</IKContext>
    
 </>
 

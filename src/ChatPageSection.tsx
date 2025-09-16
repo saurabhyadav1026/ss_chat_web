@@ -4,7 +4,7 @@ import TopNav from "./components/TopNav.tsx";
 import LeftNav from './components/left_nav/LeftNav.tsx';
 import ChatPage from './components/ChatPage.tsx';
 import InputBar from './components/InputBar.tsx';
-import { getChat,getChatList,getIsReloade ,reloaded,getSearchList} from "./components/userProfile/users.ts";
+import { getChat,getIsReloade ,reloaded,getSearchList} from "./components/userProfile/users.ts";
 export const ChatPageSection = (props:any) => {
 
 
@@ -45,12 +45,8 @@ const reloadeInterval=setInterval(async()=>{
     
 
     let c = await getChat(props.activeUser.username, activeChat.username);
-     let c_list;
-    if(searchInput!=="")  c_list=await getSearchList(props.activeUser.username,searchInput);
-     else {c_list = await getChatList(props.activeUser.username);
-    
-
-    } 
+     let  c_list=await getSearchList(props.activeUser.username,searchInput);
+     
     setchat(c)
     setChatList(c_list);
     reloaded(props.activeUser.username);

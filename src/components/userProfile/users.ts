@@ -13,6 +13,7 @@ friend chat:   usn:[{t:"",by:1|2,text:" "}]
 
 //import axios from 'axios'
 import getRes from '../../getRes';
+import axios from 'axios';
 
 
 
@@ -95,34 +96,23 @@ export const reloaded=async(username:string)=>{
 
 }
 
-export const getChatList=async(u:any)=>{
-let chat_list:any=[]
-if(u.includes('sbhunk')){
-    
-    Object.keys(sbhunk.chats).forEach((x)=>{
-chat_list.push({username:x,name:sbhunk.chats[x]['name']})
-    })
-}else try{
-let res:any=await fetch(responser+'/getchatslist?activeuser='+u)
- res= await res.json();
- chat_list=res.value}catch(e:any){ console.log(e)}
-return chat_list;
-}
+
 
 
 
 export const getIsReloade=async(username:string)=>{
     if(username==='sbhunk'||!username)return false;
     let is_reloade={value:false}
-   try {const res=await fetch(responser+'/getisreloade?username='+username)
-       is_reloade= await res.json()
-    }catch(e){console.log(e)}
+   try {const res=await axios.get(responser+'/getisreloade?username='+username,{timeout:1000});
+       is_reloade= res.data;
+    }catch(e){}
     return is_reloade.value;
 }
 
 
 
 export const getChat=async(activeuser:string,activechat:string)=>{
+    if( activechat===null) return [];
     let chat=[];  
     if(activeuser==='sbhunk'){
         if(sbhunk.chats.activechat){
@@ -167,37 +157,23 @@ export const sendToF=async(activeuser:string,activechat:string,text:string)=>{
 
 
 export const getSearchList=async(activeuser:string,input:string)=>{
-let list=[];
+  
+let list:any=[];
 
 // for if user not loggin(only ai chat)
 if(activeuser==='sbhunk'){
     Object.keys(sbhunk.chats).forEach(u=>{
         if(sbhunk.chats.u.name.includes(input))list.push({username:u,name:sbhunk.chats.u.name})
     })
+return list;
 }
-else{   // first show chat result
-const temp_chat=await getChatList(activeuser);
-
- temp_chat.forEach((x:any)=>{
-    if(x.username.includes(input)||x.name.includes(input))list.push(x);
- })
-
+else { 
  // then for global search
-const res=await fetch(responser+'/getsearchlist?input='+input);
-    let  temp_chat2=await res.json()
-    temp_chat2=temp_chat2.value;
-    let n=0;
-  for(let i=0;i<temp_chat2.length;i++){
-    let t=temp_chat2[i]['username'];
-    if(t.includes(input)){list.push(temp_chat2[i]);
-        n++;
-        if(n===5)break;
-    }
-  }
-
+const res=await fetch(responser+'/getsearchlist?input='+input+"&&activeuser="+activeuser);
+    let search_list=await res.json()
+ 
+    return search_list.value ||[{username:null,name:"wait Searching...."}]
 }
-
-    return list||[{username:null,name:"wait Searching...."}]
 }
 
 
@@ -211,3 +187,17 @@ export const getOtp=async (mail:string)=>{
 
 
 
+export const getMediaAuthinticator=async()=>{
+    let auth=await fetch(import.meta.env.VITE_API_KEY+'/get_authentiator');
+    return await auth.json();
+}
+
+
+export const setDp=async(username:String,imgurl:String)=>{
+alert("mmmm")
+let val:any=await fetch(responser+'/setdp',{method:"POST",headers:{'Content-Type':"application/json"},body:JSON.stringify({username:username,dpurl:imgurl})});
+val=await val.json();
+alert(val)
+return val.value;
+   
+}
