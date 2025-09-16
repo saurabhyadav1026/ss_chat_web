@@ -25,16 +25,13 @@ const Chat = (props:any) => {
 
   return (
     <>
-      <div id="left_nav_center" className="left_bar">
-        <div className="left_nav_icons">
-          <div id="chat_icon"><ChatIcon></ChatIcon></div>
-        </div>
-        <div className="left_nav_bar" style={{height:"81%"}}> 
-          <div className="left_option" style={{ paddingBottom: '10px', display: 'flex', width: '100%' }}>
-            <h3 style={{ width: '80%' }}>Chat</h3>
-          </div>
-
-          <div id="chat_list_bar" className="scrollbar-only-rod" >
+      <div id="left_nav_main_bar" className="left_bar">
+        
+        <div className="left_nav_menu_bar" > 
+             <h3 style={{ width: '80%' }}>Chat</h3>
+     
+</div>
+          <div id="menu_show_bar" className="scrollbar-only-rod" >
 
             {/*  <!-- list of chats  --> */}
             <ChatList chatsList={props.chatsList} setActiveChat={props.setActiveChat} ></ChatList>
@@ -51,7 +48,7 @@ const Chat = (props:any) => {
           </div>
 
         </div>
-      </div>
+      
     </>
   );
 }

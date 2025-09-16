@@ -2,7 +2,7 @@
 import Profile from './account/ProfileBar.tsx';
 import AppLogo from './AppLogo/Logo.tsx';
 import Chat from './chatbar/Chat.tsx';
-import OtherSetting from './other/Settings.tsx';
+import OtherSetting from './voicebar/VoiceButton.tsx';
 
 
 const LeftNav=(props:any)=>{

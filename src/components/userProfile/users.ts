@@ -201,3 +201,12 @@ alert(val)
 return val.value;
    
 }
+
+const AIresponser=import.meta.env.VITE_API_KEY+'/sbh/gen?req='
+export const  askAi=async(req:string)=>{
+let text:any=await fetch(AIresponser+req);
+text=await text.json();
+console.log("sbh")
+console.log(text)
+return text.value;
+}
