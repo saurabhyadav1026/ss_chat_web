@@ -76,7 +76,7 @@ const mic_btn_sty={
     return<>
   
 <button style={mic_btn_sty} id="mic_btn" onClick={speak}>mic</button>
-<div id="mic_x_btn" onClick={resetTranscript}>X</div>
+<div id="mic_x_btn" onClick={()=>SpeechRecognition.startListening({ continuous: true, language: "en-US" })}>X</div>
 
  
     
