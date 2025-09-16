@@ -3,7 +3,6 @@ import { IKUpload } from "imagekitio-react";
 import {setDp} from './users'
 
 
-const responser:string=import.meta.env.VITE_API_KEY;
 
 
 
