@@ -135,7 +135,11 @@ display: flex;
   font-weight: bolder;
   font-size: larger;
 }
-
+#mic_btn{
+  height: 90%;
+  width: 100px;
+  border-radius: 50px;
+}
 #mic_x_btn:hover{color:red;}
 
 #left_nav_top,#logo_bar{

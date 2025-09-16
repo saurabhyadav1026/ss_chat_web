@@ -5,26 +5,12 @@ import {askAi} from '../userProfile/users'
 
 const Listener=()=>{
     const {transcript,resetTranscript}=useSpeechRecognition();
-    const [btncolor,setBtnColor]=useState('blue');
-    const startListening=()=>SpeechRecognition.startListening({continuous:true})
-    const stopListening=()=>SpeechRecognition.stopListening();
-    
- 
+    const [isSpeaking,setIsSpeaking]=useState(false);
 const [text,setText]=useState("");
 
 
 
-    const speak=()=>{
-if(btncolor=='blue'){
    
-    startListening();
-    setBtnColor("green")
-}
-else{
-    stopListening();
-    setBtnColor("blue");
-}
-    }
 
 
 useEffect(()=>{
@@ -62,22 +48,13 @@ window.speechSynthesis.speak(utterance);
 }
 
 
-const mic_btn_sty={
 
-    backgroundColor:btncolor,
-    height:'90%',
-    width:"100px",
-    borderRadius:"50px"
-
-
-}
 
 
     return<>
   
-<button style={mic_btn_sty} id="mic_btn" onClick={speak}>mic</button>
-<div id="mic_x_btn" onClick={()=>SpeechRecognition.startListening({ continuous: true, language: "en-US" })}>X</div>
-
+{!isSpeaking?<button style={{backgroundColor:"blue"}} id="mic_btn" onClick={()=>{SpeechRecognition.startListening({ continuous: true, language: "en-US" });setIsSpeaking(true)}}>mic</button>:<button style={{backgroundColor:"green"}} id="mic_btn" onClick={()=>{SpeechRecognition.startListening();setIsSpeaking(false)}}>mic</button>}
+<div id="mic_x_btn" onClick={resetTranscript}>X</div>
  
     
     </>
