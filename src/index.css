@@ -168,6 +168,48 @@ box-shadow:1px 1px 0px rgb(67, 66, 66), 3px 6px 20px 5px rgb(141, 138, 138);
 
 }
 
+.active_listening{
+  animation-name: listening;
+  animation-duration: 0.5s;
+  animation-iteration-count: infinite;
+}
+.active_speaking{
+  animation-name: speaking;
+  animation-duration: 0.5s;
+  animation-iteration-count: infinite;
+}
+
+
+@keyframes listening {
+
+  from{
+background: radial-gradient(circle at center ,aqua,greenyellow);
+  }
+  30%{
+background: radial-gradient(circle at center,greenyellow ,aqua);
+  }
+  60%{
+background: radial-gradient(circle at center ,aqua,greenyellow);
+  }
+  to{
+background: radial-gradient(circle at center,greenyellow ,aqua);
+  }
+  
+
+}
+
+
+@keyframes speaking {
+
+  from{
+background: linear-gradient(to top right ,rgb(10, 240, 67),rgb(233, 253, 202));
+  }
+  to{
+background: linear-gradient(to top right,rgb(229, 249, 197) ,rgb(56, 232, 56));
+  }
+  
+
+}
 
 
 #cammand_input{

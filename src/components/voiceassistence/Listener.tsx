@@ -5,7 +5,8 @@ import {askAi} from '../userProfile/users'
 
 const Listener=()=>{
     const {transcript,resetTranscript}=useSpeechRecognition();
-    const [isSpeaking,setIsSpeaking]=useState(false);
+    const [isListening,setIsListening]=useState(false);
+     const [isSpeaking,setIsSpeaking]=useState(false);
 const [text,setText]=useState("");
 
 
@@ -16,7 +17,12 @@ const [text,setText]=useState("");
 useEffect(()=>{
 const check=setInterval(()=>{
 if(transcript &&transcript===text){getResponseAI()}
-else { window.speechSynthesis.cancel();         // if there is interupt
+else { if(transcript&&isSpeaking){
+    console.log("stop saying and start listening");
+
+    window.speechSynthesis.cancel();
+    setIsSpeaking(false);
+}         // if there is interupt
 setText(transcript);}
 },1000)
 
@@ -36,6 +42,8 @@ utterance.pitch=1;
 utterance.volume=1;
 //utterance.onstart=()=>console.log("ai is saying...")
 //utterance.onend=()=>console.log("ai stop saying")
+console.log("stop listening start listening")
+setIsSpeaking(true);
 window.speechSynthesis.speak(utterance);
 
 
@@ -53,7 +61,7 @@ window.speechSynthesis.speak(utterance);
 
     return<>
   
-{!isSpeaking?<button style={{backgroundColor:"blue"}} id="mic_btn" onClick={()=>{SpeechRecognition.startListening({ continuous: true, language: "en-US" });setIsSpeaking(true)}}>mic</button>:<button style={{backgroundColor:"green"}} id="mic_btn" onClick={()=>{SpeechRecognition.startListening();setIsSpeaking(false)}}>mic</button>}
+{!isListening?<button id="mic_btn" style={{backgroundColor:"blue"}} onClick={()=>{SpeechRecognition.startListening({ continuous: true, language: "en-US" });setIsListening(true)}}>mic</button>:!isSpeaking?<button className="active_listening" id="mic_btn" onClick={()=>{SpeechRecognition.stopListening();setIsListening(false)}}>mic</button>:<button className="active_speaking" id="mic_btn" onClick={()=>{SpeechRecognition.stopListening();setIsListening(false)}}>mic</button>}
 <div id="mic_x_btn" onClick={resetTranscript}>X</div>
  
     
