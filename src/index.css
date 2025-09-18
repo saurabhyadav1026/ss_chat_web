@@ -202,10 +202,10 @@ background: radial-gradient(circle at center,greenyellow ,aqua);
 @keyframes speaking {
 
   from{
-background: linear-gradient(to top right ,rgb(10, 240, 67),rgb(233, 253, 202));
+background: linear-gradient(to top right ,rgb(121, 4, 237),rgb(233, 253, 202));
   }
   to{
-background: linear-gradient(to top right,rgb(229, 249, 197) ,rgb(56, 232, 56));
+background: linear-gradient(to top right,rgb(229, 249, 197) ,rgb(119, 9, 254));
   }
   
 

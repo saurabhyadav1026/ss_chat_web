@@ -10,7 +10,7 @@ friend chat:   usn:[{t:"",by:1|2,text:" "}]
 
 */
 
-
+import { GoogleGenerativeAI } from '@google/generative-ai';
 //import axios from 'axios'
 import getRes from '../../getRes';
 import axios from 'axios';
@@ -202,11 +202,26 @@ return val.value;
    
 }
 
-const AIresponser=import.meta.env.VITE_API_KEY+'/sbh/gen?req='
+
+
+
+const genapi=import.meta.env.VITE_GEN_API
+const genAI = new GoogleGenerativeAI(genapi)
+
 export const  askAi=async(req:string)=>{
-let text:any=await fetch(AIresponser+req);
-text=await text.json();
-console.log(req)
-console.log(text)
-return text.value;
+
+
+    let text="Somthing error try again after sometime.";
+ try {
+     
+      const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+  
+      const result = await model.generateContent(req);
+       text =  result.response.text();
+      
+    } catch{ }
+    console.log(req)
+    console.log(text)
+    
+     return text;
 }

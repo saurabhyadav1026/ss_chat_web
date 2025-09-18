@@ -61,7 +61,7 @@ window.speechSynthesis.speak(utterance);
 
     return<>
   
-{!isListening?<button id="mic_btn" style={{backgroundColor:"blue"}} onClick={()=>{SpeechRecognition.startListening({ continuous: true, language: "en-US" });setIsListening(true)}}>mic</button>:!isSpeaking?<button className="active_listening" id="mic_btn" onClick={()=>{SpeechRecognition.stopListening();setIsListening(false)}}>mic</button>:<button className="active_speaking" id="mic_btn" onClick={()=>{SpeechRecognition.stopListening();setIsListening(false)}}>mic</button>}
+{!isListening?<button id="mic_btn" style={{backgroundColor:"blue"}} onClick={()=>{SpeechRecognition.startListening({ continuous: true, language: "en-US" });}}>mic</button>:!isSpeaking?<button className="active_listening" id="mic_btn" onClick={()=>{SpeechRecognition.stopListening();setIsListening(false)}}>mic</button>:<button className="active_speaking" id="mic_btn" onClick={()=>{SpeechRecognition.stopListening();setIsListening(false)}}>mic</button>}
 <div id="mic_x_btn" onClick={resetTranscript}>X</div>
  
     
