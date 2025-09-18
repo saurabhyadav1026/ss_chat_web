@@ -216,7 +216,7 @@ export const  askAi=async(req:string)=>{
      
       const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
   
-      const result = await model.generateContent(req);
+      const result = await model.generateContent(req+"  give response in plain text without using any formatting.");
        text =  result.response.text();
       
     } catch{ }

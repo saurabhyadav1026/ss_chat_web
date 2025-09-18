@@ -23,8 +23,9 @@ else { if(transcript&&isSpeaking){
     window.speechSynthesis.cancel();
     setIsSpeaking(false);
 }         // if there is interupt
+
 setText(transcript);}
-},1000)
+},500)
 
 return ()=>clearInterval(check);
 
@@ -44,6 +45,7 @@ utterance.volume=1;
 //utterance.onend=()=>console.log("ai stop saying")
 console.log("stop listening start listening")
 setIsSpeaking(true);
+startListening();
 window.speechSynthesis.speak(utterance);
 
 
@@ -56,12 +58,23 @@ window.speechSynthesis.speak(utterance);
 }
 
 
+const startListening=async()=>{
+    console.log("cancelling...")
+await navigator.mediaDevices.getUserMedia({
+  audio: {
+    echoCancellation: true,   
+    noiseSuppression: true,
+    autoGainControl: true
+  }
+});
+}
+
 
 
 
     return<>
   
-{!isListening?<button id="mic_btn" style={{backgroundColor:"blue"}} onClick={()=>{SpeechRecognition.startListening({ continuous: true, language: "en-US" });}}>mic</button>:!isSpeaking?<button className="active_listening" id="mic_btn" onClick={()=>{SpeechRecognition.stopListening();setIsListening(false)}}>mic</button>:<button className="active_speaking" id="mic_btn" onClick={()=>{SpeechRecognition.stopListening();setIsListening(false)}}>mic</button>}
+{!isListening?<button id="mic_btn" style={{backgroundColor:"blue"}} onClick={async()=>{   await navigator.mediaDevices.getUserMedia({ audio: true });SpeechRecognition.startListening({ continuous: true, language: "en-US" });setIsListening(true);startListening()}}>mic</button>:!isSpeaking?<button className="active_listening" id="mic_btn" onClick={()=>{SpeechRecognition.stopListening();setIsListening(false)}}>mic</button>:<button className="active_speaking" id="mic_btn" onClick={()=>{SpeechRecognition.stopListening();setIsListening(false)}}>mic</button>}
 <div id="mic_x_btn" onClick={resetTranscript}>X</div>
  
     

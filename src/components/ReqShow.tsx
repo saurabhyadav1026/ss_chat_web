@@ -39,7 +39,7 @@ const editReq=(r:any)=>{
 
                      <Markdown remarkPlugins={[remarkGfm]}>{props.req_}</Markdown>       
         <sub className='msg_time'>
-            {props.time?props.time.slice(0,5):""}
+            {props.time?props.time.slice(12,17):""}
             
       {  props.status===0?<UnsendIcon></UnsendIcon>:props.status===1?<SingleTickIcon></SingleTickIcon>:props.status===2?<DoubleTickIcon></DoubleTickIcon>:<BlueTickIcon></BlueTickIcon>    }
             </sub>
