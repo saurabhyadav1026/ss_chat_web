@@ -1,6 +1,6 @@
 
 import SpeechRecognition, { useSpeechRecognition } from "react-speech-recognition";
-import { createContext } from "react";
+import { createContext,useEffect } from "react";
 
 
 
@@ -20,7 +20,33 @@ setText
 
 export const ListenerProvider=({children}:any)=>{
 
-const {transcript,resetTranscript}:any=useSpeechRecognition();
+const {transcript,resetTranscript,listening}:any=useSpeechRecognition();
+
+
+// for continuous listening
+useEffect(()=>{
+
+if(listening){
+
+  const restartListening=async()=>{
+SpeechRecognition.startListening({
+  interimResults :true,
+  continuous:true,
+});
+  }
+
+  SpeechRecognition.getRecognition()?.addEventListener('end',restartListening);
+
+  return ()=>{
+    SpeechRecognition.getRecognition()?.removeEventListener('end',restartListening);
+  }
+
+}
+
+})
+
+
+
 
 
 
@@ -34,6 +60,7 @@ await navigator.mediaDevices.getUserMedia({
   }
 });
 SpeechRecognition.startListening({
+  interimResults :true,
   continuous:true,
  language: "en-US",
 
