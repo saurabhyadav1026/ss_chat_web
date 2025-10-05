@@ -15,6 +15,7 @@ const Chat = (props:any) => {
   const createNewAIChat = async () => {
     await newChat(props.activeUser, "sbhai" + t)
     props.setActiveChat({ username: "sbhai" + t.toString(), name: "sbhai" + t.toString() })
+    
     const x = t;
     setT(x + 1);
 

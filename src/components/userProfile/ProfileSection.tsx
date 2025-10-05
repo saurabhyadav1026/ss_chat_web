@@ -1,18 +1,40 @@
 
-import { useState,useEffect } from "react";
+import { useState,useEffect, useContext } from "react";
 
 import Loggin from "./Loggin";
 import Register from "./Register";
 import Profile from "./Profile";
 
+import ChatContext from "../../usercontext/chatscontext/ChatContext";
+
+/* interface ActiveUser {
+  username: string;
+  name: string;
+  dp: string;
+  loggin_token: string;
+}
+
+interface ChatContextType {
+  activeUser: ActiveUser;
+  setActiveUser: React.Dispatch<React.SetStateAction<ActiveUser>>;
+}
+ */
+
 const ProfileSection=(props:any)=>{
+
+
+
+
+   const {activeUser, setActiveUser} :any= useContext(ChatContext);
+
+
 
 
     
 
 
   const sty1:any={
-height:'100%',
+ 
 width:'100%',
 backgroundColor:'black',
 display:'flex', 
@@ -24,8 +46,11 @@ flexDirection:'column'
 
 
 
+
+
+
 const [profilePage,setProfileSectionPage]=useState('log');
-useEffect(()=>{if(props.activeUser.username!=='sbhunk')setProfileSectionPage('profile')},[props.activeUser])
+useEffect(()=>{if(activeUser.username!=='sbhunk')setProfileSectionPage('profile')},[activeUser])
 
 const logOut=()=>{
 
@@ -49,9 +74,9 @@ return <div id="profile_section" style={sty1}>
 
 <div id="profile_section_div2" >
 
-{profilePage==='log' && <Loggin  activeUser={props.activeUser} setActiveUser={props.setActiveUser} setPage={props.setPage} setProfileSectionPage={setProfileSectionPage}/>}
+{profilePage==='log' && <Loggin  activeUser={activeUser} setActiveUser={setActiveUser} setPage={props.setPage} setProfileSectionPage={setProfileSectionPage}/>}
 {profilePage==='reg'  && <Register   setPage={props.setPage} setProfileSectionPage={setProfileSectionPage}/>}
-{profilePage==='profile'&& <Profile logOut={logOut}  activeUser={props.activeUser} setActiveUser={props.setActiveUser} setPage={props.setPage} setProfileSectionPage={setProfileSectionPage}/>}
+{profilePage==='profile'&& <Profile logOut={logOut}  activeUser={activeUser} setActiveUser={setActiveUser} setPage={props.setPage} setProfileSectionPage={setProfileSectionPage}/>}
 
 
 

@@ -15,8 +15,9 @@ const getRes=async(req:String)=>{
                     .then((res)=> res.value));
 
     }
-    catch{
+    catch(e){console.log(e)
     }
+    console.log("response from getres  "+data);
 return data;
 
 }

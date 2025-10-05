@@ -1,14 +1,19 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 
 import TopNav from "./components/TopNav.tsx";
 import LeftNav from './components/left_nav/LeftNav.tsx';
 import ChatPage from './components/ChatPage.tsx';
 import InputBar from './components/InputBar.tsx';
 import { getChat,getIsReloade ,reloaded,getSearchList} from "./components/userProfile/users.ts";
+
+
+
+import ChatContext from "./usercontext/chatscontext/ChatContext.tsx";
+
 export const ChatPageSection = (props:any) => {
 
 
-
+const {activeUser}:any=useContext(ChatContext);
 
 
 
@@ -30,11 +35,11 @@ const updateSearchInput=(e:any)=>{
 
   useEffect(()=>{
 const reloadeInterval=setInterval(async()=>{
- const  is_reloade=await getIsReloade(props.activeUser.username);
+ const  is_reloade=await getIsReloade(activeUser.username);
  if(!(isReloade===is_reloade)) setIsReloade(is_reloade)
 },1000)
     return ()=>clearInterval(reloadeInterval)
-  },[isReloade,props.activeUser])
+  },[isReloade,activeUser])
 
 
 
@@ -44,13 +49,13 @@ const reloadeInterval=setInterval(async()=>{
     
     
 
-    let c = await getChat(props.activeUser.username, activeChat.username);
-     let  c_list=await getSearchList(props.activeUser.username,searchInput);
+    let c = await getChat(activeUser.username, activeChat.username);
+     let  c_list=await getSearchList(activeUser.username,searchInput);
      
     setchat(c)
     setChatList(c_list);
-    reloaded(props.activeUser.username);
-  },[props.activeUser.username,activeChat,searchInput])
+    reloaded(activeUser.username);
+  },[activeUser.username,activeChat,searchInput])
 
 
 useEffect(()=>{
@@ -106,12 +111,12 @@ const leftNavControl=()=>{
   return (
 
     <>
-      <LeftNav searchInput={searchInput} updateSearchInput={updateSearchInput} sty_lft={controProperty.left} activeChat={activeChat}  chatsList={chatsList} activeUser={props.activeUser} setPage={props.setPage} setActiveChat={setActiveChat} ></LeftNav>
+      <LeftNav searchInput={searchInput} updateSearchInput={updateSearchInput} sty_lft={controProperty.left} activeChat={activeChat}  chatsList={chatsList} activeUser={  activeUser} setPage={props.setPage} setActiveChat={setActiveChat} ></LeftNav>
       <div id="main_page" style={controProperty.main}>
         <TopNav  leftNavControl={leftNavControl} activeChat={activeChat}></TopNav>
-        <ChatPage  chat={chat} activeChat={activeChat.username} activeUser={props.activeUser.username}></ChatPage>
+        <ChatPage  chat={chat} activeChat={activeChat.username} activeUser={activeUser.username}></ChatPage>
 
-        <InputBar chat={chat} setchat={setchat} sty_input={controProperty.input}updateChatChatList={updateChatChatList} activeChat={activeChat.username} activeUser={props.activeUser.username} ></InputBar>
+        <InputBar chat={chat} setchat={setchat} sty_input={controProperty.input}updateChatChatList={updateChatChatList} activeChat={activeChat.username} activeUser={activeUser.username} ></InputBar>
 
 
       </div>

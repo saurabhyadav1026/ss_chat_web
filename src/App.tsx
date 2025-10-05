@@ -12,23 +12,6 @@ export const App= () => {
 
 const [page,setPage]=useState('ChatPageSection');
 
-let luser:any={username:'sbhunk',name:"Loggin here",dp:"",loggin_token:""}
-
-if(localStorage.getItem('ssapp_activeUser')){
-    luser=localStorage.getItem('ssapp_activeUser');
-    luser=JSON.parse(luser);
-}
-
-
-const [activeUser,setActiveUser]=useState(luser);
- 
-
-useEffect(()=>{
-
-localStorage.setItem('ssapp_activeUser',JSON.stringify(activeUser))
-},[activeUser])
-
-
 
 return <>
 <IKContext  publicKey={import.meta.env.VITE_MEDIA_PUBLIC_KEY} 
@@ -36,8 +19,8 @@ return <>
             authenticator={getMediaAuthinticator}
 >
     <div id="main_content" >
-{page==='ProfileSection'&&<ProfileSection activeUser={activeUser} setActiveUser={setActiveUser} setPage={setPage}/>}
-{page==='ChatPageSection'&& <ChatPageSection   activeUser={activeUser} setPage={setPage}/>}
+{page==='ProfileSection'&&<ProfileSection  setPage={setPage}/>}
+{page==='ChatPageSection'&& <ChatPageSection    setPage={setPage}/>}
 
 
 </div>

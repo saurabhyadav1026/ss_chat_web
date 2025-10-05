@@ -1,8 +1,8 @@
 
 
-import { useState } from 'react';
-import {Dislike,Copy,LikeRes,SpeakerIcon} from './icons'
-
+import { useContext, useState } from 'react';
+import {Dislike,Copy,LikeRes,SpeakerIcon,StopspeakIcon} from './icons'
+import SpeakerContext from '../voiceassistance/speaker/SpeakerContext.tsx'
 
 import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -18,30 +18,11 @@ props
 
 const ResShow=(props:any)=>{ 
 
-const [isSpeak,setSpeak]=useState(false);
-
+const [isSpeaking,setIsSpeaking]=useState(false);
+const {startSpeaking,stopSpeaking}:any=useContext(SpeakerContext);
   
-    
-const speakRes=(r:any)=>{
+ 
 
-
-  if(isSpeak){
-setSpeak(false);
-window.speechSynthesis.cancel();
-return;
-
-  }
-
-
-  setSpeak(true); 
-   const text = document.getElementsByClassName("res_output")[r].innerHTML;
-     const utterance = new SpeechSynthesisUtterance(text);
-
-
-      speechSynthesis.speak(utterance);
-      utterance.lang = 'en-US';
-       window.speechSynthesis.speak(utterance);
-} 
 
 
 
@@ -54,8 +35,8 @@ return;
 
      return (
    <div className="res">
-                <div className="res_output">                 
-                {/*     <!-- for ai  response displaying  --> */}
+                <div className="res_output">   
+                      {/*     <!-- for ai  response displaying  --> */}
                   <Markdown remarkPlugins={[remarkGfm]}>{props.res_}</Markdown> 
                     
     <span className='msg_time'><sub> {props.time?props.time.slice(0,5):""}</sub></span>
@@ -63,9 +44,8 @@ return;
 
                 <div  className="res_option">
 
-                  <span><SpeakerIcon func={speakRes} r_no={props.r_no}></SpeakerIcon></span>
-
-                
+                 { !isSpeaking?<SpeakerIcon    func={async()=>{setIsSpeaking(true); await startSpeaking(props.res_)}} ></SpeakerIcon>:
+                               <StopspeakIcon  func={()=>{ setIsSpeaking(false); stopSpeaking()}  }></StopspeakIcon>     }
                     <span><Copy func={copyRes} r_no={props.r_no} ></Copy></span>
 
                   
