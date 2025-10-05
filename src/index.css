@@ -306,17 +306,24 @@ background-color: antiquewhite;
 
 
 .res_option,.req_option{
-margin:4px;   
+
 height:40px;
 border-radius: 20px;
 padding: 10px;
-visibility: hidden;
-display: flex;
+display: none;
 flex-direction: row;
 }
 .res:hover .res_option,.req:hover .req_option,.res:active .res_option,.req:active .req_option{
-visibility: visible;
-border: 3px solid gray;
+display: flex;
+
+}
+
+.msg_options{
+margin:3px;
+}
+.msg_options:hover{
+  cursor: pointer;
+  color: rgb(255, 91, 219);
 }
 
 .msg_time{

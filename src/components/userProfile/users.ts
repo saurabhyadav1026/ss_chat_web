@@ -249,3 +249,11 @@ export const  askAi=async(req:string)=>{
     
      return text;
 }
+
+
+
+
+export const  deletemsg=async(activeuser:string,activechat:string,time:string)=>{
+    try{ await fetch(responser+'/deletemsg?activeuser='+activeuser+'&&activechat='+activechat+'&&time='+time)
+}catch(e){console.log(e)}
+    } 
