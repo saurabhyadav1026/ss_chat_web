@@ -1,7 +1,7 @@
 
 
 //import {BrowserRouter as Router ,Routes,Route} from 'react-router-dom'
-import { useEffect,  useState } from 'react';
+import {  useState } from 'react';
 import ChatPageSection from './ChatPageSection'
 import ProfileSection from './components/userProfile/ProfileSection'
 import { IKContext } from 'imagekitio-react';
