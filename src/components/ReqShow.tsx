@@ -55,7 +55,7 @@ const [likecolor,setLikecolor]=useState("gray");
 
 
 const deleteMsg=(activeUser:any,active_chat:any,time:any)=>{
-alert("deleting msg ");
+alert("deletinng msg"+activeUser+active_chat+time);
 }
 
 

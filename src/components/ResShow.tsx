@@ -42,8 +42,8 @@ const {startSpeaking,stopSpeaking}:any=useContext(SpeakerContext);
 
 
 
-const deleteMsg=(user:any,active_chat:any,time:any)=>{
-alert("deleting msg ");
+const deleteMsg=(activeUser:any,active_chat:any,time:any)=>{
+alert("deletinng msg"+activeUser+active_chat+time);
 }
 
 
@@ -91,20 +91,10 @@ export default ResShow;
 
 
 const copyRes=(r:any)=>{
-  const text = document.getElementsByClassName("res_output")
- navigator.clipboard.writeText(text[0].innerHTML).then(
+ navigator.clipboard.writeText(r).then(
   ()=>alert(" text coppied.")
  )  
 
   
-}
-
-const likeRes=(r:any)=>{
-  alert("Its my pleasure sir,I am always here for your help.  "+r)
-}
-
-
-const dislikeRes=(r:any)=>{
-  alert("I appolize, I will improve myself.Thanks for feedback."+r)
 }
 
