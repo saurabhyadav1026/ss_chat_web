@@ -15,11 +15,7 @@ props
 */
 
 const ReqShow = (props: any) => {
-    useEffect(() => {
-
-        console.log("req show")
-        console.log(props.u)
-    }, [])
+   
     const editReq = (r: any) => {
         const text: any = document.getElementsByClassName("req_cammand"!)[r].innerHTML;
         (document.getElementById("cammand_input"!) as HTMLInputElement).value = text;

@@ -13,12 +13,12 @@ friend chat:   usn:[{t:"",by:1|2,text:" "}]
 import { GoogleGenerativeAI } from '@google/generative-ai';
 //import axios from 'axios'
 import getRes from '../../getRes';
-import axios from 'axios';
 
 
 
 
-let isreloade_sbhunk:boolean=false;
+
+
 const responser:string=import.meta.env.VITE_API_KEY+'/users';
 export const addUser=async(u:any)=>{
 try{
@@ -51,15 +51,14 @@ let res
 }
 
 
-
 export const newChat=async(activeuser:string,activechat:string)=>{
 
-if(activeuser.includes('sbhunk')){
-    console.log("new chat for sbhunk")
-    console.log(sbhunk.chats)
+
+
+
+if(activeuser.includes('sbhunk'))
     sbhunk.chats[activechat]={name:'unknown'+activechat[5],reqs:[],ress:[]}
-    isreloade_sbhunk=true
-}
+  
     else try{
       await fetch(responser+'/newchat?activeuser='+activeuser+'&&activechat='+activechat)
     }catch{}
@@ -93,41 +92,17 @@ return rr;
 }
 
  
-export const reloaded=async(username:string)=>{
-    
-  try{  await fetch(responser+'/reloaded?username='+username)
-
-}catch(e:any){console.log(e)}
-
-}
 
 
 
 
 
-export const getIsReloade=async(username:string)=>{
-    if(username==='sbhunk'||!username){
-       
-       if( isreloade_sbhunk  ) {
-         console.log("isreloade sbhunk  "+isreloade_sbhunk)
-        isreloade_sbhunk=false;
-        return true;}
-        else return false;
-    }
-    let is_reloade={value:false}
-   try {const res=await axios.get(responser+'/getisreloade?username='+username,{timeout:1000});
-       is_reloade= res.data;
-    }catch(e){}
-    return is_reloade.value;
-}
 
 
 
 export const getChat=async(activeuser:string,activechat:string)=>{
-    console.log("get chat called")
     if( activechat===null) return [];
     let chat:any=[];  
-    console.log("get chat called for "+activechat)
     if(activeuser==='sbhunk'){
         if(sbhunk.chats[activechat]){
             sbhunk.chats[activechat].reqs.forEach((r:any,i:any)=>{
@@ -135,7 +110,6 @@ export const getChat=async(activeuser:string,activechat:string)=>{
             chat.push({by:1,text:r},{by:2,text:rr})
          
         })}
-        console.log(chat);
     }
 else{
     try{
@@ -151,25 +125,27 @@ else{
 
 
 export const sendToAI=async(activeuser:string,activechat:string,req:string)=>{
-console.log("send to ai called")
-    if(activeuser.includes('sbhunk')){
+   
+
+  
+  if(activeuser.includes('sbhunk')){
         sbhunk.chats[activechat].reqs.push(req);
           
         sbhunk.chats[activechat].ress.push(await getRes(req))
-        isreloade_sbhunk=true;
+       
         return;
     }
 else try    {
   await fetch(responser+'/sendtoai?activeuser='+activeuser+'&&activechat='+activechat+'&&req='+req)
 }catch(e){console.log(e)}
-console.log("send to ai end")
 }
 
 
 
 
-export const sendToF=async(activeuser:string,activechat:string,text:string)=>{
-     try{ await fetch(responser+'/sendtofriend?activeuser='+activeuser+'&&activechat='+activechat+'&&text='+text)
+export const sendToF=(activeuser:string,activechat:string,text:string)=>{
+    
+     try{  fetch(responser+'/sendtofriend?activeuser='+activeuser+'&&activechat='+activechat+'&&text='+text)
  }catch{}
 }
 
@@ -182,13 +158,9 @@ let list:any=[];
 // for if user not loggin(only ai chat)
 if(activeuser==='sbhunk'){
     Object.keys(sbhunk.chats).forEach(u=>{
-        console.log("checking for  "+u)
        if(input!==""&&sbhunk.chats[u].name.includes(input))list.push({username:u,name:sbhunk.chats[u].name})
         else list.push({username:u,name:sbhunk.chats[u].name})
     })
-    console.log(sbhunk.chats)
-    console.log("search list for sbhunk")
-    console.log(list)
 return list;
 }
 else { 
@@ -244,8 +216,6 @@ export const  askAi=async(req:string)=>{
        text =  result.response.text();
       
     } catch{ }
-    console.log(req)
-    console.log(text)
     
      return text;
 }

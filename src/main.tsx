@@ -3,24 +3,30 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App'
 
-import {ListenerProvider} from './voiceassistance/listener/ListenerContext'
-import {SpeakerProvider} from './voiceassistance/speaker/SpeakerContext';
-import {ChatContextProvider} from './usercontext/chatscontext/ChatContext'
+import { ListenerProvider } from './voiceassistance/listener/ListenerContext'
+import { SpeakerProvider } from './voiceassistance/speaker/SpeakerContext';
+import { ChatContextProvider } from './contexts/chatscontext/ChatContext'
+
+import { SocketContextProvider } from './contexts/socketcontext/SocketContext'
 
 
 
-const root=createRoot(document.getElementById('root')!);
+const root = createRoot(document.getElementById('root')!);
 root.render(
-  <StrictMode><ChatContextProvider>
-    
-   <SpeakerProvider>
+  <StrictMode>
+    <SocketContextProvider>
 
-  <ListenerProvider>
-    <App/>
-  </ListenerProvider>    
-   </SpeakerProvider>
-   
-  </ChatContextProvider>
+      <ChatContextProvider>
+
+        <SpeakerProvider>
+
+          <ListenerProvider>
+            <App />
+          </ListenerProvider>
+        </SpeakerProvider>
+
+      </ChatContextProvider>
+    </SocketContextProvider>
   </StrictMode>,
 )
 

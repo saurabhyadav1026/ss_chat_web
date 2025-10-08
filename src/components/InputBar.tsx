@@ -7,39 +7,50 @@ import {sendToAI, sendToF} from './userProfile/users';
 import  ListenerContext from '../voiceassistance/listener/ListenerContext.tsx';
  
 import { useContext ,useEffect,useState} from 'react';
-
-
+import ChatContext from '../contexts/chatscontext/ChatContext.tsx';
 
 const InputBar = (props:any) => {
 
 const {transcript,startListening,stopListening,resetTranscript}:any=useContext(ListenerContext);
+
+const {setchat,activeChat,activeUser,chat}:any =useContext(ChatContext)
+
 const [isListening,setIsListening]:any=useState(false);  
 
 const [inputValue,setInputValue]:any=useState("");
-
 
     const send=async()=>{
      let inputText=inputValue;
   setInputValue("");
  resetTranscript();
  if(inputValue.trim()==='')return;          // return if blank input
- if(props.activeChat.includes('sbhai')){await sendToAI(props.activeUser,props.activeChat,inputText);}
+ if(activeChat.username.includes('sbhai')){await sendToAI(activeUser,activeChat,inputText);}
 else{ 
  
-let old_chat=props.chat;
-old_chat.push({by:1,text:inputText,status:2,time:"12:12:12"})
-console.log(old_chat)
-props.setchat(old_chat)
 
-// update chats
-props.updateChatChatList();
+let new_msg={by:1,text:inputText,status:0,time:getTime()}
+setchat([...chat,new_msg])
 
-  sendToF(props.activeUser,props.activeChat,inputText)
- }
+  sendToF(activeUser.username,activeChat.username,inputText);
+ }  
  
 }
 
+const getTime=()=>{
+  const now=new Date();
+  let datetime = now.toLocaleString('en-IN', {
+  timeZone: 'Asia/Kolkata',
+  day: '2-digit',
+  month: '2-digit',
+  year: 'numeric',
+  hour: '2-digit',
+  minute: '2-digit',
+  second: '2-digit',
+  hour12: false
+});
 
+  return datetime;
+}
 
 
     // for seetting key shortcuts
@@ -48,7 +59,7 @@ props.updateChatChatList();
         if((!e.shiftKey)&&(e.key==='Enter'))send();
         if(((e.shiftKey)&&(e.key==='n'))||((e.shiftKey)&&(e.key==='N'))){
            
-            //props.createAINewChat();
+            //createAINewChat();
         
         }
     }
@@ -75,7 +86,7 @@ resetTranscript();}
 
 
 
-if(props.activeChat===null) return <></>
+if(activeChat===null) return <></>
 
     return (
         <>

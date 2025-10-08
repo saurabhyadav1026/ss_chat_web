@@ -5,7 +5,7 @@ import Loggin from "./Loggin";
 import Register from "./Register";
 import Profile from "./Profile";
 
-import ChatContext from "../../usercontext/chatscontext/ChatContext";
+import ChatContext from "../../contexts/chatscontext/ChatContext";
 
 /* interface ActiveUser {
   username: string;
