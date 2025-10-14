@@ -23,13 +23,12 @@ useEffect(()=>{
 },[chat])
 
  
-  
- 
+
 
   
   // for new chat page return empty chat page
   
- if (activeChat === null) return <div  ref={chatPageRef} id="chat_page">
+ if (activeChat.username === null) return <div  ref={chatPageRef} id="chat_page">
   <BlankChatPage></BlankChatPage>
   </div>
 

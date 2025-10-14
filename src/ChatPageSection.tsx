@@ -14,7 +14,7 @@ import ChatContext from "./contexts/chatscontext/ChatContext.tsx";
 
 export const ChatPageSection = (props:any) => {
 
-const {activeUser,activeChat,setActiveChat,chatsList,searchInput,setSearchInput}:any=useContext(ChatContext);
+const {activeUser,activeChat,setActiveChat,chatsList,searchInput}:any=useContext(ChatContext);
 
 
 
@@ -24,9 +24,7 @@ const {activeUser,activeChat,setActiveChat,chatsList,searchInput,setSearchInput}
   const [nav_flag,setNavFlag]=useState('C');
 
 
-const updateSearchInput=(e:any)=>{
-  setSearchInput(e.target.value)
-}
+
 
 const [controProperty,setControlProperty]:any=useState({left:{display:null},main:{width:null}})
     
@@ -74,7 +72,7 @@ useEffect(()=>{
   return (
 
     <>
-      <LeftNav searchInput={searchInput} updateSearchInput={updateSearchInput} sty_lft={controProperty.left} activeChat={activeChat}  chatsList={chatsList} activeUser={  activeUser} setPage={props.setPage} setActiveChat={setActiveChat} ></LeftNav>
+      <LeftNav  sty_lft={controProperty.left} activeChat={activeChat}  chatsList={chatsList} activeUser={  activeUser} setPage={props.setPage} setActiveChat={setActiveChat} ></LeftNav>
       <div id="main_page" style={controProperty.main}>
         <TopNav  leftNavControl={leftNavControl} activeChat={activeChat}></TopNav>
         <ChatPage   ></ChatPage>

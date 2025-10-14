@@ -22,13 +22,7 @@ export const ListenerProvider=({children}:any)=>{
 
 const {transcript,resetTranscript,listening}:any=useSpeechRecognition();
 
-  useEffect(() => {
-    const recognition = SpeechRecognition.getRecognition();
-    if (recognition) {
-      recognition.lang = 'en-US';  // Set your desired language here
-    }
-  }, []);
-
+  
 // for continuous listening
 useEffect(()=>{
 
@@ -38,6 +32,7 @@ if(listening){
 SpeechRecognition.startListening({
   interimResults :true,
   continuous:true,
+  language:'en-US',
  
 
 });

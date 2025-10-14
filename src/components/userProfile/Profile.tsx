@@ -5,13 +5,14 @@ import {setDp} from './users'
 
 import ListenerContext from "../../voiceassistance/listener/ListenerContext"
 import { useContext, useEffect, useState } from "react";
+import ChatContext from "../../contexts/chatscontext/ChatContext";
 
 
   const Profile=(props:any)=>{
 
 const {transcript,startListening,resetTranscript}:any=useContext(ListenerContext);
 const [text,setText] =useState("");
-
+const {setLogout}:any=useContext(ChatContext)
 const changedp:any=async(imgurl:any)=>{
 if(await setDp(props.activeUser.username,imgurl))alert("DP changed successfully.");
 else alert("Error!  try again later.")
@@ -34,13 +35,15 @@ resetTranscript();
 
 
 
+
+
 return<>
 
 
 
 
 <div id="profile_page" className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow-sm ">
-    
+    <div><button onClick={()=>{setLogout();props.setPage('ChatPageSection');}}>logout</button></div>
     <div className="flex flex-col items-center pb-10">
         <img className="w-24 h-24 mb-3 rounded-full shadow-lg" src={props.activeUser.dp} alt="Bonnie image"/>
        <IKUpload fileName={props.activeUser.username+"_dp"}

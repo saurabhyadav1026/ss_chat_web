@@ -1,7 +1,8 @@
 
 
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { newChat } from '../../userProfile/users.ts';
+import ChatContext from '../../../contexts/chatscontext/ChatContext.tsx';
 
 
 
@@ -21,8 +22,11 @@ const Chat = (props:any) => {
 
   }
 
+  const {searchInput ,setSearchInput}:any=useContext(ChatContext)
 
-
+const updateSearchInput=(e:any)=>{
+  setSearchInput(e.target.value)
+}
 
   return (
     <>
@@ -41,7 +45,7 @@ const Chat = (props:any) => {
           <div id="search_block" >
 
             <div id="new_chat_op2" style={{boxSizing:'border-box', width: '100%', height: '100%'}}>
-              <input onChange={props.updateSearchInput} value={props.searchInput} style={{ boxSizing:'border-box', borderRadius:"8px",width: '70%', height: '100%',margin:'0' }} type="search" placeholder='search your friends...' id="search_input"></input>
+              <input onChange={updateSearchInput} value={searchInput} style={{ boxSizing:'border-box', borderRadius:"8px",width: '70%', height: '100%',margin:'0' }} type="search" placeholder='search your friends...' id="search_input"></input>
               <button style={{ boxSizing:'border-box',width: '30%',borderRadius:"8px", height: '100%' }} onClick={() => createNewAIChat()}> AI</button>
             </div>
           

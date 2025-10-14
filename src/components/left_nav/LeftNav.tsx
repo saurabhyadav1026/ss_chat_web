@@ -16,7 +16,7 @@ return (
 
 <AppLogo ></AppLogo>
  <Profile isLoggin={props.isLoggin} activeUser={props.activeUser} setPage={props.setPage}></Profile>
-<Chat  activeUser={props.activeUser.username} searchInput={props.searchInput} updateSearchInput={props.updateSearchInput}  chatsList={props.chatsList}  setActiveChat={props.setActiveChat}  clearChats={props.clearChats}></Chat>
+<Chat  activeUser={props.activeUser.username}   chatsList={props.chatsList}  setActiveChat={props.setActiveChat}  clearChats={props.clearChats}></Chat>
 <OtherSetting  ></OtherSetting>
 
 

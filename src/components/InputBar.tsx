@@ -8,6 +8,7 @@ import  ListenerContext from '../voiceassistance/listener/ListenerContext.tsx';
  
 import { useContext ,useEffect,useState} from 'react';
 import ChatContext from '../contexts/chatscontext/ChatContext.tsx';
+//import { sendMessage } from '../securety/msgencryption.ts';
 
 const InputBar = (props:any) => {
 
@@ -24,7 +25,7 @@ const [inputValue,setInputValue]:any=useState("");
   setInputValue("");
  resetTranscript();
  if(inputValue.trim()==='')return;          // return if blank input
- if(activeChat.username.includes('sbhai')){await sendToAI(activeUser,activeChat,inputText);}
+ if(activeChat.username.includes('sbhai')){await sendToAI(activeUser.username,activeChat.username,inputText);}
 else{ 
  
 

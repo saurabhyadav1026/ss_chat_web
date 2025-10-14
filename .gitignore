@@ -1,3 +1,9 @@
+
+
+
+
+
+/src/securety/*
 # Logs
 logs
 *.log
@@ -13,7 +19,7 @@ dist-ssr
 *.local
 
 
-
+*.md
 .env
 # Editor directories and files
 .vscode/*

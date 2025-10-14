@@ -22,7 +22,7 @@ import getRes from '../../getRes';
 const responser:string=import.meta.env.VITE_API_KEY+'/users';
 export const addUser=async(u:any)=>{
 try{
-await fetch(responser+'/newuser?name='+u.name+"&&username="+u.username+"&&password="+u.userpassword);
+await fetch(responser+'/newuser?name='+u.name+"&&username="+u.username+"&&password="+u.userpassword+"");
  
 }
     catch(error){
@@ -161,13 +161,13 @@ if(activeuser==='sbhunk'){
        if(input!==""&&sbhunk.chats[u].name.includes(input))list.push({username:u,name:sbhunk.chats[u].name})
         else list.push({username:u,name:sbhunk.chats[u].name})
     })
+   
 return list;
 }
 else { 
  // then for global search
 const res=await fetch(responser+'/getsearchlist?input='+input+"&&activeuser="+activeuser);
     let search_list=await res.json()
- 
     return search_list.value ||[{username:null,name:"wait Searching...."}]
 }
 }
@@ -190,7 +190,7 @@ export const getMediaAuthinticator=async()=>{
 
 
 export const setDp=async(username:String,imgurl:String)=>{
-alert("mmmm")
+
 let val:any=await fetch(responser+'/setdp',{method:"POST",headers:{'Content-Type':"application/json"},body:JSON.stringify({username:username,dpurl:imgurl})});
 val=await val.json();
 alert(val)

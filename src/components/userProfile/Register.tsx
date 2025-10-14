@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import {addUser,checkIsUsernameAvailble,getOtp} from './users'
 
-
+//import { generateKeyBundle } from '../../securety/msgencryption';
 
 const Register=(props:any)=>{
 
@@ -84,8 +84,9 @@ const      otp:any=otp_.value;
     return;
  }
  else{
-
- await  addUser(User)
+const user:any =User;
+   [ user["storekey"],user["public_bundle"]]=["str key","bundle key"]  //await generateKeyBundle(User.username);
+ await  addUser(user)
     props.setProfileSectionPage('log');
     alert("register successfully");
  }
