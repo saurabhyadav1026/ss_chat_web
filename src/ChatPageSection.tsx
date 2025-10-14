@@ -14,7 +14,7 @@ import ChatContext from "./contexts/chatscontext/ChatContext.tsx";
 
 export const ChatPageSection = (props:any) => {
 
-const {activeUser,activeChat,setActiveChat,chatsList,searchInput}:any=useContext(ChatContext);
+const {activeUser,activeChat,setActiveChat,chatsList}:any=useContext(ChatContext);
 
 
 
@@ -77,7 +77,7 @@ useEffect(()=>{
         <TopNav  leftNavControl={leftNavControl} activeChat={activeChat}></TopNav>
         <ChatPage   ></ChatPage>
 
-        <InputBar  sty_input={controProperty.input}  ></InputBar>
+      {activeChat.username?  <InputBar  sty_input={controProperty.input}  ></InputBar>:<></>}
 
 
       </div>
