@@ -143,11 +143,7 @@ else try    {
 
 
 
-export const sendToF=(activeuser:string,activechat:string,text:string)=>{
-    
-     try{  fetch(responser+'/sendtofriend?activeuser='+activeuser+'&&activechat='+activechat+'&&text='+text)
- }catch{}
-}
+
 
 
 
