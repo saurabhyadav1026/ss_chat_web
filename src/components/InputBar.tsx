@@ -5,7 +5,7 @@ import {AddAttachmentIcon,LoadingIcon,SendIcon,Activemic, CrossIcon} from './ico
 //import getImageText from '../getImageText'
 import {sendToAI, sendToF} from './userProfile/users';
 import  ListenerContext from '../voiceassistance/listener/ListenerContext.tsx';
- 
+ import {socket} from '../context/SocketContext'
 import { useContext ,useEffect,useState} from 'react';
 import ChatContext from '../contexts/chatscontext/ChatContext.tsx';
 //import { sendMessage } from '../securety/msgencryption.ts';
@@ -31,11 +31,19 @@ else{
 
 let new_msg={by:1,text:inputText,status:0,time:getTime()}
 setchat([...chat,new_msg])
+ const data={
+  sender:activeUser.username,
+ reciever:activeChat.username,
+ senderCopy:inputText,
+ recieverCopy:inputText }
 
-  sendToF(activeUser.username,activeChat.username,inputText);
+ socket.emit('sendtofriend',data) 
  }  
  
 }
+
+
+ 
 
 const getTime=()=>{
   const now=new Date();
