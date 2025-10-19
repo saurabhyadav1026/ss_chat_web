@@ -3,7 +3,7 @@ import {AddAttachmentIcon,LoadingIcon,SendIcon,Activemic, CrossIcon} from './ico
 
 
 //import getImageText from '../getImageText'
-import {sendToAI, sendToF} from './userProfile/users';
+import {sendToAI} from './userProfile/users';
 import  ListenerContext from '../voiceassistance/listener/ListenerContext.tsx';
  import {socket} from '../context/socketcontext/SocketContext'
 import { useContext ,useEffect,useState} from 'react';
