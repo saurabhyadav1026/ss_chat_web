@@ -5,7 +5,7 @@ import {AddAttachmentIcon,LoadingIcon,SendIcon,Activemic, CrossIcon} from './ico
 //import getImageText from '../getImageText'
 import {sendToAI, sendToF} from './userProfile/users';
 import  ListenerContext from '../voiceassistance/listener/ListenerContext.tsx';
- import {socket} from '../context/SocketContext'
+ import {socket} from '../context/socketcontext/SocketContext'
 import { useContext ,useEffect,useState} from 'react';
 import ChatContext from '../contexts/chatscontext/ChatContext.tsx';
 //import { sendMessage } from '../securety/msgencryption.ts';
