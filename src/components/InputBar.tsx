@@ -38,6 +38,7 @@ setchat([...chat,new_msg])
  recieverCopy:inputText }
 
  socket.emit('sendtofriend',data) 
+ alert(1)
  }  
  
 }
