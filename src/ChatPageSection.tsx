@@ -62,7 +62,7 @@ const leftNavControl=()=>{
 
 
 useEffect(()=>{
-  if(activeChat.name!==null)setNavFlag('B');
+  if(activeChat)setNavFlag('B');
 },[activeChat])
 
 
@@ -77,7 +77,7 @@ useEffect(()=>{
         <TopNav  leftNavControl={leftNavControl} activeChat={activeChat}></TopNav>
         <ChatPage   ></ChatPage>
 
-      {activeChat.username?  <InputBar  sty_input={controProperty.input}  ></InputBar>:<></>}
+      {activeChat?  <InputBar  sty_input={controProperty.input}  ></InputBar>:<></>}
 
 
       </div>

@@ -14,7 +14,7 @@ const InputBar = (props:any) => {
 
 const {transcript,startListening,stopListening,resetTranscript}:any=useContext(ListenerContext);
 
-const {setchat,activeChat,activeUser,chat}:any =useContext(ChatContext)
+const {setchat,activeChat,activeUser,chat,sendMessage}:any =useContext(ChatContext)
 
 const [isListening,setIsListening]:any=useState(false);  
 
@@ -25,43 +25,56 @@ const [inputValue,setInputValue]:any=useState("");
   setInputValue("");
  resetTranscript();
  if(inputValue.trim()==='')return;          // return if blank input
- if(activeChat.username.includes('sbhai')){await sendToAI(activeUser.username,activeChat.username,inputText);}
+ if(activeChat.username&&activeChat.username.includes('sbhai')){await sendToAI(activeUser.username,activeChat.username,inputText);}
 else{ 
  
+const newMsgId= createTempMsgId();
+let msg:any={
+_id:newMsgId,
+  roomId:activeChat._id,
+  senderId:activeUser._id,
+  
+  text:inputText,
+  tick:0,
+   tickStatus:{send: new Date()},
+  
+}
 
-let new_msg={by:1,text:inputText,status:0,time:getTime()}
-setchat([...chat,new_msg])
- const data={
-  sender:activeUser.username,
- reciever:activeChat.username,
- senderCopy:inputText,
- recieverCopy:inputText }
 
- socket.emit('sendtofriend',data) 
- alert(1)
+setchat([...chat,msg]);
+
+let new_msg:any={
+_id:newMsgId,
+  roomId:activeChat._id,
+  senderId:activeUser._id,  
+  texts:getMemberTextCopy(activeChat.members,inputText),
+   
+}
+
+
+ sendMessage(new_msg)
+
  }  
  
 }
 
 
- 
 
-const getTime=()=>{
-  const now=new Date();
-  let datetime = now.toLocaleString('en-IN', {
-  timeZone: 'Asia/Kolkata',
-  day: '2-digit',
-  month: '2-digit',
-  year: 'numeric',
-  hour: '2-digit',
-  minute: '2-digit',
-  second: '2-digit',
-  hour12: false
-});
+const getMemberTextCopy=(members:any,inputText:String)=>{
 
-  return datetime;
+  members.forEach((x:any) => {
+    x['text']=inputText;
+    
+  });
+  return members;
 }
 
+
+ // to generate the temp msg id
+const createTempMsgId=()=>{
+  return String(Date.now()+(Math.floor(Math.random()*999)+1))
+
+}
 
     // for seetting key shortcuts
     const keyFunctions=(e:any)=>{

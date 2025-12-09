@@ -55,7 +55,7 @@ alert("deletinng msg"+activeUser+active_chat+time);
                       {/*     <!-- for ai  response displaying  --> */}
                   <Markdown remarkPlugins={[remarkGfm]}>{props.res_}</Markdown> 
                     
-    <span className='msg_time'><sub> {props.time?props.time.slice(0,5):""}</sub></span>
+    <span className='msg_time'><sub> {props.time?props.time:""}</sub></span>
                
 {/* div */}
                 <div  className="res_option">

@@ -46,21 +46,21 @@ return<>
     <div><button onClick={()=>{setLogout();props.setPage('ChatPageSection');}}>logout</button></div>
     <div className="flex flex-col items-center pb-10">
         <img className="w-24 h-24 mb-3 rounded-full shadow-lg" src={props.activeUser.dp} alt="Bonnie image"/>
-       <IKUpload fileName={props.activeUser.username+"_dp"}
+      {/*  <IKUpload fileName={props.activeUser.username+"_dp"}
               onSuccess={(res:any)=>{changedp(res.url)}}
               onError={(e:any)=>alert(e)}
-   />
+   /> */}
         <h5 className="mb-1 text-xl font-medium  ">{props.activeUser.name}</h5>
       <h6 className="mb-1 text-xl font-medium ">@{props.activeUser.username}</h6>
         <span className="text-sm text-gray-500 dark:text-gray-800">{props.activeUser.about}</span>
        
     </div>
-    <button onClick={startListening}>speak</button>
+   {/* { <button onClick={startListening}>speak</button> */}
 <div style={{height:'200px',width:"100%",padding:"10px",fontSize:"larger"}}>
 {text+(transcript||"")}
 
 </div>
-
+ 
 
 
 </div>

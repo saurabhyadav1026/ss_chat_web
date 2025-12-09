@@ -39,7 +39,7 @@ const updateSearchInput=(e:any)=>{
           <div id="menu_show_bar" className="scrollbar-only-rod" >
 
             {/*  <!-- list of chats  --> */}
-            <ChatList chatsList={props.chatsList} setActiveChat={props.setActiveChat} ></ChatList>
+            <ChatList chatsList={props.chatsList} activeUser={props.activeUser} setActiveChat={props.setActiveChat} ></ChatList>
           </div>
 
           <div id="search_block" >

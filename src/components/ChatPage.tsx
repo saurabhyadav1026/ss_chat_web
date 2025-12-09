@@ -11,7 +11,7 @@ import ChatContext from "../contexts/chatscontext/ChatContext.tsx";
 
 const ChatPage = ()=> {
 
-const {activeChat,chat}:any=useContext(ChatContext);
+const {activeChat,chat,activeUser}:any=useContext(ChatContext);
 const chatPageRef=useRef(null);
 
 useEffect(()=>{
@@ -28,17 +28,20 @@ useEffect(()=>{
   
   // for new chat page return empty chat page
   
- if (activeChat.username === null) return <div  ref={chatPageRef} id="chat_page">
+ if (!activeChat) {
+  
+  return <div  ref={chatPageRef} id="chat_page">
+    <h5>we get soon</h5>
   <BlankChatPage></BlankChatPage>
-  </div>
+  </div>}
 
 else if (chat === null) return <div className="scrollbar-only-rod" ref={chatPageRef} id="chat_page"></div>
     return <div className="scrollbar-only-rod"   ref={chatPageRef} id="chat_page">{
-     
+    
        chat.map((u:any, i:any) :any=> {
             return <React.Fragment key={i}>
               
-        {u.by=== 1? <ReqShow activeChat={activeChat} chat_c={u} status={u['status']} req_={u['text']} r_no={i} time={u['time']}> </ReqShow> : <ResShow activeChat={activeChat}  time={u['time']} res_={u['text']} r_no={i}></ResShow>}
+        {u.senderId=== activeUser._id? <ReqShow activeChat={activeChat} chat_c={u} status={u['status']} req_={u['text']} r_no={i} time={u.tickStatus.send && new Date(u.tickStatus.send).toLocaleTimeString()}> </ReqShow> : <ResShow activeChat={activeChat}  time={u.time && new Date(u.time).toLocaleTimeString()} res_={u['text']} r_no={i}></ResShow>}
       </React.Fragment>
 
        })

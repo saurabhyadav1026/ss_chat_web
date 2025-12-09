@@ -6,6 +6,7 @@ import Register from "./Register";
 import Profile from "./Profile";
 
 import ChatContext from "../../contexts/chatscontext/ChatContext";
+import PasswordReset from "./PasswordReset";
 
 /* interface ActiveUser {
   username: string;
@@ -77,6 +78,7 @@ return <div id="profile_section" style={sty1}>
 {profilePage==='log' && <Loggin  activeUser={activeUser} setActiveUser={setActiveUser} setPage={props.setPage} setProfileSectionPage={setProfileSectionPage}/>}
 {profilePage==='reg'  && <Register   setPage={props.setPage} setProfileSectionPage={setProfileSectionPage}/>}
 {profilePage==='profile'&& <Profile logOut={logOut}  activeUser={activeUser} setActiveUser={setActiveUser} setPage={props.setPage} setProfileSectionPage={setProfileSectionPage}/>}
+{profilePage==='forgetPassword'  && <PasswordReset    setProfileSectionPage={setProfileSectionPage}/>}
 
 
 

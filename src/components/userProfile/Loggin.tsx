@@ -21,6 +21,8 @@ const Loggin=(props:any)=>{
 
 const usname_:string=(document.getElementById('log_usname_input'!)as HTMLInputElement).value;
 const uspassword_:string=(document.getElementById('log_uspassword_input'!)as HTMLInputElement).value;
+
+
 const a_user:any=(await verifyUser(usname_,uspassword_))
 if(!a_user.status){
     alert("usernae or password is incorrect");
@@ -58,7 +60,7 @@ return<>
 </tbody>
 </table>
 
-
+<div  >  <span style={{color:'blue',margin:"3px"}}onClick={()=>props.setProfileSectionPage('forgetPassword')}>Forget Password</span></div>
 <div  >if don't have account <span style={{color:'blue',margin:"3px"}} onClick={()=>props.setProfileSectionPage('reg')}>sign up</span></div>
 <div  > click to <span style={{color:'blue',margin:"3px"}}onClick={()=>props.setPage('ChatPageSection')}>stay without loggin</span></div>
 
