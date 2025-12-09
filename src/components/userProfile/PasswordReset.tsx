@@ -18,13 +18,15 @@ const [visibleDiv,setVisibleDiv]=useState(1);
 
 
 const sendOtp=()=>{
-    
+    setOtp(null)  // for test not use
+   console.log(waiting)   /// for deploy not use
 socket.emit('sendOtp',{emailId:emailId});
 setWaiting(true)
 
 }
 
 socket.on("otpSend",(data)=>{
+
     if(data.status){setWaiting(false)
     alert("opt is send on your email.")
 setVisibleDiv(2)}

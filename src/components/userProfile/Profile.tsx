@@ -10,9 +10,11 @@ import ChatContext from "../../contexts/chatscontext/ChatContext";
 
   const Profile=(props:any)=>{
 
-const {transcript,startListening,resetTranscript}:any=useContext(ListenerContext);
+const {transcript,resetTranscript}:any=useContext(ListenerContext);
 const [text,setText] =useState("");
 const {setLogout}:any=useContext(ChatContext)
+
+
 const changedp:any=async(imgurl:any)=>{
 if(await setDp(props.activeUser.username,imgurl))alert("DP changed successfully.");
 else alert("Error!  try again later.")
@@ -46,10 +48,10 @@ return<>
     <div><button onClick={()=>{setLogout();props.setPage('ChatPageSection');}}>logout</button></div>
     <div className="flex flex-col items-center pb-10">
         <img className="w-24 h-24 mb-3 rounded-full shadow-lg" src={props.activeUser.dp} alt="Bonnie image"/>
-      {/*  <IKUpload fileName={props.activeUser.username+"_dp"}
+      <IKUpload fileName={props.activeUser.username+"_dp"}
               onSuccess={(res:any)=>{changedp(res.url)}}
               onError={(e:any)=>alert(e)}
-   /> */}
+   /> 
         <h5 className="mb-1 text-xl font-medium  ">{props.activeUser.name}</h5>
       <h6 className="mb-1 text-xl font-medium ">@{props.activeUser.username}</h6>
         <span className="text-sm text-gray-500 dark:text-gray-800">{props.activeUser.about}</span>
