@@ -22,7 +22,7 @@ const Chat = (props:any) => {
 
   }
 
-  const {searchInput ,setSearchInput}:any=useContext(ChatContext)
+  const {searchInput ,chatsList,setSearchInput}:any=useContext(ChatContext)
 
 const updateSearchInput=(e:any)=>{
   setSearchInput(e.target.value)
@@ -39,7 +39,7 @@ const updateSearchInput=(e:any)=>{
           <div id="menu_show_bar" className="scrollbar-only-rod" >
 
             {/*  <!-- list of chats  --> */}
-            <ChatList chatsList={props.chatsList} activeUser={props.activeUser} setActiveChat={props.setActiveChat} ></ChatList>
+            <ChatList ></ChatList>
           </div>
 
           <div id="search_block" >

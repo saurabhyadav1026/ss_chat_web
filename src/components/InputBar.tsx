@@ -14,7 +14,7 @@ const InputBar = (props:any) => {
 
 const {transcript,startListening,stopListening,resetTranscript}:any=useContext(ListenerContext);
 
-const {setchat,activeChat,activeUser,chat,sendMessage}:any =useContext(ChatContext)
+const {setchat,activeChat,activeUser,sendMessage}:any =useContext(ChatContext)
 
 const [isListening,setIsListening]:any=useState(false);  
 
