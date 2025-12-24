@@ -22,7 +22,7 @@ const Chat = (props:any) => {
 
   }
 
-  const {searchInput ,chatsList,setSearchInput}:any=useContext(ChatContext)
+  const {searchInput,setSearchInput}:any=useContext(ChatContext)
 
 const updateSearchInput=(e:any)=>{
   setSearchInput(e.target.value)
