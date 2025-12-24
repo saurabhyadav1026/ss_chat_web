@@ -67,8 +67,9 @@ alert("deletinng msg"+activeUser+active_chat+time);
                 <Markdown remarkPlugins={[remarkGfm]}>{props.req_}</Markdown>
                 <sub className='msg_time'>
                     {props.time ? props.time : ""}
-
-                    {props.status === 0 ? <UnsendIcon></UnsendIcon> : props.status === 1 ? <SingleTickIcon></SingleTickIcon> : props.status === 2 ? <DoubleTickIcon></DoubleTickIcon> : <BlueTickIcon></BlueTickIcon>}
+ {console.log(props.tick)}
+ {console.log(props.tickStatus)}
+                    {props.tick === 0 ? <UnsendIcon></UnsendIcon>: props.tickStatus.read !==null ?  <BlueTickIcon></BlueTickIcon> : props.tickStatus.delivered !== null ? <DoubleTickIcon></DoubleTickIcon> :<SingleTickIcon></SingleTickIcon>}
                 </sub>
 
 

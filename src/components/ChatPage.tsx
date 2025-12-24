@@ -38,10 +38,10 @@ useEffect(()=>{
 else if (chat === null) return <div className="scrollbar-only-rod" ref={chatPageRef} id="chat_page"></div>
     return <div className="scrollbar-only-rod"   ref={chatPageRef} id="chat_page">{
     
-       chat.map((u:any, i:any) :any=> {
+       Object.values(chat).map((u:any, i:any) :any=> {
             return <React.Fragment key={i}>
               
-        {u.senderId=== activeUser._id? <ReqShow activeChat={activeChat} chat_c={u} status={u['status']} req_={u['text']} r_no={i} time={u.tickStatus.send && new Date(u.tickStatus.send).toLocaleTimeString()}> </ReqShow> : <ResShow activeChat={activeChat}  time={u.time && new Date(u.time).toLocaleTimeString()} res_={u['text']} r_no={i}></ResShow>}
+        {u.senderId=== activeUser._id? <ReqShow activeChat={activeChat} chat_c={u} tick={u.tick} tickStatus={u.tickStatus} req_={u.text} r_no={i} time={u.tickStatus.send && new Date(u.tickStatus.send).toLocaleTimeString()}> </ReqShow> : <ResShow activeChat={activeChat}  time={u.time && new Date(u.time).toLocaleTimeString()} res_={u['text']} r_no={i}></ResShow>}
       </React.Fragment>
 
        })

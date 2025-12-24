@@ -41,7 +41,8 @@ _id:newMsgId,
 }
 
 
-setchat([...chat,msg]);
+
+setchat((prev:any)=>({...prev, [newMsgId]:msg }));
 
 let new_msg:any={
 _id:newMsgId,
@@ -62,11 +63,12 @@ _id:newMsgId,
 
 const getMemberTextCopy=(members:any,inputText:String)=>{
 
-  members.forEach((x:any) => {
-    x['text']=inputText;
-    
-  });
-  return members;
+  let texts:any=[]
+   members.forEach((x:any) =>{ texts.push({memberId:x,text:inputText})});
+  console.log(members)
+  console.log(texts)
+  return texts;
+  
 }
 
 
