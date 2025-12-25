@@ -1,7 +1,4 @@
 
-import { IKUpload } from "imagekitio-react";
-import {setDp} from './users'
-
 
 import ListenerContext from "../../voiceassistance/listener/ListenerContext"
 import { useContext, useEffect, useState } from "react";
@@ -15,10 +12,6 @@ const [text,setText] =useState("");
 const {setLogout}:any=useContext(ChatContext)
 
 
-const changedp:any=async(imgurl:any)=>{
-if(await setDp(props.activeUser.username,imgurl))alert("DP changed successfully.");
-else alert("Error!  try again later.")
-}
 
 useEffect(()=>{
 

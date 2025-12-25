@@ -5,14 +5,14 @@ import {setDp} from './users'
 
 import ListenerContext from "../../voiceassistance/listener/ListenerContext"
 import { useContext, useEffect, useState } from "react";
-import ChatContext from "../../contexts/chatscontext/ChatContext";
+
 
 
   const EditProfile=(props:any)=>{
 
 const {transcript,resetTranscript}:any=useContext(ListenerContext);
 const [text,setText] =useState("");
-const {setLogout}:any=useContext(ChatContext)
+
 
 
 const changedp:any=async(imgurl:any)=>{
@@ -48,7 +48,7 @@ return<>
 
 <div id="profile_page" className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow-sm ">
     <div><button className="btn btn-danger" onClick={()=>props.setProfileSectionPage("profile")}>Back</button>
-    <button className="btn btn-primary" onClick={()=>props.setProfileSectionPage("profile")}>Save</button>
+    <button className="btn btn-primary" onClick={()=> {saveProfile();props.setProfileSectionPage("profile")}}>Save</button>
     </div>
     <div className="flex flex-col items-center pb-10">
         <img className="w-24 h-24 mb-3 rounded-full shadow-lg" src={props.activeUser.dp} alt="Bonnie image"/>
