@@ -7,6 +7,7 @@ import Profile from "./Profile";
 
 import ChatContext from "../../contexts/chatscontext/ChatContext";
 import PasswordReset from "./PasswordReset";
+import EditProfile from "./EditProfilePage";
 
 /* interface ActiveUser {
   username: string;
@@ -34,17 +35,6 @@ const ProfileSection=(props:any)=>{
     
 
 
-  const sty1:any={
- 
-width:'100%',
-backgroundColor:'black',
-display:'flex', 
-position:'fixed', 
-alignItems:'center',
-justifyContent:'center',
-flexDirection:'column'
-    }
-
 
 
 
@@ -70,15 +60,16 @@ const logOut=()=>{
 
 
 
-return <div id="profile_section" style={sty1}>
+return <div id="profile_section" className="container  p-5 my-5 border" >
 
 
-<div id="profile_section_div2" >
+<div id="profile_section_div2" className="container p-5 my-5 " >
 
 {profilePage==='log' && <Loggin  activeUser={activeUser} setActiveUser={setActiveUser} setPage={props.setPage} setProfileSectionPage={setProfileSectionPage}/>}
 {profilePage==='reg'  && <Register   setPage={props.setPage} setProfileSectionPage={setProfileSectionPage}/>}
 {profilePage==='profile'&& <Profile logOut={logOut}  activeUser={activeUser} setActiveUser={setActiveUser} setPage={props.setPage} setProfileSectionPage={setProfileSectionPage}/>}
 {profilePage==='forgetPassword'  && <PasswordReset    setProfileSectionPage={setProfileSectionPage}/>}
+{profilePage==='editProfile'  && <EditProfile  activeUser={activeUser} setActiveUser={setActiveUser} setPage={props.setPage}   setProfileSectionPage={setProfileSectionPage}/>}
 
 
 

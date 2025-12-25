@@ -8,93 +8,103 @@ import ChatContext from "../../../contexts/chatscontext/ChatContext";
 
 
 
-export const ChatList =() => {
+export const ChatList = () => {
 
-    const {activeUser,searchInput,chatsList,setActiveChat}:any=useContext(ChatContext)
-
-
-
-const update=(u:any)=>{
-console.log(u)
-    setActiveChat(u)
-    console.log("acttyyyyyyy")
-}
+    const { activeUser, searchInput, chatsList, setActiveChat }: any = useContext(ChatContext)
 
 
-const newChat=(member2:any)=>{
 
-    const tempRoom={
-        _id:null,
-        members:[activeUser._id,member2._id],
-        name:member2.name,
-        roomDP:member2.dp,
-        roomName:member2.username,
-        
+    const update = (u: any) => {
+        console.log(u)
+        setActiveChat(u)
+        console.log("acttyyyyyyy")
     }
 
-    console.log("tera user")
-    console.log(activeUser)
-    console.log("tera roo ye hai dek")
-    console.log(tempRoom)
-update(tempRoom);
 
-}
+    const newChat = (member2: any) => {
+
+        const tempRoom = {
+            _id: null,
+            members: [activeUser._id, member2._id],
+            name: member2.name,
+            roomDP: member2.dp,
+            roomName: member2.username,
+
+        }
+
+        console.log("tera user")
+        console.log(activeUser)
+        console.log("tera roo ye hai dek")
+        console.log(tempRoom)
+        update(tempRoom);
+
+    }
 
 
-   if(searchInput==="") return <>
+    if (searchInput === "") return <>
 
         {console.log(chatsList)}
-           {  Object.values(chatsList).map((u:any,i:any) => {
-                
-                             return    <React.Fragment key={i}>
-               <div className="listshow" style={{cursor:"pointer"}}onClick={() => {update(u)}}   > 
-                <span className="chatlist_dp" style={{backgroundImage:`url(${u.roomDP})`}}></span>
-                <span style={{alignSelf:"flex-start",width:'70%'}}>{u.name}</span>
-             {  u.unreadCount>0? <span style={stty_unread} className="unread_show">{u.unreadCount}</span>:<></>}
-                <span className="list_option" style={{visibility:"hidden"}}><b>:</b></span>
-               </div>
-               </React.Fragment>
-            }
-            )
+        {Object.values(chatsList).map((u: any, i: any) => {
+
+            return <React.Fragment key={i}>
+                <tr className="listshow" style={{ cursor: "pointer" }} onClick={() => { update(u) }}   >
+                    <td className="my-2  chatlist_dp" style={{  backgroundImage: `url(${u.roomDP})` }}></td>
+                      <td className="container mx-3" style={{width:'100%'}}> 
+                            <div >
+                    <span >{u.name}</span>
+                    {u.unreadCount > 0 ? <span style={stty_unread} className="unread_show">{u.unreadCount}</span> : <></>}
+                    <span className="list_option" style={{ visibility: "hidden" }}><b>:</b></span>
+                    </div>
+                    </td>
+                </tr>
+            </React.Fragment>
+        }
+        )
 
         }
     </>
 
 
-// for displaying search list
+    // for displaying search list
     else return <>
-    
-    {
-            Object.values(chatsList).map((u:any,i:any) => {
-              
-                             return    <React.Fragment key={i}>
-               <div className="listshow" style={{cursor:"pointer"}}onClick={() => {newChat(u)}}   > 
-                <span className="chatlist_dp" style={{backgroundImage:`url(${u.dp})`}}></span>
-                <span style={{alignSelf:"flex-start",width:'70%'}}>{u.name}</span>
-                <span className="list_option" style={{visibility:"hidden"}}><b>:</b></span>
-               </div>
-               </React.Fragment>
+
+        {
+            Object.values(chatsList).map((u: any, i: any) => {
+
+                return <React.Fragment key={i}>
+                    <tr className="listshow" style={{ cursor: "pointer" }} onClick={() => { newChat(u) }}   >
+                        <td className="chatlist_dp" style={{ backgroundImage: `url(${u.dp})` }}></td>
+                        <td className="container mx-3" style={{width:'100%'}}> 
+                            <div >
+                            <span >{u.name}</span>                      
+
+                        
+                        <span className="list_option" style={{ visibility: "hidden" }}><b>:</b></span>
+                        </div>
+                        </td>
+                    </tr>
+                </React.Fragment>
             }
             )
 
         }
-    
-    
-    
-    
+
+
+
+
     </>
 }
 
 export default ChatList;
 
-const stty_unread={
-    height:'20px',
-    width:'20px',
-    borderRadius:'50%',
-    backgroundColor:'green',
-    color:'white',
-    display:'flex',
-    alignItems:"center",
-    justifyContent:"center",
-    alignSelf:'flex-end'
+const stty_unread = {
+    height: '20px',
+    width: '20px',
+    borderRadius: '50%',
+    backgroundColor: 'green',
+    color: 'white',
+    display: 'flex',
+    alignItems: "center",
+    justifyContent: "center",
+    alignSelf: 'flex-end'
 }

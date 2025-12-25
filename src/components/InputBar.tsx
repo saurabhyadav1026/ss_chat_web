@@ -118,7 +118,7 @@ if(activeChat===null) return <></>
 
             <div id="text_input_bar" style={props.sty_input}>
                {!isListening?<Activemic func={()=>{setIsListening(true);startListening()}}></Activemic>:<CrossIcon func={()=>{setIsListening(false);stopListening();}}></CrossIcon>}
-                <input id="add_attachment"  style={{display:"none"}} type="file" accept="image/*"  />
+                <input id="add_attachment" className='form-control' style={{display:"none"}} type="file" accept="image/*"  />
 {/* <!-- add attachment btn --> */}
               <div id="add_file_btn"><AddAttachmentIcon func={()=>{}}></AddAttachmentIcon></div>
              

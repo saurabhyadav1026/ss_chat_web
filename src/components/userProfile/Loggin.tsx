@@ -39,20 +39,21 @@ props.setPage('ChatPageSection')
 
 
 return<>
-
+<div className='container'><button className="btn btn-primary"  onClick={()=>{props.setPage('ChatPageSection');}}>Back</button></div>
 <h2 style={{color:"blue"}}>Loggin Here...</h2>
+
 <table style={tabSty}>
     <tbody>
         
 <tr>
-<td >Username:</td><td ><input placeholder='Enter Username...' style={{width:'100%',height:'30px'}}  id='log_usname_input'></input></td>
+<td >Username:</td><td ><input className='form-control' placeholder='Enter Username...' style={{width:'100%',height:'30px'}}  id='log_usname_input'></input></td>
 </tr>
 <tr>
-<td >Password:</td><td ><input placeholder='Enter Password...' style={{width:'100%',height:'30px'}} type="password" id='log_uspassword_input'></input></td>
+<td >Password:</td><td ><input className='form-control' placeholder='Enter Password...' style={{width:'100%',height:'30px'}} type="password" id='log_uspassword_input'></input></td>
 </tr>
 
 <tr>
-<td  colSpan={2}><button  style={{width:"100%",height:"100%",backgroundColor:"green"}} onClick={verifyLoggin}>Log in</button></td>
+<td  colSpan={2}><button className='btn btn-success text-bg-color' style={{width:"100%",height:"80%"}} onClick={verifyLoggin}>Log in</button></td>
 </tr>
 <tr  style={{display:'none'}}><td  colSpan={2}>or loggin witd</td></tr>
 <tr  style={{display:'none'}}><td  colSpan={2}></td></tr>

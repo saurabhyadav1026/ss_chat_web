@@ -8,7 +8,7 @@ import { SpeakerProvider } from './voiceassistance/speaker/SpeakerContext';
 import { ChatContextProvider } from './contexts/chatscontext/ChatContext'
 
 import { SocketContextProvider } from './contexts/socketcontext/SocketContext'
-
+import 'bootstrap/dist/css/bootstrap.min.css'
 
 
 const root = createRoot(document.getElementById('root')!);

@@ -43,14 +43,15 @@ padding:0;
    background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
-  height: 100px;
+  height: 150px;
   width: 100px;
   border-radius: 50%;
 }
 .chatlist_dp{
-  height: 30px;
-  width: 30px;
+  height: 50px;
+  width: 50px;
 }
+
 
 
 #user_dp,#chat_dp,#logo_icon{

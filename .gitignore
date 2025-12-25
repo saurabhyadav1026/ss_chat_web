@@ -18,7 +18,7 @@ dist
 dist-ssr
 *.local
 
-
+/test
 *.md
 .env
 # Editor directories and files

@@ -129,22 +129,22 @@ return<>
 
 
 <tr>
-    <td>Name</td><td><input    style={{height:'25px'}}  name='name' onChange={updateUser} readOnly={isReadOnly}   value={User.name}  required /></td>
+    <td>Name</td><td><input className='form-control'    style={{height:'25px'}}  name='name' onChange={updateUser} readOnly={isReadOnly}   value={User.name}  required /></td>
 </tr>
 <tr>
-    <td>Username</td><td><input  style={{height:'25px'}}  name='username' onKeyUp={checkUsername} onChange={updateUser} readOnly={isReadOnly}   value={User.username} required /></td><UserNameAvailble value={isUsernameAvailble}></UserNameAvailble>
+    <td>Username</td><td><input  className='form-control' style={{height:'25px'}}  name='username' onKeyUp={checkUsername} onChange={updateUser} readOnly={isReadOnly}   value={User.username} required /></td><UserNameAvailble value={isUsernameAvailble}></UserNameAvailble>
 </tr>
 <tr>
-    <td>Password :</td><td><input   style={{height:'25px'}} name='userpassword' onChange={updateUser} readOnly={isReadOnly}  type="password" value={User.userpassword} required></input></td>
+    <td>Password :</td><td><input  className='form-control'  style={{height:'25px'}} name='userpassword' onChange={updateUser} readOnly={isReadOnly}  type="password" value={User.userpassword} required></input></td>
 </tr>
 <tr>
-    <td>Confirm Password :</td><td><input  style={{height:'25px'}}  name='confirm_password' onChange={updateUser} readOnly={isReadOnly}   type="password" value={User.confirm_password} required></input></td>
+    <td>Confirm Password :</td><td><input  className='form-control' style={{height:'25px'}}  name='confirm_password' onChange={updateUser} readOnly={isReadOnly}   type="password" value={User.confirm_password} required></input></td>
 </tr>
 <tr>
-    <td>Email id :</td><td><input  style={{height:'25px'}}  name='email' onChange={updateUser} readOnly={isReadOnly}   value={User.email} type='email' required></input></td>
+    <td>Email id :</td><td><input className='form-control'  style={{height:'25px'}}  name='email' onChange={updateUser} readOnly={isReadOnly}   value={User.email} type='email' required></input></td>
 </tr>
 <tr>
-   <td style={{display:'flex'}} colSpan={2}> <button style={{alignSelf:'center',backgroundColor:"yellow",padding:"5px"}} onClick={sendOtp}>Send OTP</button></td>
+   <td style={{display:'flex'}} colSpan={2}> <button className='btn btn-warning text-bg-color' onClick={sendOtp}>Send OTP</button></td>
 </tr>
 
 {/* 
@@ -174,8 +174,8 @@ export default Register;
 
 
 const UserNameAvailble=(props:any)=>{
-    if(props.value) return <td id="username_availble_status"style={{fontSize:"small",color:'green'}}>Availble</td>
-    else return <td id="username_availble_status" style={{fontSize:"small",color:'red'}}>not Availble</td>
+    if(props.value) return <td id="username_availble_status" className='text-success' style={{fontSize:"small",color:'green'}}>Availble</td>
+    else return <td id="username_availble_status" className='text-danger'  style={{fontSize:"small",color:'red'}}>not Availble</td>
 }
 
 

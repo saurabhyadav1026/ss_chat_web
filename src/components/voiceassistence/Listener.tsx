@@ -66,11 +66,11 @@ startSpeaking(res);
     return<>
   
 {   // 1. for start listening , 2.  showing listening onclick stop listening and saying,  3. for showing speaking and onclick stop listening and saying
-!isListening?<button id="mic_btn" style={{backgroundColor:"blue"}} onClick={async()=>{   await navigator.mediaDevices.getUserMedia({ audio: true });setIsListening(true);startListening()}}>start asking</button>
-:!isSpeaking?<button className="active_listening" id="mic_btn" onClick={()=>{stopListening();setIsListening(false)}}>we listenig,stop listening</button>
-:<button className="active_speaking" id="mic_btn" onClick={()=>{stopListening();setIsListening(false)}}>stop listening</button>
+!isListening?<button   className="btn btn-info text-bg-color" id="mic_btn"  onClick={async()=>{   await navigator.mediaDevices.getUserMedia({ audio: true });setIsListening(true);startListening()}}>start asking</button>
+:!isSpeaking?<button className="btn btn-primary text-bg-color" id="mic_btn" onClick={()=>{stopListening();setIsListening(false)}}>listenig</button>
+:<button className="btn btn-danger text-bg-color" id="mic_btn" onClick={()=>{stopListening();setIsListening(false)}}>stop listening</button>
 }
-<div id="mic_x_btn" onClick={resetTranscript}>X</div>
+{isListening?<div id="mic_x_btn" onClick={resetTranscript}>X</div>:<></>}
  
     
     </>

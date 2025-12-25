@@ -1,5 +1,4 @@
 
-import Profile from './account/ProfileBar.tsx';
 import AppLogo from './AppLogo/Logo.tsx';
 import Chat from './chatbar/Chat.tsx';
 import OtherSetting from './voicebar/VoiceButton.tsx';
@@ -14,9 +13,8 @@ return (
 
 <div id="left_nav" style={props.sty_lft} >
 
-<AppLogo ></AppLogo>
- <Profile isLoggin={props.isLoggin} activeUser={props.activeUser} setPage={props.setPage}></Profile>
-<Chat  activeUser={props.activeUser.username}   chatsList={props.chatsList}  setActiveChat={props.setActiveChat}  clearChats={props.clearChats}></Chat>
+<AppLogo   isLoggin={props.isLoggin} activeUser={props.activeUser} setPage={props.setPage}   chatsList={props.chatsList}  setActiveChat={props.setActiveChat}  clearChats={props.clearChats}  ></AppLogo>
+<Chat   isLoggin={props.isLoggin} activeUser={props.activeUser} setPage={props.setPage}   chatsList={props.chatsList}  setActiveChat={props.setActiveChat}  clearChats={props.clearChats}></Chat>
 <OtherSetting  ></OtherSetting>
 
 

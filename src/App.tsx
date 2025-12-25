@@ -18,7 +18,7 @@ return <>
             urlEndpoint={import.meta.env.VITE_MEDIA_ENDPOINTURL}
             authenticator={getMediaAuthinticator}
 >
-    <div id="main_content" >
+    <div id="main_content" className='container-fluid' >
 {page==='ProfileSection'&&<ProfileSection  setPage={setPage}/>}
 {page==='ChatPageSection'&& <ChatPageSection    setPage={setPage}/>}
 
