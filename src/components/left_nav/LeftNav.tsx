@@ -13,7 +13,7 @@ return (
 
 <div id="left_nav" style={props.sty_lft} >
 
-<AppLogo   isLoggin={props.isLoggin} activeUser={props.activeUser} setPage={props.setPage}   chatsList={props.chatsList}  setActiveChat={props.setActiveChat}  clearChats={props.clearChats}  ></AppLogo>
+<AppLogo   ></AppLogo>
 <Chat   isLoggin={props.isLoggin} activeUser={props.activeUser} setPage={props.setPage}   chatsList={props.chatsList}  setActiveChat={props.setActiveChat}  clearChats={props.clearChats}></Chat>
 <OtherSetting  ></OtherSetting>
 

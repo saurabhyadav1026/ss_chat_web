@@ -1,7 +1,7 @@
 
 
-import { useContext, useState } from 'react';
-import { newChat } from '../../userProfile/users.ts';
+import { useContext } from 'react';
+
 import ChatContext from '../../../contexts/chatscontext/ChatContext.tsx';
 
 
