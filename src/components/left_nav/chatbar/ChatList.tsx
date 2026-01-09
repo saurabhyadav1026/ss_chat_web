@@ -44,53 +44,78 @@ export const ChatList = () => {
     if (searchInput === "") return <>
 
         {console.log(chatsList)}
-        {Object.values(chatsList).map((u: any, i: any) => {
+        <table id="menu_show_bar" className="table table-hover p-0 " >
+            {/*  <!-- list of chats  --> */}
+            <tbody className='overflow-y-scroll m-0'>
+                {Object.values(chatsList).map((u: any, i: any) => {
 
-            return <React.Fragment key={i}>
-                <tr className="listshow" style={{ cursor: "pointer" }} onClick={() => { update(u) }}   >
-                    <td className="my-2  chatlist_dp" style={{  backgroundImage: `url(${u.roomDP})` }}></td>
-                      <td className="container mx-3" style={{width:'100%'}}> 
-                            <div >
-                    <span >{u.name}</span>
-                    {u.unreadCount > 0 ? <span style={stty_unread} className="unread_show">{u.unreadCount}</span> : <></>}
-                    <span className="list_option" style={{ visibility: "hidden" }}><b>:</b></span>
-                    </div>
-                    </td>
-                </tr>
-            </React.Fragment>
-        }
-        )
+                    return <>
 
-        }
+
+                        <React.Fragment key={i}>
+                            <tr className="listshow" style={{ cursor: "pointer" }} onClick={() => { update(u) }}   >
+                                <td className="my-2  chatlist_dp" style={{ backgroundImage: `url(${u.roomDP})` }}></td>
+                                <td className="container mx-3" style={{ width: '100%' }}>
+                                    <div >
+                                        <span >{u.name}</span>
+                                        {u.unreadCount > 0 ? <span style={stty_unread} className="unread_show">{u.unreadCount}</span> : <></>}
+                                        <span className="list_option" style={{ visibility: "hidden" }}><b>:</b></span>
+                                    </div>
+                                </td>
+                            </tr>
+                        </React.Fragment>
+
+
+
+                    </>
+
+                }
+
+                )
+
+
+                }
+            </tbody>
+        </table>
     </>
 
 
     // for displaying search list
     else return <>
+        <table id="menu_show_bar" className="table table-hover " >
+            {/*  <!-- list of chats  --> */}
+            <tbody className='overflow-y-scroll m-0'>
 
-        {
-            Object.values(chatsList).map((u: any, i: any) => {
+                {
+                    Object.values(chatsList).map((u: any, i: any) => {
 
-                return <React.Fragment key={i}>
-                    <tr className="listshow" style={{ cursor: "pointer" }} onClick={() => { newChat(u) }}   >
-                        <td className="chatlist_dp" style={{ backgroundImage: `url(${u.dp})` }}></td>
-                        <td className="container mx-3" style={{width:'100%'}}> 
-                            <div >
-                            <span >{u.name}</span>                      
+                        return <>
 
-                        
-                        <span className="list_option" style={{ visibility: "hidden" }}><b>:</b></span>
-                        </div>
-                        </td>
-                    </tr>
-                </React.Fragment>
-            }
-            )
-
-        }
+                            <React.Fragment key={i}>
+                                <tr className="listshow " style={{ cursor: "pointer" }} onClick={() => { newChat(u) }}   >
+                                    <td className="chatlist_dp" style={{ backgroundImage: `url(${u.dp})` }}></td>
+                                    <td className="container mx-3" style={{ width: '100%' }}>
+                                        <div >
+                                            <span >{u.name}</span>
 
 
+                                            <span className="list_option" style={{ visibility: "hidden" }}><b>:</b></span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </React.Fragment>
 
+
+                        </>
+                    }
+                    )
+
+
+                }
+
+
+            </tbody>
+        </table>
 
     </>
 }

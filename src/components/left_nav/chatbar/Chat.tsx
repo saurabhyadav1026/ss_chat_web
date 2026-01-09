@@ -7,8 +7,10 @@ import ChatContext from '../../../contexts/chatscontext/ChatContext.tsx';
 
 
 import ChatList from './ChatList.tsx'
+import AppOptionSwitcher from './AppOptionSwitcher.tsx';
 
-const Chat = (props:any) => {
+const Chat = (props: any) => {
+
 
 
   const [t, setT] = useState(0)
@@ -16,48 +18,48 @@ const Chat = (props:any) => {
   const createNewAIChat = async () => {
     await newChat(props.activeUser.username, "sbhai" + t)
     props.setActiveChat({ username: "sbhai" + t.toString(), name: "sbhai" + t.toString() })
-    
+
     const x = t;
     setT(x + 1);
 
   }
 
-  const {searchInput,setSearchInput}:any=useContext(ChatContext)
+  const { searchInput, setSearchInput, chatsList,setAppOption,appOption }: any = useContext(ChatContext)
 
-const updateSearchInput=(e:any)=>{
-  setSearchInput(e.target.value)
-}
-
+  const updateSearchInput = (e: any) => {
+    setSearchInput(e.target.value)
+  }
+  console.log(chatsList)
   return (
     <>
-      <div id="left_nav_main_bar" className="left_bar">
-        
-        <div className="container left_nav_menu_bar" > 
-             <h3 className='col' style={{ width: '80%', display:"inline-block"}}>Chat</h3>
-              <button  className='btn btn-info col-sm' onClick={() => createNewAIChat()}> AI</button>
-            
-     
-</div>
-          <table id="menu_show_bar" className="table table-hover scrollbar-only-rod" >
+      <div id="left_nav_main_bar" className="left_bar left_nav_menu_bar  " style={{ height: "80%" }}>
 
-            {/*  <!-- list of chats  --> */}
-           <tbody>
-             <ChatList ></ChatList>
-           </tbody>
-          </table>
+        <div className="container d-flex justify-content-around align-items-center " style={{backgroundColor:"pink", height:"10%"}}>
+          <div className=' fw-bold col-sm-4'  onClick={() => {if(appOption!=="Chat")setAppOption("Chat")}}>Chat</div>
+         
+          <div className=' fw-bold col-sm-4' onClick={() => {if(appOption!=="AI")setAppOption("AI")}}> AI</div>
+          { props.activeUser.dp!==""? <div  className=' col-sm-4' id="user_dp" style={{display:"inline-block", backgroundImage:`url(${props.activeUser.dp})`}} onClick={()=>{props.setPage('ProfileSection')}}></div>:  <div   className=' col-sm-4 ' id="user_dp"  style={{display:"inline-block"}} onClick={()=>{props.setPage('ProfileSection')}}></div>}
 
-          <div id="search_block" >
-
-            <div id="new_chat_op2" style={{boxSizing:'border-box', width: '100%', height: '100%'}}>
-              <input className='form-control' onChange={updateSearchInput} value={searchInput}  type="search" placeholder='search your friends...' id="search_input"></input>
-             
-            </div>
-          
-
-          </div>
+        </div >
+        <div className='container p-3 '>
+          <input className='form-control' name="ignore-history" style={{ height: "30px" }} typeof='search' onChange={updateSearchInput} value={searchInput} type="search" placeholder='search your friends...' id="search_input"></input>
 
         </div>
-      
+       <div className='container-fluid bg-primary   table-responsive scrollbar-only-rod m-0 p-0 vh-100' >
+         <AppOptionSwitcher/>
+       </div>
+
+
+
+
+
+
+
+
+      </div>
+
+
+
     </>
   );
 }

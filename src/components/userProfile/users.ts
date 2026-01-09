@@ -22,7 +22,7 @@ import getRes from '../../getRes';
 const responser:string=import.meta.env.VITE_API_KEY+'/users';
 export const addUser=async(u:any)=>{
 try{
-await fetch(responser+'/newuser?name='+u.name+"&&username="+u.username+"&&password="+u.userpassword+"");
+await fetch(responser+'/newuser?name='+u.name+"&&username="+u.username+"&&password="+u.userpassword+"&&email="+u.email);
  
 }
     catch(error){

@@ -48,6 +48,8 @@ export const ChatContextProvider = ({ children }: any) => {
   const [chat, setchat]: any = useState({});
   const [searchInput, setSearchInput]: any = useState("");
 
+  // to switch Chat / AI chat
+  const [appOption, setAppOption] = useState("Chat")
 
 
 
@@ -63,9 +65,37 @@ export const ChatContextProvider = ({ children }: any) => {
 
   // to get search or friend list    
   useEffect(() => {
-    if (searchInput) socket.emit("getFriendList", { userId: activeUser._id, searchInput: searchInput })
-    else socket.emit("getChatList", { userId: activeUser._id })
-  }, [searchInput])
+    console.log(activeUser)
+
+    if (appOption === "Chat") {
+      
+      if (activeUser._id ) {
+        if (searchInput) socket.emit("getFriendList", { userId: activeUser._id, searchInput: searchInput })
+        else socket.emit("getChatList", { userId: activeUser._id })
+      }
+
+      // on not loggin
+      else{
+setChatList({info:"loggin yourself to connect with your friend"})
+console.log(chatsList  )
+
+      }
+    }
+    else if (appOption === "AI") {
+        // on loggin
+        
+  if (activeUser._id) {
+
+  }
+
+  // on without loggin
+  else{
+
+// write code to set AI chat when user not register
+  }
+    }
+
+  }, [searchInput,appOption])
 
   // to set the chatlist   yani chatroom  by getfriendList or getchatList
 
@@ -155,11 +185,11 @@ export const ChatContextProvider = ({ children }: any) => {
       if (activeUser._id === msg.senderId && activeChat._id === room._id) {
 
         keyHepler.set(msg._id, data.oldMsgId)  // to save temp key
-      setchat((prev: any) => ({ ...prev, [data.oldMsgId]: msg }));
+        setchat((prev: any) => ({ ...prev, [data.oldMsgId]: msg }));
         console.log(" tmhara tick kr diya yrr")
 
       }
-      
+
       // for receiver 
       else {
 
@@ -186,7 +216,7 @@ export const ChatContextProvider = ({ children }: any) => {
   })
 
 
-// to update tick  ??????? not working
+  // to update tick  ??????? not working
   useEffect(() => {
     socket.on("updateTick", (data: any) => {
       console.log("we will update the tick")
@@ -238,7 +268,7 @@ export const ChatContextProvider = ({ children }: any) => {
 
 
 
-  return <ChatContext.Provider value={{ setLogout, activeUser, activeChat, setActiveUser, setActiveChat, chatsList, setChatList, chat, setchat, searchInput, setSearchInput, sendMessage }}>
+  return <ChatContext.Provider value={{ appOption, setAppOption, setLogout, activeUser, activeChat, setActiveUser, setActiveChat, chatsList, setChatList, chat, setchat, searchInput, setSearchInput, sendMessage }}>
     {children}
   </ChatContext.Provider>
 }

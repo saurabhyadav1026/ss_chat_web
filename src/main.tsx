@@ -9,25 +9,30 @@ import { ChatContextProvider } from './contexts/chatscontext/ChatContext'
 
 import { SocketContextProvider } from './contexts/socketcontext/SocketContext'
 import 'bootstrap/dist/css/bootstrap.min.css'
+import AIChatContextProvider from './contexts/chatscontext/AIChatContext'
 
 
 const root = createRoot(document.getElementById('root')!);
 root.render(
   <StrictMode>
-    <SocketContextProvider>
+  
+      <SocketContextProvider>
+<AIChatContextProvider value> 
+        <ChatContextProvider>
 
-      <ChatContextProvider>
+          <SpeakerProvider>
 
-        <SpeakerProvider>
+            <ListenerProvider>
+      <App />
+         
+            </ListenerProvider>
+          </SpeakerProvider>
 
-          <ListenerProvider>
-            <App />
-          </ListenerProvider>
-        </SpeakerProvider>
-
-      </ChatContextProvider>
-    </SocketContextProvider>
-  </StrictMode>,
+        </ChatContextProvider>
+        </AIChatContextProvider>
+      </SocketContextProvider>
+    
+  </StrictMode>
 )
 
 

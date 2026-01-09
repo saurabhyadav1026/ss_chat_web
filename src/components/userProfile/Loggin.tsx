@@ -1,5 +1,8 @@
 
+import { useState } from 'react';
+import Alert, { ConditionAlert } from '../bootstrapCoponents/Alert.tsx';
 import { verifyUser } from './users.ts'
+
 
 
 
@@ -11,7 +14,7 @@ import { verifyUser } from './users.ts'
 
 const Loggin=(props:any)=>{
 
-
+const [condition ,setCondition]=useState(false)
 
 
 
@@ -25,12 +28,13 @@ const uspassword_:string=(document.getElementById('log_uspassword_input'!)as HTM
 
 const a_user:any=(await verifyUser(usname_,uspassword_))
 if(!a_user.status){
+    setCondition(true)
     alert("usernae or password is incorrect");
     return;
 }
 else{
     props.setActiveUser(a_user.value)
-        alert("Loggin Successfully.")
+            alert("Loggin Successfully.")
 props.setPage('ChatPageSection')
 }
 
@@ -39,8 +43,12 @@ props.setPage('ChatPageSection')
 
 
 return<>
+<ConditionAlert condition={condition} message='Incorrect Password'></ConditionAlert>
 <div className='container'><button className="btn btn-primary"  onClick={()=>{props.setPage('ChatPageSection');}}>Back</button></div>
+<button className='btn bg-primary' id='hlosbh'>heloo</button>
+
 <h2 style={{color:"blue"}}>Loggin Here...</h2>
+
 
 <table style={tabSty}>
     <tbody>

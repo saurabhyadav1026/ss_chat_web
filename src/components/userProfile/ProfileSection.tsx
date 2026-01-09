@@ -8,6 +8,7 @@ import Profile from "./Profile";
 import ChatContext from "../../contexts/chatscontext/ChatContext";
 import PasswordReset from "./PasswordReset";
 import EditProfile from "./EditProfilePage";
+import Alert from "../bootstrapCoponents/Alert";
 
 /* interface ActiveUser {
   username: string;
@@ -63,6 +64,7 @@ const logOut=()=>{
 return <div id="profile_section" className="container  p-5 my-5 border" >
 
 
+<Alert buttonId="hlosbh" message='Incorrect Password'/>
 <div id="profile_section_div2" className="container p-5 my-5 " >
 
 {profilePage==='log' && <Loggin  activeUser={activeUser} setActiveUser={setActiveUser} setPage={props.setPage} setProfileSectionPage={setProfileSectionPage}/>}

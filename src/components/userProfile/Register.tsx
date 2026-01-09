@@ -36,32 +36,25 @@ if(!isUsernameAvailble){
         return;
     }
 const new_otp:any= await getOtp(User.email);
-if(new_otp.status==='no_get')return;
-else if(new_otp.status==='ok'){
+if(new_otp.status==='ok'){
     setIsReadOnly(true)
     alert("We have send the otp on your register contact. otp code is : "+new_otp.otp_code);
     setotp(new_otp);
     setOtpDivVisibility(true)
      
   }
-  else {alert("Enetr correct mail id")
-
-  }
-
+  else alert(new_otp.status)
     }
 
 
     const resendOtp=async()=>{
     const new_otp:any= await getOtp(User.email);
-    if(new_otp.status==='not_get')return;
-else if(new_otp.status==='ok'){
+    if(new_otp.status==='ok'){
     alert("We have resend the otp on your register contact. otp code is : "+new_otp.otp_code);
     setotp(new_otp);
        
   }
-  else {
-    
-    alert("Enetr correct mail id")}
+  else alert(new_otp.status)
 
     }
 
@@ -109,7 +102,7 @@ setIsAvailbleUsername(true);
 
 const OtpDiv=()=>{
    return <>
-    <tr ><td>Enter OTP</td><td><input type='Number' id="otp_input" required /></td><td onClick={resendOtp} style={{color:"blue",fontSize:"small"}} >Resend OTP</td></tr>
+    <tr ><td>Enter OTP</td><td><input type='Number' className='form-control'   id="otp_input" required /></td><td onClick={resendOtp} style={{color:"blue",fontSize:"small"}} >Resend OTP</td></tr>
 <tr ><td colSpan={2}><button style={{margin:"3px",width:'100%',height:"30px",backgroundColor:"blue",color:'white',borderRadius:'10px'}} id='otp_verify_btn' onClick={verifyRegisterDetail}>Register</button></td></tr>
 <tr ><td colSpan={2}>To edit Email/ Contact no. <span onClick={edit} style={{color:'blue'}}>click here</span> </td></tr>
 </>
@@ -175,7 +168,7 @@ export default Register;
 
 const UserNameAvailble=(props:any)=>{
     if(props.value) return <td id="username_availble_status" className='text-success' style={{fontSize:"small",color:'green'}}>Availble</td>
-    else return <td id="username_availble_status" className='text-danger'  style={{fontSize:"small",color:'red'}}>not Availble</td>
+    else return <td id="username_availble_status" className='text-danger '  style={{fontSize:"small",color:'red'}}>not Availble</td>
 }
 
 

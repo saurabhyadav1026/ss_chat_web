@@ -123,7 +123,7 @@ if(activeChat===null) return <></>
               <div id="add_file_btn"><AddAttachmentIcon func={()=>{}}></AddAttachmentIcon></div>
              
                 {/*  intput area  */}
-                <input id="cammand_input"  type='text' onChange={onInputChange}  value={inputValue} onKeyUp={(key)=>{keyFunctions(key)}} placeholder="Enter here.."/> 
+                <input id="cammand_input" name="ignore-history"  type='text' onChange={onInputChange}  value={inputValue} onKeyUp={(key)=>{keyFunctions(key)}} placeholder="Enter here.."/> 
 
 
                 {/* <!-- send btn --> */}

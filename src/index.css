@@ -22,13 +22,9 @@ margin: 0;
 }
 
 
-#root,html,body{
-display: flex;
-flex-direction: column;
-height:100%;
-width:100%;
-padding:0;
-
+#root,html,body{margin: 0;
+  padding: 0%;
+  left: 0;
 }
 #logo_icon{
   background-image: url('https://i.ibb.co/WpB24TDH/light-logo.png');}
@@ -43,7 +39,7 @@ padding:0;
    background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
-  height: 150px;
+  height: 100px;
   width: 100px;
   border-radius: 50%;
 }
@@ -59,10 +55,9 @@ padding:0;
   background-size: cover;
   background-position: center;
   border-radius: 50%;
-  height: 40px;
-  width: 40px;
+  height: 30px;
+  width: 30px;
   margin: 0;
-  padding: 5PX;
 }
 
 
@@ -73,7 +68,7 @@ padding:0;
   
   width:100%;
   height:100%;
-
+padding: 0%;
   display: flex;
   
 
@@ -126,7 +121,7 @@ padding-left: 5%;
   align-items: center;
   justify-content: space-between;
   height: 10%;
-
+min-height: 50px;
  }
 
 
@@ -137,14 +132,17 @@ padding-left: 5%;
 }
 #menu_show_bar{
   padding: 0%;
-  height: 90%;
+  margin: 0;
+  width: 100%;
+  height: 100%;
   background-color: rgb(173, 230, 230);
 }
 #left_nav_top,#voice_assistence_btn{
 
   justify-content: space-evenly;
   align-items: center;
-  height: 10%;
+
+  min-height: 80px;
 }
 #voice_assistence_btn{
 display: flex;
@@ -244,27 +242,9 @@ text-wrap: wrap;
 line-height: 20px;
 }
 
-.req,.res{
-  
-  width:100%; 
-  display: flex;
-  margin-top: 4px;
-   flex-direction: column;
-   justify-content: center;
-}
 
-.res_output,.req_cammand{
-  padding:0.4em 1em;
-  margin: 4px;
-  font-weight: bold;  
-display: inline-block;
-line-height: 1.2em;
-border-radius: 20px;
 
-}
-.res_output{
-background-color: antiquewhite;
-}
+
 .req_cammand{
   background-color: rgb(138, 187, 129);
 }
@@ -275,7 +255,8 @@ background-color: antiquewhite;
    flex-direction:column;
    height: 100%;
    padding: 5px; 
-   overflow-y: scroll;
+   
+
    box-sizing: border-box;
 }
 
@@ -300,7 +281,7 @@ background-color: antiquewhite;
   text-align: left;
   width: 100%;
   flex-shrink: 0;
-  overflow: hidden;
+  
   box-sizing: border-box;
   display: flex;
   overflow-x: hidden;
@@ -339,19 +320,10 @@ margin:3px;
   color: rgb(255, 91, 219);
 }
 
-.msg_time{
-  padding: 5px;
-  align-self: flex-end;
-  margin-left: 20px;
-  padding-right: 10px;;
-  padding-bottom: 0;
-  font-size: smaller;
-  box-sizing: border-box;
-  right: 10px;
-}
+
 
 .req{
-
+width: 100%;
   align-items: flex-end;
 
 
@@ -365,19 +337,13 @@ word-wrap: break-word;
 }
 
 .res{
-
+width: 10%;
   align-items: flex-start;
 
 
 }
 
 
-.res_output{
-
-max-width: 70%;
-text-wrap: wrap;
-
-}
 
 
 

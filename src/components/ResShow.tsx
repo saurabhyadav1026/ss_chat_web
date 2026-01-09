@@ -50,16 +50,19 @@ alert("deletinng msg"+activeUser+active_chat+time);
 
 
      return (
-   <div className="res">
-                <div className="res_output">   
+                <div className="res  container-fluid bg-danger px-3 hh-100 m-2 res_output   ">   
                       {/*     <!-- for ai  response displaying  --> */}
-                  <Markdown remarkPlugins={[remarkGfm]}>{props.res_}</Markdown> 
+                 <div className=' col d-inline-flex bg-info border fw-semibold'> <Markdown remarkPlugins={[remarkGfm]}>{props.res_}</Markdown>
+                
+               
+                 </div> 
+
                     
-    <span className='msg_time'><sub> {props.time?props.time:""}</sub></span>
+    
                
 {/* div */}
-                <div  className="res_option">
-<span className='msg_options'>
+                <div  className="res_option border  ">
+<span className='msg_options '>
                  { !isSpeaking?<SpeakerIcon    func={async()=>{setIsSpeaking(true); await startSpeaking(props.res_)}} ></SpeakerIcon>:
                                <StopspeakIcon  func={()=>{ setIsSpeaking(false); stopSpeaking()}  }></StopspeakIcon>     }
                  </span>
@@ -74,7 +77,7 @@ alert("deletinng msg"+activeUser+active_chat+time);
 <span className='msg_options'><Trash_binIcon func={()=>deleteMsg(props.activeUser,props.active_chat,props.time)}></Trash_binIcon></span>
                 </div>
 </div>
-            </div>
+           
     
 
 
