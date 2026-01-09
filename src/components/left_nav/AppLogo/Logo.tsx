@@ -1,6 +1,6 @@
 
 
-const Logo=(props:any)=>{
+const Logo=()=>{
 return(
     <>
 <div id="logo_bar" className="left_bar">

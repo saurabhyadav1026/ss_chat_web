@@ -6,23 +6,11 @@ import ChatContext from '../../../contexts/chatscontext/ChatContext.tsx';
 
 
 
-import ChatList from './ChatList.tsx'
 import AppOptionSwitcher from './AppOptionSwitcher.tsx';
 
 const Chat = (props: any) => {
 
 
-
-  const [t, setT] = useState(0)
-
-  const createNewAIChat = async () => {
-    await newChat(props.activeUser.username, "sbhai" + t)
-    props.setActiveChat({ username: "sbhai" + t.toString(), name: "sbhai" + t.toString() })
-
-    const x = t;
-    setT(x + 1);
-
-  }
 
   const { searchInput, setSearchInput, chatsList,setAppOption,appOption }: any = useContext(ChatContext)
 

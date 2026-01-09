@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import Alert, { ConditionAlert } from '../bootstrapCoponents/Alert.tsx';
+import { ConditionAlert } from '../bootstrapCoponents/Alert.tsx';
 import { verifyUser } from './users.ts'
 
 

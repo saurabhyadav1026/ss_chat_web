@@ -8,7 +8,7 @@ import AIChatContext from "../../../contexts/chatscontext/AIChatContext";
 const AIChatList = () => {
 
 
-    const { activeUser, aiChatsList, setActiveAIChat }: any = useContext(AIChatContext)
+    const {  aiChatsList, setActiveAIChat }: any = useContext(AIChatContext)
 
 
     return <div> Come soon bro </div>
