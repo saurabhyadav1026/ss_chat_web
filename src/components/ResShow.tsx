@@ -50,10 +50,14 @@ alert("deletinng msg"+activeUser+active_chat+time);
 
 
      return (
-                <div className="res  container-fluid bg-danger px-3 hh-100 m-2 res_output   ">   
+                <div className="res  container-fluid p-2 px-3 hh-100 m-2 res_output   ">   
                       {/*     <!-- for ai  response displaying  --> */}
-                 <div className=' col d-inline-flex bg-info border fw-semibold'> <Markdown remarkPlugins={[remarkGfm]}>{props.res_}</Markdown>
+                 <div className=' col p-1 d-inline-flex bg-info border ' style={{fontFamily:"'Poppins', sans-serif",fontWeight:"600",fontSize:"100%",lineHeight:"0.8"}}> 
+                  <Markdown remarkPlugins={[remarkGfm]}>{props.res_}</Markdown>
+                 <div className=' d-flex p-2 pt-3 msg_time ' style={{fontFamily:"'Poppins', sans-serif",fontWeight:"400",fontSize:"70%",lineHeight:"0.8"}}>
+                                    {props.time ? props.time : ""}
                 
+                                </div>
                
                  </div> 
 
@@ -61,7 +65,7 @@ alert("deletinng msg"+activeUser+active_chat+time);
     
                
 {/* div */}
-                <div  className="res_option border  ">
+                <div  className="container res_option border  ">
 <span className='msg_options '>
                  { !isSpeaking?<SpeakerIcon    func={async()=>{setIsSpeaking(true); await startSpeaking(props.res_)}} ></SpeakerIcon>:
                                <StopspeakIcon  func={()=>{ setIsSpeaking(false); stopSpeaking()}  }></StopspeakIcon>     }

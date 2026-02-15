@@ -11,7 +11,7 @@ const LeftNav=(props:any)=>{
 return (
 <>
 
-<div id="left_nav" style={props.sty_lft} >
+<div id="left_nav" className='container-fluid m-0 p-0' style={props.sty_lft} >
 
 <AppLogo   ></AppLogo>
 <Chat   isLoggin={props.isLoggin} activeUser={props.activeUser} setPage={props.setPage}   chatsList={props.chatsList}  setActiveChat={props.setActiveChat}  clearChats={props.clearChats}></Chat>

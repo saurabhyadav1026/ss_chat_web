@@ -1,7 +1,8 @@
 
 import { useState } from 'react';
 import { ConditionAlert } from '../bootstrapCoponents/Alert.tsx';
-import { verifyUser } from './users.ts'
+import { googleLoggin, verifyUser } from './users.ts'
+import { GoogleLogin } from '@react-oauth/google';
 
 
 
@@ -33,19 +34,37 @@ if(!a_user.status){
     return;
 }
 else{
+    console.log(a_user.value)
     props.setActiveUser(a_user.value)
-            alert("Loggin Successfully.")
-props.setPage('ChatPageSection')
+        props.setPage('ChatPageSection')
 }
 
     }
+    
+    const verifygoogleLoggin=async (res:any)=>{
 
+        
+        
+    const a_user:any=(await googleLoggin(res.credential))
+if(!a_user.status){
+    setCondition(true)
+    alert("usernae or password is incorrect");
+    return;
+}
+else{
+    console.log(a_user.value)
+    props.setActiveUser(a_user.value)
+        props.setPage('ChatPageSection')
+}
+    }
+
+   
 
 
 return<>
 <ConditionAlert condition={condition} message='Incorrect Password'></ConditionAlert>
 <div className='container'><button className="btn btn-primary"  onClick={()=>{props.setPage('ChatPageSection');}}>Back</button></div>
-<button className='btn bg-primary' id='hlosbh'>heloo</button>
+
 
 <h2 style={{color:"blue"}}>Loggin Here...</h2>
 
@@ -63,7 +82,7 @@ return<>
 <tr>
 <td  colSpan={2}><button className='btn btn-success text-bg-color' style={{width:"100%",height:"80%"}} onClick={verifyLoggin}>Log in</button></td>
 </tr>
-<tr  style={{display:'none'}}><td  colSpan={2}>or loggin witd</td></tr>
+<tr  ><td  >or loggin with : </td><td><GoogleLogin onSuccess={verifygoogleLoggin}></GoogleLogin></td></tr>
 <tr  style={{display:'none'}}><td  colSpan={2}></td></tr>
 
 </tbody>
@@ -71,8 +90,6 @@ return<>
 
 <div  >  <span style={{color:'blue',margin:"3px"}}onClick={()=>props.setProfileSectionPage('forgetPassword')}>Forget Password</span></div>
 <div  >if don't have account <span style={{color:'blue',margin:"3px"}} onClick={()=>props.setProfileSectionPage('reg')}>sign up</span></div>
-<div  > click to <span style={{color:'blue',margin:"3px"}}onClick={()=>props.setPage('ChatPageSection')}>stay without loggin</span></div>
-
 
 </>
  

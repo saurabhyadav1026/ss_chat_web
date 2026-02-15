@@ -5,6 +5,7 @@ import {setDp} from './users'
 
 import ListenerContext from "../../voiceassistance/listener/ListenerContext"
 import { useContext, useEffect, useState } from "react";
+import ChatContext from "../../contexts/chatscontext/ChatContext";
 
 
 
@@ -12,11 +13,14 @@ import { useContext, useEffect, useState } from "react";
 
 const {transcript,resetTranscript}:any=useContext(ListenerContext);
 const [text,setText] =useState("");
-
+const {activeUser, setActiveUser}:any=useContext(ChatContext);
 
 
 const changedp:any=async(imgurl:any)=>{
-if(await setDp(props.activeUser.username,imgurl))alert("DP changed successfully.");
+
+  const u:any=await setDp(activeUser.accessToken, activeUser._id,imgurl)
+  console.log(activeUser)
+if(u.status)setActiveUser(u.data);
 else alert("Error!  try again later.")
 }
 

@@ -58,26 +58,29 @@ alert("deletinng msg"+activeUser+active_chat+time);
 
     return (
 
-        <div className="req">
+        <div className="req  container-fluid  px-3 hh-100 mt-1 ">
 
-            <div className="req_cammand">
+            <div className="req_cammand col px-3 pt-2  d-flex align-items-center bg-success border" style={{borderRadius:"50px",fontFamily:"'Poppins', sans-serif",fontWeight:"600",fontSize:"100%",lineHeight:"0.8"}}   >
 
                 {/* <!-- for your cammand displaying --> */}
 
                 <Markdown remarkPlugins={[remarkGfm]}>{props.req_}</Markdown>
-                <sub className='msg_time'>
+                <div className=' d-flex p-2  pt-1 msg_time ' style={{fontFamily:"'Poppins', sans-serif",fontWeight:"400",fontSize:"70%",lineHeight:"1.5"}}>
                     {props.time ? props.time : ""}
  {console.log(props.tick)}
  {console.log(props.tickStatus)}
+ <div className='pt-0'>
                     {props.tick === 0 ? <UnsendIcon></UnsendIcon>: props.tickStatus.read !==null ?  <BlueTickIcon></BlueTickIcon> : props.tickStatus.delivered !== null ? <DoubleTickIcon></DoubleTickIcon> :<SingleTickIcon></SingleTickIcon>}
-                </sub>
+      </div>
+                </div>
 
 
 
-     
+     </div>
+     <div>
 
 
-            <div className="req_option">
+            <div className="req_option  border">
 
                 {/*     <!--  edit btn--> */}
                 <span className='msg_options'> <Edit func={editReq} r_no={props.r_no} ></Edit></span>

@@ -51,7 +51,7 @@ export const ChatContextProvider = ({ children }: any) => {
   // to switch Chat / AI chat
   const [appOption, setAppOption] = useState("Chat")
 
-
+const [picShow,setPicShow]:any=useState({status:false})
 
 
 
@@ -268,7 +268,7 @@ console.log(chatsList  )
 
 
 
-  return <ChatContext.Provider value={{ appOption, setAppOption, setLogout, activeUser, activeChat, setActiveUser, setActiveChat, chatsList, setChatList, chat, setchat, searchInput, setSearchInput, sendMessage }}>
+  return <ChatContext.Provider value={{picShow,setPicShow, appOption, setAppOption, setLogout, activeUser, activeChat, setActiveUser, setActiveChat, chatsList, setChatList, chat, setchat, searchInput, setSearchInput, sendMessage }}>
     {children}
   </ChatContext.Provider>
 }

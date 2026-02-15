@@ -20,7 +20,7 @@ const Chat = (props: any) => {
   console.log(chatsList)
   return (
     <>
-      <div id="left_nav_main_bar" className="left_bar left_nav_menu_bar  " style={{ height: "80%" }}>
+      <div id="left_nav_main_bar" className="left_bar left_nav_menu_bar col-12  flex-grow-1" style={{ height: "80%" }}>
 
         <div className="container d-flex justify-content-around align-items-center " style={{backgroundColor:"pink", height:"10%"}}>
           <div className=' fw-bold col-sm-4'  onClick={() => {if(appOption!=="Chat")setAppOption("Chat")}}>Chat</div>
@@ -33,7 +33,7 @@ const Chat = (props: any) => {
           <input className='form-control' name="ignore-history" style={{ height: "30px" }} typeof='search' onChange={updateSearchInput} value={searchInput} type="search" placeholder='search your friends...' id="search_input"></input>
 
         </div>
-       <div className='container-fluid bg-primary   table-responsive scrollbar-only-rod m-0 p-0 vh-100' >
+       <div className='container-fluid table-responsive scrollbar-only-rod m-0 p-0 vh-100 flex-grow-1'   style={{ backgroundColor: "rgb(173, 230, 230)"}}>
          <AppOptionSwitcher/>
        </div>
 

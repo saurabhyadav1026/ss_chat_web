@@ -9,7 +9,7 @@ import ChatContext from "../../contexts/chatscontext/ChatContext";
 
 const {transcript,resetTranscript}:any=useContext(ListenerContext);
 const [text,setText] =useState("");
-const {setLogout}:any=useContext(ChatContext)
+const {setLogout,setPicShow}:any=useContext(ChatContext)
 
 
 
@@ -43,7 +43,7 @@ return<>
 
     </div>
     <div className="flex flex-col items-center pb-10">
-        <img className="w-24 h-24 mb-3 rounded-full shadow-lg" src={props.activeUser.dp} alt="Bonnie image"/><br/>
+        <img  onClick={()=>setPicShow({status:true,url:props.activeUser.dp})} className="w-24 h-24 mb-3 rounded-full shadow-lg" src={props.activeUser.dp} alt="Bonnie image"/><br/>
             <button className="btn btn-secondary" onClick={()=>props.setProfileSectionPage("editProfile")}>Edit</button>
         
     

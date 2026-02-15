@@ -6,6 +6,7 @@ import ChatPageSection from './ChatPageSection'
 import ProfileSection from './components/userProfile/ProfileSection'
 import { IKContext } from 'imagekitio-react';
 import {getMediaAuthinticator} from './components/userProfile/users'
+//import PicShow from './components/userProfile/picShow';
 
 
 export const App= () => { 
@@ -22,8 +23,10 @@ return <>
 {page==='ProfileSection'&&<ProfileSection  setPage={setPage}/>}
 {page==='ChatPageSection'&& <ChatPageSection    setPage={setPage}/>}
 
-
+{/* <PicShow/>
+ */}
 </div>
+
 </IKContext>
    
 </>

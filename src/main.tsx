@@ -10,28 +10,40 @@ import { ChatContextProvider } from './contexts/chatscontext/ChatContext'
 import { SocketContextProvider } from './contexts/socketcontext/SocketContext'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import AIChatContextProvider from './contexts/chatscontext/AIChatContext'
+import { GoogleOAuthProvider } from '@react-oauth/google'
+import {MessageContextProvider} from './contexts/MessagesContext'
+import { ChatsListContextProvider } from './contexts/ChatsListContext'
+import { UserContextProvider } from './contexts/UserContext'
+
+
 
 
 const root = createRoot(document.getElementById('root')!);
 root.render(
   <StrictMode>
-  
-      <SocketContextProvider>
-<AIChatContextProvider value> 
-        <ChatContextProvider>
+    <UserContextProvider>
+      <ChatsListContextProvider>
+        <MessageContextProvider>
+          <SocketContextProvider>
+            <AIChatContextProvider value>
+              <ChatContextProvider>
 
-          <SpeakerProvider>
+                <SpeakerProvider>
 
-            <ListenerProvider>
-      <App />
-         
-            </ListenerProvider>
-          </SpeakerProvider>
+                  <ListenerProvider>
 
-        </ChatContextProvider>
-        </AIChatContextProvider>
-      </SocketContextProvider>
-    
+                    <GoogleOAuthProvider clientId={import.meta.env.VITE_GoogeOAuthClientId}>
+                      <App />
+                    </GoogleOAuthProvider>
+                  </ListenerProvider>
+                </SpeakerProvider>
+
+              </ChatContextProvider>
+            </AIChatContextProvider>
+          </SocketContextProvider>
+        </MessageContextProvider>
+      </ChatsListContextProvider>
+    </UserContextProvider>
   </StrictMode>
 )
 

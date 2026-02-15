@@ -12,6 +12,7 @@
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
     "@privacyresearch/libsignal-protocol-typescript": "^0.0.16",
+    "@react-oauth/google": "^0.13.4",
     "@tailwindcss/vite": "^4.1.13",
     "axios": "^1.11.0",
     "bootstrap": "^5.3.8",

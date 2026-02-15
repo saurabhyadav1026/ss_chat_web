@@ -13,7 +13,7 @@ friend chat:   usn:[{t:"",by:1|2,text:" "}]
 import { GoogleGenerativeAI } from '@google/generative-ai';
 //import axios from 'axios'
 import getRes from '../../getRes';
-
+import axios from 'axios'
 
 
 
@@ -42,12 +42,23 @@ const sbhunk:any={
 }
 
 
+
+export const googleLoggin=async(token:any)=>{
+   let data=false;
+  try{  await axios.post(responser+'/googleAuthVerification',{token:token}).
+  then((res)=>{data=res.data})
+}
+catch(e){
+    console.log(e)
+}
+return data;
+}
+
 export const checkIsUsernameAvailble=async(username:string)=>{
-let res
-    try{res=await fetch(responser+'/checkisusernameavailble?username='+username);
-    res=await res.json();
-    res=res.value;}catch{}
-    return res;
+let data
+    try{await axios.post(responser+'/checkisusernameavailble',{username:username}).then((res)=>data=res.data.value);
+    }catch(e){console.log(e)}
+    return data;
 }
 
 
@@ -83,8 +94,8 @@ return us.value;
 
 export const verifyUser=async(username:any,password:any)=>{
     let rr=false;
-    try  {let res:any=await fetch(responser+'/verifyuser?username='+username+'&&password='+password)
-        rr=await res.json();
+   try  {await axios.post(responser+'/verifyuser',{username:username,password:password})
+                    .then((res)=>{rr=res.data})        
       
     }catch(e:any){console.log(e)}
 return rr;
@@ -185,12 +196,13 @@ export const getMediaAuthinticator=async()=>{
 }
 
 
-export const setDp=async(username:String,imgurl:String)=>{
+export const setDp=async(accessToken:any,_id:String,imgurl:String)=>{
+    console.log(accessToken)
+let data={status:false}
+await axios.post(responser+'/setdp',{_id:_id,dpurl:imgurl},{headers:{authorization:`Bearer ${accessToken}`}})
+.then((res)=>data=res.data);
 
-let val:any=await fetch(responser+'/setdp',{method:"POST",headers:{'Content-Type':"application/json"},body:JSON.stringify({username:username,dpurl:imgurl})});
-val=await val.json();
-alert(val)
-return val.value;
+return data;
    
 }
 

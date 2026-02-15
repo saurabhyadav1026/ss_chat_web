@@ -10,7 +10,7 @@ import ChatContext from "../../../contexts/chatscontext/ChatContext";
 
 export const ChatList = () => {
 
-    const { activeUser, searchInput, chatsList, setActiveChat }: any = useContext(ChatContext)
+    const { activeUser, searchInput, chatsList, setActiveChat ,setPicShow}: any = useContext(ChatContext)
 
 
 
@@ -54,7 +54,7 @@ export const ChatList = () => {
 
                         <React.Fragment key={i}>
                             <tr className="listshow" style={{ cursor: "pointer" }} onClick={() => { update(u) }}   >
-                                <td className="my-2  chatlist_dp" style={{ backgroundImage: `url(${u.roomDP})` }}></td>
+                                <td className="my-2  chatlist_dp" onClick={()=>setPicShow({status:true,url:u.roomDP})} style={{ backgroundImage: `url(${u.roomDP})` }}></td>
                                 <td className="container mx-3" style={{ width: '100%' }}>
                                     <div >
                                         <span >{u.name}</span>
@@ -92,9 +92,9 @@ export const ChatList = () => {
                         return <>
 
                             <React.Fragment key={i}>
-                                <tr className="listshow " style={{ cursor: "pointer" }} onClick={() => { newChat(u) }}   >
-                                    <td className="chatlist_dp" style={{ backgroundImage: `url(${u.dp})` }}></td>
-                                    <td className="container mx-3" style={{ width: '100%' }}>
+                                <tr className="listshow " style={{ cursor: "pointer" }}    >
+                                    <td className="chatlist_dp" onClick={()=>setPicShow({status:true,url:u.dp})} style={{ backgroundImage: `url(${u.dp})` }}></td>
+                                    <td className="container mx-3" onClick={() => { newChat(u) }} style={{ width: '100%' }}>
                                         <div >
                                             <span >{u.name}</span>
 
