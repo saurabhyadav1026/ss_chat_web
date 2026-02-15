@@ -6,7 +6,7 @@ import {AddAttachmentIcon,LoadingIcon,SendIcon,Activemic, CrossIcon} from './ico
 import {sendToAI} from './userProfile/users';
 import  ListenerContext from '../voiceassistance/listener/ListenerContext.tsx';
 
-import { useContext ,useEffect,useState} from 'react';
+import { useContext ,useEffect,useRef,useState} from 'react';
 import ChatContext from '../contexts/chatscontext/ChatContext.tsx';
 //import { sendMessage } from '../securety/msgencryption.ts';
 
@@ -79,9 +79,14 @@ const createTempMsgId=()=>{
 }
 
     // for seetting key shortcuts
-    const keyFunctions=(e:any)=>{
+    const keyFunctions=async(e:any)=>{
 
-        if((!e.shiftKey)&&(e.key==='Enter'))send();
+        if((!e.shiftKey)&&(e.key==='Enter')){
+        await  send()
+        const el :any= textareaRef.current;
+    el.style.height = "auto";                 // reset height
+    el.style.height = el.scrollHeight + "px";
+        };
         if(((e.shiftKey)&&(e.key==='n'))||((e.shiftKey)&&(e.key==='N'))){
            
             //createAINewChat();
@@ -89,9 +94,12 @@ const createTempMsgId=()=>{
         }
     }
 
-
+const textareaRef=useRef(null);
 const onInputChange=async(e:any)=>{
   setInputValue(e.target.value);
+ const el :any= textareaRef.current;
+    el.style.height = "auto";                 // reset height
+    el.style.height = el.scrollHeight + "px";
   }
 
 
@@ -116,14 +124,23 @@ if(activeChat===null) return <></>
     return (
         <>
 
-            <div id="text_input_bar" style={props.sty_input}>
+            <div id="text_input_bar" className='p-2 px-3' style={props.sty_input}>
+
+{/* 
                {!isListening?<Activemic func={()=>{setIsListening(true);startListening()}}></Activemic>:<CrossIcon func={()=>{setIsListening(false);stopListening();}}></CrossIcon>}
                 <input id="add_attachment" className='form-control' style={{display:"none"}} type="file" accept="image/*"  />
+ */}
+
+
 {/* <!-- add attachment btn --> */}
+
+{/* 
               <div id="add_file_btn"><AddAttachmentIcon func={()=>{}}></AddAttachmentIcon></div>
-             
+         */}     
                 {/*  intput area  */}
-                <input id="cammand_input" name="ignore-history"  type='text' onChange={onInputChange}  value={inputValue} onKeyUp={(key)=>{keyFunctions(key)}} placeholder="Enter here.."/> 
+             
+             
+                <textarea id="cammand_input" ref={textareaRef} name="ignore-history"  rows={1} onChange={onInputChange}  value={inputValue} onKeyUp={(key)=>{keyFunctions(key)}} placeholder="Enter here.."/> 
 
 
                 {/* <!-- send btn --> */}

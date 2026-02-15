@@ -50,11 +50,11 @@ alert("deletinng msg"+activeUser+active_chat+time);
 
 
      return (
-                <div className="res  container-fluid  px-3 hh-100 m-2  d-flex res_output   ">   
+                <div className="receiv_msg msg_box_a container-fluid  px-3 hh-100 m-2  d-flex res_output   ">   
                       {/*     <!-- for ai  response displaying  --> */}
-                 <div className='  pt-2 px-3 d-flex align-items-center  bg-primary  border ' style={{borderRadius:"50px",fontFamily:"'Poppins', sans-serif",fontWeight:"600",fontSize:"100%",lineHeight:"1"}}> 
+                 <div className=' msg_box_b pt-2 px-3  bg-primary  border msg_font_style' > 
                   <Markdown remarkPlugins={[remarkGfm]}>{props.res_}</Markdown>
-                 <div className=' text-dark d-flex msg_time ' style={{fontFamily:"'Poppins', sans-serif",fontWeight:"400",fontSize:"70%",lineHeight:"1"}}>
+                 <div className='message-time '>
                                     {props.time ? props.time : ""}
                 
                                 </div>
@@ -65,7 +65,7 @@ alert("deletinng msg"+activeUser+active_chat+time);
     
                
 {/* div */}
-                <div  className="res_option border  ">
+                <div  className="receiv_msg_option msg_box_c ">
 <span className='msg_options '>
                  { !isSpeaking?<SpeakerIcon    func={async()=>{setIsSpeaking(true); await startSpeaking(props.res_)}} ></SpeakerIcon>:
                                <StopspeakIcon  func={()=>{ setIsSpeaking(false); stopSpeaking()}  }></StopspeakIcon>     }

@@ -58,21 +58,18 @@ alert("deletinng msg"+activeUser+active_chat+time);
 
     return (
 
-        <div className="req  container-fluid d-flex  px-3 hh-100 mt-1 " style={{justifyContent:"flex-end"}} >
+        <div className="send_msg req  msg_box_a container-fluid   px-3 hh-100 mt-1 " style={{justifyContent:"flex-end"}} >
 
-            <div className="req_cammand  px-3 pt-2  d-flex align-items-center  bg-success border" style={{borderRadius:"50px",fontFamily:"'Poppins', sans-serif",fontWeight:"600",fontSize:"100%",lineHeight:"0.8"}}   >
+            <div className="  pt-2 px-3 msg_box_b  bg-success border"    >
 
                 {/* <!-- for your cammand displaying --> */}
-
-                <Markdown remarkPlugins={[remarkGfm]}>{props.req_}</Markdown>
-                <div className='  p-1  pt-1 msg_time ' style={{display:"inline-block",fontFamily:"'Poppins', sans-serif",fontWeight:"400",fontSize:"70%",lineHeight:"1"}}>
+<span  className='msg_font_style'>{props.req_} </span>
+              {/*   <Markdown remarkPlugins={[remarkGfm]}>{props.req_}</Markdown> */}
+                <span className='message-time '>
                     {props.time.slice(0,6) ? props.time : ""}
- {console.log(props.tick)}
- {console.log(props.tickStatus)}
- <div className='pt-0' style={{display:"inline-block"}}>
-                    {props.tick === 0 ? <UnsendIcon></UnsendIcon>: props.tickStatus.read !==null ?  <BlueTickIcon></BlueTickIcon> : props.tickStatus.delivered !== null ? <DoubleTickIcon></DoubleTickIcon> :<SingleTickIcon></SingleTickIcon>}
-      </div>
-                </div>
+                   <span className='py-1' style={{display:"inline-block"}}> {props.tick === 0 ? <UnsendIcon></UnsendIcon>: props.tickStatus.read !==null ?  <BlueTickIcon></BlueTickIcon> : props.tickStatus.delivered !== null ? <DoubleTickIcon></DoubleTickIcon> :<SingleTickIcon></SingleTickIcon>}
+     </span>
+                </span>
 
 
 
@@ -80,7 +77,7 @@ alert("deletinng msg"+activeUser+active_chat+time);
      <div>
 
 
-            <div className="req_option  border">
+            <div className="send_msg_option msg_box_c">
 
                 {/*     <!--  edit btn--> */}
                 <span className='msg_options'> <Edit func={editReq} r_no={props.r_no} ></Edit></span>

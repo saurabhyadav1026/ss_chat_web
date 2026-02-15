@@ -35,7 +35,7 @@ useEffect(()=>{
   <BlankChatPage></BlankChatPage>
   </div>}
 
-else if (chat === null) return <div className="scrollbar-only-rod" ref={chatPageRef} id="chat_page"></div>
+else if (chat === null) return <div className="scrollbar-only-rod"  ref={chatPageRef} id="chat_page"></div>
     return <div className="scrollbar-only-rod"   ref={chatPageRef} id="chat_page">{
     
        Object.values(chat).map((u:any, i:any) :any=> {
