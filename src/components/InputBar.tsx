@@ -1,6 +1,6 @@
 //import { useEffect,useState } from 'react';
-import {AddAttachmentIcon,LoadingIcon,SendIcon,Activemic, CrossIcon} from './icons.tsx';
-
+//import {AddAttachmentIcon,LoadingIcon,SendIcon,Activemic, CrossIcon} from './icons.tsx';
+import {LoadingIcon,SendIcon} from './icons.tsx';
 
 //import getImageText from '../getImageText'
 import {sendToAI} from './userProfile/users';
@@ -12,11 +12,11 @@ import ChatContext from '../contexts/chatscontext/ChatContext.tsx';
 
 const InputBar = (props:any) => {
 
-const {transcript,startListening,stopListening,resetTranscript}:any=useContext(ListenerContext);
-
+//const {transcript,startListening,stopListening,resetTranscript}:any=useContext(ListenerContext);
+const {transcript,resetTranscript}:any=useContext(ListenerContext);
 const {setchat,activeChat,activeUser,sendMessage}:any =useContext(ChatContext)
 
-const [isListening,setIsListening]:any=useState(false);  
+const [isListening]:any=useState(false);  
 
 const [inputValue,setInputValue]:any=useState("");
 

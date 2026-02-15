@@ -1,8 +1,11 @@
 
 import { LikeRes,Dislike,Edit, Copy, DoubleTickIcon, UnsendIcon, SingleTickIcon, BlueTickIcon ,Trash_binIcon} from './icons'
 
-import Markdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
+//import Markdown from 'react-markdown';
+//import remarkGfm from 'remark-gfm';
+
+
+
 import { useEffect,useState } from 'react';
 
 
