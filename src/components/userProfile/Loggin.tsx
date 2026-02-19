@@ -46,19 +46,24 @@ else{
         
         
     const a_user:any=(await googleLoggin(res.credential))
-if(!a_user.status){
-    setCondition(true)
-    alert("usernae or password is incorrect");
-    return;
-}
-else{
-    console.log(a_user.value)
+if(a_user.status){
+    createNewPassword();
     props.setActiveUser(a_user.value)
         props.setPage('ChatPageSection')
 }
+else{
+    setCondition(true)
+    alert("username or password is incorrect");
+    return;
+}
+
     }
 
    
+
+    const createNewPassword=()=>{
+return;
+    }
 
 
 return<>
@@ -66,7 +71,7 @@ return<>
 <div className='container'><button className="btn btn-primary"  onClick={()=>{props.setPage('ChatPageSection');}}>Back</button></div>
 
 
-<h2 style={{color:"blue"}}>Loggin Here...</h2>
+<h2 style={{color:"blue"}}>Log in Here...</h2>
 
 
 <table style={tabSty}>
@@ -82,14 +87,14 @@ return<>
 <tr>
 <td  colSpan={2}><button className='btn btn-success text-bg-color' style={{width:"100%",height:"80%"}} onClick={verifyLoggin}>Log in</button></td>
 </tr>
-<tr  ><td  >or loggin with : </td><td><GoogleLogin onSuccess={verifygoogleLoggin}></GoogleLogin></td></tr>
+<tr  ><td  >or log in with : </td><td><GoogleLogin onSuccess={verifygoogleLoggin}></GoogleLogin></td></tr>
 <tr  style={{display:'none'}}><td  colSpan={2}></td></tr>
 
 </tbody>
 </table>
 
 <div  >  <span style={{color:'blue',margin:"3px"}}onClick={()=>props.setProfileSectionPage('forgetPassword')}>Forget Password</span></div>
-<div  >if don't have account <span style={{color:'blue',margin:"3px"}} onClick={()=>props.setProfileSectionPage('reg')}>sign up</span></div>
+<div  >if you don't have an account <span style={{color:'blue',margin:"3px"}} onClick={()=>props.setProfileSectionPage('reg')}>sign up</span></div>
 
 </>
  
