@@ -8,7 +8,7 @@ import Profile from "./Profile";
 import ChatContext from "../../contexts/chatscontext/ChatContext";
 import PasswordReset from "./PasswordReset";
 import EditProfile from "./EditProfilePage";
-import Alert from "../bootstrapCoponents/Alert";
+//import Alert from "../bootstrapCoponents/Alert";
 
 /* interface ActiveUser {
   username: string;
@@ -67,7 +67,7 @@ return <div id="profile_section" className="container-fluid d-flex p-5 m-0 borde
 
 
 
-<div id="profile_section_div2" className=" col-sm-12 p-4 px-2 col-md-6 col-lg-4 col-xl- " >
+<div id="profile_section_div2" className=" col-sm-12 p-4 px-2 col-md-6 col-lg-4 col-xl-3  " style={{overflowY:"scroll"}} >
 
 {profilePage==='log' && <Loggin  activeUser={activeUser} setActiveUser={setActiveUser} setPage={props.setPage} setProfileSectionPage={setProfileSectionPage}/>}
 {profilePage==='reg'  && <Register   setPage={props.setPage} setProfileSectionPage={setProfileSectionPage}/>}
@@ -78,7 +78,7 @@ return <div id="profile_section" className="container-fluid d-flex p-5 m-0 borde
 
 
 </div>
-<div className="sbh_ad_show d-none d-md-flex col-md-6 d-xl-flex d-lg-flex col-lg-8 col-xl-10 bg-danger" style={{backgroundImage:`url("https://ik.imagekit.io/sbhtechhub/show.jpg")`,borderRadius:"5px",height:"100%"}}>
+<div className="sbh_ad_show d-none d-md-flex col-md-6 d-xl-flex d-lg-flex col-lg-8 col-xl-9 bg-danger" style={{backgroundImage:`url("https://ik.imagekit.io/sbhtechhub/show.jpg")`,borderRadius:"5px",height:"100%"}}>
 
  </div>
 </div>

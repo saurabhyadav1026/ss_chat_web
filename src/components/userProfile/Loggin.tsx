@@ -101,8 +101,8 @@ return<>
 {/* <div  >click here to <span style={{color:'blue',margin:"3px"}} onClick={()=>props.setProfileSectionPage('reg')}>Register</span></div>
  */}
 
-<div  >click to <span style={{color:'blue',margin:"3px"}}onClick={()=>props.setPage('demoAICatPageSection')}>stay without logging</span></div>
-
+{/* <div  >click to <span style={{color:'blue',margin:"3px"}}onClick={()=>props.setPage('demoAICatPageSection')}>stay without logging</span></div>
+ */}
 </>
  
 }

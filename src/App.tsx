@@ -9,7 +9,7 @@ import {getMediaAuthinticator} from './components/userProfile/users'
 import PicShow from './components/userProfile/PicShow';
 import ChatContext from './contexts/chatscontext/ChatContext';
 
-import DemoAICatPageSection from './components/pages/demoAI/demoAICatPageSection';
+import DemoAICatPageSection from './components/pages/demoAI/DemoAICatPageSection';
 
 
 export const App= () => { 
