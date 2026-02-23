@@ -42,9 +42,9 @@ resetTranscript();
 
 
 const saveProfile=()=>{
+setTempUser(activeUser);
     alert("saved")
 }
-
 
 
 return<>
