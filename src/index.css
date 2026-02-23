@@ -26,8 +26,8 @@ margin: 0;
   padding: 0%;
   left: 0;
 }
-#logo_icon{
-  background-image: url('https://i.ibb.co/WpB24TDH/light-logo.png');}
+.app_logo,#logo_icon{
+  background-image: url('https://ik.imagekit.io/sbhtechhub/ssapplogo.png');}
 
 
   #user_dp,#chat_dp{
@@ -50,7 +50,7 @@ margin: 0;
 
 
 
-#user_dp,#chat_dp,#logo_icon{
+.sbh_ad_show,.app_logo,#user_dp,#chat_dp,#logo_icon{
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
@@ -378,8 +378,7 @@ width: 10%;
 
 #profile_section_div2{
 
-  height:100%;
-width:100%;
+ 
 background-color:white;
 padding:0;
 margin: 0%;

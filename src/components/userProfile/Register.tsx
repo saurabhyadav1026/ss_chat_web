@@ -113,7 +113,11 @@ const OtpDiv=()=>{
 
 return<>
 
-<h2 style={{color:'green'}}>Register...</h2>
+<div className='d-flex m-0'>
+    <div className='app_logo' style={{height:"100px", width:"100px", borderRadius:"50%"}}></div>
+</div>
+
+<h2 className='m-0' style={{color:'green'}}>Register...</h2>
 <hr/>
 <table style={tabSty}>
     <tbody>
@@ -154,7 +158,6 @@ return<>
 
 
 <div>if you have account <span style={{color:'blue',margin:"3px"}} onClick={()=>props.setProfileSectionPage('log')}>sign in</span></div>
-<div  >click to <span style={{color:'blue',margin:"3px"}}onClick={()=>props.setPage('ChatPageSection')}>stay without loggin</span></div>
 
 
 </>    

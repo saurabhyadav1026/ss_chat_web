@@ -24,6 +24,8 @@ if(u.status)setActiveUser(u.data);
 else alert("Error!  try again later.")
 }
 
+const [tempUser,setTempUser]:any=useState(activeUser);
+
 useEffect(()=>{
 
 
@@ -51,8 +53,9 @@ return<>
 
 
 <div id="profile_page" className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow-sm ">
-    <div><button className="btn btn-danger" onClick={()=>props.setProfileSectionPage("profile")}>Back</button>
-    <button className="btn btn-primary" onClick={()=> {saveProfile();props.setProfileSectionPage("profile")}}>Save</button>
+    <div className="p-3 d-flex " style={{width:"100%",justifyContent:"space-between"}}>
+      <button className=" btn btn-danger" onClick={()=>props.setProfileSectionPage("profile")}>Back</button>
+    <button className=" btn btn-primary" onClick={()=> {saveProfile();props.setProfileSectionPage("profile")}}>Save</button>
     </div>
     <div className="flex flex-col items-center pb-10">
         <img className="w-24 h-24 mb-3 rounded-full shadow-lg" src={props.activeUser.dp} alt="Bonnie image"/>
@@ -60,9 +63,34 @@ return<>
               onSuccess={(res:any)=>{changedp(res.url)}}
               onError={(e:any)=>alert(e)}
    /> 
-        <h5 className="mb-1 text-xl font-medium  ">{props.activeUser.name}</h5>
-      <h6 className="mb-1 text-xl font-medium ">@{props.activeUser.username}</h6>
-        <span className="text-sm text-gray-500 dark:text-gray-800">{props.activeUser.about}</span>
+</div>
+    <div className="m-4 p-2 container d-flex " style={{flexDirection:"column",justifyContent:"space-between"}}>
+    <table>
+      <tr>
+        <td className="p-1">Name :</td>
+        <td className="p-1">
+          <input  className="input border " onChange={()=>{}} value={tempUser.name}/>
+        </td>
+        
+      </tr>
+      <tr>
+        <td className="p-1 fw-5">Username :</td>
+        <td className="p-1" >
+
+<input  className="input border " value={tempUser.username} />
+        </td>
+      </tr>
+      <tr>
+        <td className="p-1">
+          About :
+        </td>
+        <td className="p-1">
+<input  value={tempUser.about} className="input border "/>    
+        </td>
+      </tr>
+    </table>
+   
+     
        
     </div>
    {/* { <button onClick={startListening}>speak</button> */}

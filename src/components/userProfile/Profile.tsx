@@ -37,27 +37,34 @@ return<>
 
 
 
-<div id="profile_page" className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow-sm ">
-    <div><button className="btn btn-primary"  onClick={()=>{props.setPage('ChatPageSection');}}>Back</button>
-    <button className="btn btn-danger" style={{alignSelf:"10"}} onClick={()=>{setLogout();props.setPage('ChatPageSection');}}>logout</button>
-
+<div id="profile_page" className=" col-12 ">
+    <div className="d-flex p-3" style={{width:"100%",justifyContent:"space-between"}}>
+      <button className="btn btn-primary"  onClick={()=>{props.setPage('ChatPageSection');}}>Back</button>
+       <button className="btn btn-secondary" onClick={()=>props.setProfileSectionPage("editProfile")}>Edit</button>
+        
+      
     </div>
     <div className="flex flex-col items-center pb-10">
         <img  onClick={()=>setPicShow({status:true,url:props.activeUser.dp})} className="w-24 h-24 mb-3 rounded-full shadow-lg" src={props.activeUser.dp} alt="Bonnie image"/><br/>
-            <button className="btn btn-secondary" onClick={()=>props.setProfileSectionPage("editProfile")}>Edit</button>
-        
-    
+
+       
         <h5 className="mb-1 text-xl font-medium  ">{props.activeUser.name}</h5>
       <h6 className="mb-1 text-xl font-medium ">@{props.activeUser.username}</h6>
         <span className="text-sm text-gray-500 dark:text-gray-800">{props.activeUser.about}</span>
        
     </div>
-   
+    
+<div className="mt-4 d-flex align-items-center justify-content-center">
+  <button className="btn btn-transparent text-danger" style={{alignSelf:"10"}} onClick={()=>{setLogout();props.setProfileSectionPage("log");props.setPage('ProfileSection');}}>logout</button>
+
+</div>
+
+
+
 <div style={{height:'200px',width:"100%",padding:"10px",fontSize:"larger"}}>
 {text+(transcript||"")}
 
 </div>
- 
 
 
 </div>

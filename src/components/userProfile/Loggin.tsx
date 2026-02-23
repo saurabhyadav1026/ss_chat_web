@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import { ConditionAlert } from '../bootstrapCoponents/Alert.tsx';
+//import { ConditionAlert } from '../bootstrapCoponents/Alert.tsx';
 import { googleLoggin, verifyUser } from './users.ts'
 import { GoogleLogin } from '@react-oauth/google';
 
@@ -30,6 +30,7 @@ const uspassword_:string=(document.getElementById('log_uspassword_input'!)as HTM
 const a_user:any=(await verifyUser(usname_,uspassword_))
 if(!a_user.status){
     setCondition(true)
+    console.log(condition)
     alert("usernae or password is incorrect");
     return;
 }
@@ -65,13 +66,13 @@ else{
 return;
     }
 
-
+//<ConditionAlert condition={condition} message='Incorrect Password'></ConditionAlert>
 return<>
-<ConditionAlert condition={condition} message='Incorrect Password'></ConditionAlert>
-<div className='container'><button className="btn btn-primary"  onClick={()=>{props.setPage('ChatPageSection');}}>Back</button></div>
 
-
-<h2 style={{color:"blue"}}>Log in Here...</h2>
+<div className='d-flex'>
+    <div className='app_logo' style={{height:"100px", width:"100px", borderRadius:"50%"}}></div>
+</div>
+<br/>
 
 
 <table style={tabSty}>
@@ -93,8 +94,14 @@ return<>
 </tbody>
 </table>
 
-<div  >  <span style={{color:'blue',margin:"3px"}}onClick={()=>props.setProfileSectionPage('forgetPassword')}>Forget Password</span></div>
-<div  >if you don't have an account <span style={{color:'blue',margin:"3px"}} onClick={()=>props.setProfileSectionPage('reg')}>sign up</span></div>
+{/* <div  >  <span style={{color:'blue',margin:"3px"}}onClick={()=>props.setProfileSectionPage('forgetPassword')}>Forget Password</span></div>
+
+ */}
+
+{/* <div  >click here to <span style={{color:'blue',margin:"3px"}} onClick={()=>props.setProfileSectionPage('reg')}>Register</span></div>
+ */}
+
+<div  >click to <span style={{color:'blue',margin:"3px"}}onClick={()=>props.setPage('demoAICatPageSection')}>stay without logging</span></div>
 
 </>
  

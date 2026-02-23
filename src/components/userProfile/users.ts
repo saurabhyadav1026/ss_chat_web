@@ -11,18 +11,21 @@ friend chat:   usn:[{t:"",by:1|2,text:" "}]
 */
 
 import { GoogleGenerativeAI } from '@google/generative-ai';
-//import axios from 'axios'
+
 import getRes from '../../getRes';
-import axios from 'axios'
 
 
 
+import api from '../../api/api';
 
 
-const responser:string=import.meta.env.VITE_API_KEY+'/users';
+
+const responser:string='/users';
+
+
 export const addUser=async(u:any)=>{
 try{
-await fetch(responser+'/newuser?name='+u.name+"&&username="+u.username+"&&password="+u.userpassword+"&&email="+u.email);
+await api.post(responser+'/newuser?name='+u.name+"&&username="+u.username+"&&password="+u.userpassword+"&&email="+u.email);
  
 }
     catch(error){
@@ -45,7 +48,7 @@ const sbhunk:any={
 
 export const googleLoggin=async(token:any)=>{
    let data=false;
-  try{  await axios.post(responser+'/googleAuthVerification',{token:token}).
+  try{  await api.post(responser+'/googleAuthVerification',{token:token}).
   then((res)=>{data=res.data})
 }
 catch(e){
@@ -56,7 +59,7 @@ return data;
 
 export const checkIsUsernameAvailble=async(username:string)=>{
 let data
-    try{await axios.post(responser+'/checkisusernameavailble',{username:username}).then((res)=>data=res.data.value);
+    try{await api.post(responser+'/checkisusernameavailble',{username:username}).then((res)=>data=res.data.value);
     }catch(e){console.log(e)}
     return data;
 }
@@ -71,7 +74,7 @@ if(activeuser.includes('sbhunk'))
     sbhunk.chats[activechat]={name:'unknown'+activechat[5],reqs:[],ress:[]}
   
     else try{
-      await fetch(responser+'/newchat?activeuser='+activeuser+'&&activechat='+activechat)
+      await api.post(responser+'/newchat?activeuser='+activeuser+'&&activechat='+activechat)
     }catch{}
     
      
@@ -81,20 +84,20 @@ if(activeuser.includes('sbhunk'))
 
 export const getlogUser:any=async (username:string)=>{
     
-let us:any= await fetch(responser+'/getloguser?username='+username)
-us=await us.json();
+let us:any= await api.get(responser+'/getloguser?username='+username)
+us= us.data;
 return us.value;
 }
 export const getUser=async(username:string)=>{
-    let us:any=await fetch(responser+'/getuser?username='+username)
-us=await us.json();
+    let us:any=await api.get(responser+'/getuser?username='+username)
+us=us.data;
 return us.value;
 }
 
 
 export const verifyUser=async(username:any,password:any)=>{
     let rr=false;
-   try  {await axios.post(responser+'/verifyuser',{username:username,password:password})
+   try  {await api.post(responser+'/verifyuser',{username:username,password:password})
                     .then((res)=>{rr=res.data})        
       
     }catch(e:any){console.log(e)}
@@ -124,8 +127,8 @@ export const getChat=async(activeuser:string,activechat:string)=>{
     }
 else{
     try{
-     const res=await fetch(responser+'/getchat?activeuser='+activeuser+'&&activechat='+activechat)
-     chat= await res.json();
+     const res=await api.get(responser+'/getchat?activeuser='+activeuser+'&&activechat='+activechat)
+     chat= res.data;
      chat=chat.value
    }catch{}
  } 
@@ -147,7 +150,7 @@ export const sendToAI=async(activeuser:string,activechat:string,req:string)=>{
         return;
     }
 else try    {
-  await fetch(responser+'/sendtoai?activeuser='+activeuser+'&&activechat='+activechat+'&&req='+req)
+  await api.post(responser+'/sendtoai?activeuser='+activeuser+'&&activechat='+activechat+'&&req='+req)
 }catch(e){console.log(e)}
 }
 
@@ -173,8 +176,8 @@ return list;
 }
 else { 
  // then for global search
-const res=await fetch(responser+'/getsearchlist?input='+input+"&&activeuser="+activeuser);
-    let search_list=await res.json()
+const res=await api.post(responser+'/getsearchlist?input='+input+"&&activeuser="+activeuser);
+    let search_list=await res.data
     return search_list.value ||[{username:null,name:"wait Searching...."}]
 }
 }
@@ -182,8 +185,8 @@ const res=await fetch(responser+'/getsearchlist?input='+input+"&&activeuser="+ac
 
 export const getOtp=async (mail:string)=>{
     let otp={status:'not_get'};
-   try{ const res= await fetch(responser+'/getotp?email='+mail);
-     otp=await res.json();}catch{}
+   try{ const res= await api.get(responser+'/getotp?email='+mail);
+     otp=await res.data;}catch{}
     return otp;    
 }
 
@@ -191,15 +194,15 @@ export const getOtp=async (mail:string)=>{
 
 
 export const getMediaAuthinticator=async()=>{
-    let auth=await fetch(import.meta.env.VITE_API_KEY+'/get_authentiator');
-    return await auth.json();
+    let auth=await api.get(import.meta.env.VITE_api_KEY+'/get_authentiator');
+    return await auth.data;
 }
 
 
 export const setDp=async(accessToken:any,_id:String,imgurl:String)=>{
     console.log(accessToken)
 let data={status:false}
-await axios.post(responser+'/setdp',{_id:_id,dpurl:imgurl},{headers:{authorization:`Bearer ${accessToken}`}})
+await api.post(responser+'/setdp',{_id:_id,dpurl:imgurl},{headers:{authorization:`Bearer ${accessToken}`}})
 .then((res)=>data=res.data);
 
 return data;
@@ -209,7 +212,7 @@ return data;
 
 
 
-const genapi=import.meta.env.VITE_GEN_API
+const genapi=import.meta.env.VITE_GEN_api
 const genAI = new GoogleGenerativeAI(genapi)
 
 export const  askAi=async(req:string)=>{
@@ -232,6 +235,6 @@ export const  askAi=async(req:string)=>{
 
 
 export const  deletemsg=async(activeuser:string,activechat:string,time:string)=>{
-    try{ await fetch(responser+'/deletemsg?activeuser='+activeuser+'&&activechat='+activechat+'&&time='+time)
+    try{ await api(responser+'/deletemsg?activeuser='+activeuser+'&&activechat='+activechat+'&&time='+time)
 }catch(e){console.log(e)}
     } 

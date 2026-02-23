@@ -60,12 +60,14 @@ const logOut=()=>{
 
 
 
+//<Alert buttonId="hlosbh" message='Incorrect Password'/>
 
-return <div id="profile_section" className="container  p-5 my-5 border" >
+
+return <div id="profile_section" className="container-fluid d-flex p-5 m-0 border" style={{width:"100%"}} >
 
 
-<Alert buttonId="hlosbh" message='Incorrect Password'/>
-<div id="profile_section_div2" className="container p-5 my-5 " >
+
+<div id="profile_section_div2" className=" col-sm-12 p-4 px-2 col-md-6 col-lg-4 col-xl- " >
 
 {profilePage==='log' && <Loggin  activeUser={activeUser} setActiveUser={setActiveUser} setPage={props.setPage} setProfileSectionPage={setProfileSectionPage}/>}
 {profilePage==='reg'  && <Register   setPage={props.setPage} setProfileSectionPage={setProfileSectionPage}/>}
@@ -76,8 +78,10 @@ return <div id="profile_section" className="container  p-5 my-5 border" >
 
 
 </div>
-</div>
+<div className="sbh_ad_show d-none d-md-flex col-md-6 d-xl-flex d-lg-flex col-lg-8 col-xl-10 bg-danger" style={{backgroundImage:`url("https://ik.imagekit.io/sbhtechhub/show.jpg")`,borderRadius:"5px",height:"100%"}}>
 
+ </div>
+</div>
 
 }
 
