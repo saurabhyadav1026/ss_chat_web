@@ -124,7 +124,7 @@ if(activeChat===null) return <></>
     return (
         <>
 
-            <div id="text_input_bar" className='p-2 px-3' style={props.sty_input}>
+            <div id="text_input_bar" className='p-2 px-3 ' style={props.sty_input}>
 
 {/* 
                {!isListening?<Activemic func={()=>{setIsListening(true);startListening()}}></Activemic>:<CrossIcon func={()=>{setIsListening(false);stopListening();}}></CrossIcon>}

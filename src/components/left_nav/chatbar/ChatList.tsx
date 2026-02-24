@@ -44,7 +44,7 @@ export const ChatList = () => {
     if (searchInput === "") return <>
 
         {console.log(chatsList)}
-        <table id="menu_show_bar" className="table table-hover p-0 " >
+        <table id="menu_show_bar" className="table table-hover p-0 " style={{height:"100%"}} >
             {/*  <!-- list of chats  --> */}
             <tbody className='overflow-y-scroll m-0'>
                 {Object.values(chatsList).map((u: any, i: any) => {
@@ -58,6 +58,7 @@ export const ChatList = () => {
                                 <td className="container mx-3" style={{ width: '100%' }}>
                                     <div >
                                         <span >{u.name}</span>
+                                        <span>{u.username}</span>
                                         {u.unreadCount > 0 ? <span style={stty_unread} className="unread_show">{u.unreadCount}</span> : <></>}
                                         <span className="list_option" style={{ visibility: "hidden" }}><b>:</b></span>
                                     </div>
@@ -97,7 +98,7 @@ export const ChatList = () => {
                                     <td className="container mx-3" onClick={() => { newChat(u) }} style={{ width: '100%' }}>
                                         <div >
                                             <span >{u.name}</span>
-
+                                            <span>{u.username}</span>
 
                                             <span className="list_option" style={{ visibility: "hidden" }}><b>:</b></span>
                                         </div>

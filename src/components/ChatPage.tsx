@@ -6,10 +6,10 @@ import BlankChatPage from "./userProfile/BlankChatPage.tsx";
 
 import ChatContext from "../contexts/chatscontext/ChatContext.tsx";
 
+import InputBar from "./InputBar.tsx";
 
 
-
-const ChatPage = ()=> {
+const ChatPage = (props:any)=> {
 
 const {activeChat,chat,activeUser}:any=useContext(ChatContext);
 const chatPageRef=useRef(null);
@@ -30,14 +30,20 @@ useEffect(()=>{
   
  if (!activeChat) {
   
-  return <div  ref={chatPageRef} id="chat_page">
+  return <div  ref={chatPageRef} id="chat_page" >
     <h5>we get soon</h5>
   <BlankChatPage></BlankChatPage>
   </div>}
 
-else if (chat === null) return <div className="scrollbar-only-rod"  ref={chatPageRef} id="chat_page"></div>
-    return <div className="scrollbar-only-rod"   ref={chatPageRef} id="chat_page">{
-    
+else if (chat === null) return <div className="scrollbar-only-rod chat_page"  ref={chatPageRef} id="chat_page_ad"></div>
+
+
+    return <div className=" chat_page"    id="chat_page_chat" style={{backgroundImage:`url("https://ik.imagekit.io/sbhtechhub/chatpagewallpaper.jpg?updatedAt=1771875251700")`}}>
+      
+      <div className="scrollbar-only-rod  d-flex flex-direction-column" ref={chatPageRef} style={{overflowX:"hidden", flexDirection:"column",height:"90%"}}>
+     
+      {
+  
        Object.values(chat).map((u:any, i:any) :any=> {
             return <React.Fragment key={i}>
               
@@ -46,6 +52,9 @@ else if (chat === null) return <div className="scrollbar-only-rod"  ref={chatPag
 
        })
     }
+    </div>
+
+    {activeChat? <div className="container-fluid  " ><InputBar  sty_input={props.controProperty.input} /></div>:<></>}
     </div>
 
   }

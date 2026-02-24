@@ -1,12 +1,13 @@
 
-import { LikeRes,Dislike,Edit, Copy, DoubleTickIcon, UnsendIcon, SingleTickIcon, BlueTickIcon ,Trash_binIcon} from './icons'
+import { LikeRes,Dislike,Edit, Copy, DoubleTickIcon, UnsendIcon, SingleTickIcon, BlueTickIcon ,Trash_binIcon, SpeakerIcon, StopspeakIcon} from './icons'
 
 //import Markdown from 'react-markdown';
 //import remarkGfm from 'remark-gfm';
 
 
+import SpeakerContext from '../voiceassistance/speaker/SpeakerContext';
+import { useEffect,useState,useContext } from 'react';
 
-import { useEffect,useState } from 'react';
 
 
 /* 
@@ -19,6 +20,11 @@ props
 
 const ReqShow = (props: any) => {
    
+
+const [isSpeaking,setIsSpeaking]=useState(false);
+const {startSpeaking,stopSpeaking}:any=useContext(SpeakerContext);
+
+
     const editReq = (r: any) => {
         const text: any = document.getElementsByClassName("req_cammand"!)[r].innerHTML;
         (document.getElementById("cammand_input"!) as HTMLInputElement).value = text;
@@ -81,6 +87,11 @@ alert("deletinng msg"+activeUser+active_chat+time);
 
 
             <div className="send_msg_option msg_box_c">
+
+                <span className='msg_options '>
+                                 { !isSpeaking?<SpeakerIcon    func={async()=>{setIsSpeaking(true); await startSpeaking(props.req_)}} ></SpeakerIcon>:
+                                               <StopspeakIcon  func={()=>{ setIsSpeaking(false); stopSpeaking()}  }></StopspeakIcon>     }
+                                 </span>
 
                 {/*     <!--  edit btn--> */}
                 <span className='msg_options'> <Edit func={editReq} r_no={props.r_no} ></Edit></span>

@@ -78,7 +78,7 @@ return <div id="profile_section" className="container-fluid d-flex p-5 m-0 borde
 
 
 </div>
-<div className="sbh_ad_show d-none d-md-flex col-md-6 d-xl-flex d-lg-flex col-lg-8 col-xl-9 bg-danger" style={{backgroundImage:`url("https://ik.imagekit.io/sbhtechhub/show.jpg")`,borderRadius:"5px",height:"100%"}}>
+<div className="sbh_ad_show d-none d-md-flex col-md-6 d-xl-flex d-lg-flex col-lg-8 col-xl-9" style={{backgroundImage:`url("https://ik.imagekit.io/sbhtechhub/show.jpg")`,borderRadius:"5px",height:"100%"}}>
 
  </div>
 </div>

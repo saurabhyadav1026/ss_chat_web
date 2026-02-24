@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import TopNav from "./components/TopNav.tsx";
 import LeftNav from './components/left_nav/LeftNav.tsx';
 import ChatPage from './components/ChatPage.tsx';
-import InputBar from './components/InputBar.tsx';
+
 
 import ChatContext from "./contexts/chatscontext/ChatContext.tsx";
 
@@ -73,11 +73,13 @@ useEffect(()=>{
 
     <>
       <LeftNav  sty_lft={controProperty.left} activeChat={activeChat}  chatsList={chatsList} activeUser={  activeUser} setPage={props.setPage} setActiveChat={setActiveChat} ></LeftNav>
+      
+      
       <div id="main_page" style={controProperty.main}>
         <TopNav  leftNavControl={leftNavControl} activeChat={activeChat}></TopNav>
-        <ChatPage   ></ChatPage>
+        <ChatPage  controProperty={controProperty} ></ChatPage>
 
-      {activeChat?  <InputBar  sty_input={controProperty.input}  ></InputBar>:<></>}
+      
 
 
       </div>
