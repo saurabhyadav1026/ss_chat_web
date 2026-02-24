@@ -38,9 +38,9 @@ useEffect(()=>{
 else if (chat === null) return <div className="scrollbar-only-rod chat_page"  ref={chatPageRef} id="chat_page_ad"></div>
 
 
-    return <div className=" chat_page"    id="chat_page_chat" style={{backgroundImage:`url("https://ik.imagekit.io/sbhtechhub/chatpagewallpaper.jpg?updatedAt=1771875251700")`}}>
+    return <div className=" chat_page"    id="chat_page_chat" style={{backgroundImage:`url("https://ik.imagekit.io/sbhtechhub/chatpagewallpaper.png")`}}>
       
-      <div className="scrollbar-only-rod  d-flex flex-direction-column" ref={chatPageRef} style={{overflowX:"hidden", flexDirection:"column",height:"90%"}}>
+      <div className="scrollbar-only-rod  d-flex flex-direction-column" ref={chatPageRef} style={{overflowX:"hidden", flexDirection:"column",height:"80%"}}>
      
       {
   
