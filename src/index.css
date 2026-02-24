@@ -471,6 +471,7 @@ width: 40%;
 #text_input_bar{
   position: relative;
   margin: 0;
+  margin-top: 5px;
   width: 90%;
   left: 5%;
   bottom:5%;
