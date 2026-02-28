@@ -65,7 +65,7 @@ else{
     const createNewPassword=()=>{
 return;
     }
-
+console.log(condition)
 //<ConditionAlert condition={condition} message='Incorrect Password'></ConditionAlert>
 return<>
 

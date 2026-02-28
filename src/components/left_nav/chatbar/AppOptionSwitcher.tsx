@@ -6,7 +6,7 @@ import AIChatList from "./AIChatList";
 
 
 
- const AppOptionSwitcher=(props:any)=>{
+ const AppOptionSwitcher=()=>{
 
 const {appOption}:any=useContext(ChatContext)
 

@@ -21,6 +21,7 @@ const sendOtp=()=>{
     setOtp(null)  // for test not use
      /// for deploy not use
 socket.emit('sendOtp',{emailId:emailId});
+console.log(waiting)
 setWaiting(true)
 
 }
