@@ -30,12 +30,12 @@ const uspassword_:string=(document.getElementById('log_uspassword_input'!)as HTM
 const a_user:any=(await verifyUser(usname_,uspassword_))
 if(!a_user.status){
     setCondition(true)
-    console.log(condition)
+  
     alert("usernae or password is incorrect");
     return;
 }
 else{
-    console.log(a_user.value)
+   
     props.setActiveUser(a_user.value)
         props.setPage('ChatPageSection')
 }

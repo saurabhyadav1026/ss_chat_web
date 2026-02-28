@@ -3,43 +3,29 @@ import { IKUpload } from "imagekitio-react";
 import {setDp} from './users'
 
 
-import ListenerContext from "../../voiceassistance/listener/ListenerContext"
-import { useContext, useEffect, useState } from "react";
+import { useContext,useState } from "react";
 import ChatContext from "../../contexts/chatscontext/ChatContext";
 
 
 
   const EditProfile=(props:any)=>{
 
-const {transcript,resetTranscript}:any=useContext(ListenerContext);
-const [text,setText] =useState("");
 const {activeUser, setActiveUser}:any=useContext(ChatContext);
 
 
 const changedp:any=async(imgurl:any)=>{
 
-  const u:any=await setDp(activeUser.accessToken, activeUser._id,imgurl)
-  console.log(activeUser)
-if(u.status)setActiveUser(u.data);
+  const res:any=await setDp(imgurl)
+
+if(res.status){
+  const u= activeUser;
+  u.dp=imgurl;
+  setActiveUser(u)
+}
 else alert("Error!  try again later.")
 }
 
 const [tempUser,setTempUser]:any=useState(activeUser);
-
-useEffect(()=>{
-
-
-  console.log(transcript);
-
- if(transcript.length>100) {
-  console.log(text)
-/*   let t:string=text+transcript */
-setText(text+transcript);
-resetTranscript();
- }
- 
-},[transcript])
-
 
 const saveProfile=()=>{
 setTempUser(activeUser);
@@ -59,9 +45,9 @@ return<>
     </div>
     <div className="flex flex-col items-center pb-10">
         <img className="w-24 h-24 mb-3 rounded-full shadow-lg" src={props.activeUser.dp} alt="Bonnie image"/>
-      <IKUpload fileName={props.activeUser.username+"_dp"}
+      <IKUpload fileName={props.activeUser._id+"_dp"}
               onSuccess={(res:any)=>{changedp(res.url)}}
-              onError={(e:any)=>alert(e)}
+              onError={(e:any)=>{ console.log(e);alert(e)}}
    /> 
 </div>
     <div className="m-4 p-2 container d-flex " style={{flexDirection:"column",justifyContent:"space-between"}}>
@@ -93,11 +79,7 @@ return<>
      
        
     </div>
-   {/* { <button onClick={startListening}>speak</button> */}
-<div style={{height:'200px',width:"100%",padding:"10px",fontSize:"larger"}}>
-{text+(transcript||"")}
-
-</div>
+   
  
 
 

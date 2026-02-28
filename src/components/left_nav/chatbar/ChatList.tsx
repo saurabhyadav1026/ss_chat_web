@@ -15,9 +15,9 @@ export const ChatList = () => {
 
 
     const update = (u: any) => {
-        console.log(u)
+     
         setActiveChat(u)
-        console.log("acttyyyyyyy")
+      
     }
 
 
@@ -32,10 +32,7 @@ export const ChatList = () => {
 
         }
 
-        console.log("tera user")
-        console.log(activeUser)
-        console.log("tera roo ye hai dek")
-        console.log(tempRoom)
+    
         update(tempRoom);
 
     }
@@ -43,7 +40,6 @@ export const ChatList = () => {
 
     if (searchInput === "") return <>
 
-        {console.log(chatsList)}
         <table id="menu_show_bar" className="table table-hover p-0 " style={{height:"100%"}} >
             {/*  <!-- list of chats  --> */}
             <tbody className='overflow-y-scroll m-0'>

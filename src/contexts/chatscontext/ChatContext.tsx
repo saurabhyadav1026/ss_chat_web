@@ -18,6 +18,7 @@ export const ChatContextProvider = ({ children }: any) => {
 
   let luser: any = { _id: null, username: 'sbhunk', name: "Loggin here", dp: "https://ik.imagekit.io/sbhtechhub/no_dp.jpg", loggin_token: "" }
 
+  
   if (localStorage.getItem('ssapp_activeUser')) {
     luser = localStorage.getItem('ssapp_activeUser');
     luser = JSON.parse(luser);
@@ -65,7 +66,7 @@ const [picShow,setPicShow]:any=useState({status:false})
 
   // to get search or friend list    
   useEffect(() => {
-    console.log(activeUser)
+   
 
     if (appOption === "Chat") {
       
@@ -77,7 +78,7 @@ const [picShow,setPicShow]:any=useState({status:false})
       // on not loggin
       else{
 setChatList({info:"loggin yourself to connect with your friend"})
-console.log(chatsList  )
+
 
       }
     }
@@ -102,10 +103,8 @@ console.log(chatsList  )
   useEffect(() => {
 
     socket.on("setChatList", (data) => {
-      console.log("chatlist will set soon")
       setChatList(data.chatlist);
-      console.log(chatsList)
-      console.log("we set the chat list")
+    
     })
     return () => { socket.off("setChatList") }
   })
@@ -116,18 +115,15 @@ console.log(chatsList  )
 
   // to get Chat  yaani messages
   useEffect(() => {
-    console.log("hum chat namga rhe hai")
 
 
     if (activeChat && activeChat._id) {
-      console.log("hum 1 pe hai")
+     
       socket.emit("getChat", { userId: activeUser._id, roomId: activeChat._id })
-      console.log("1 ho gya ")
+    
     }
     else if (activeChat) {
-      console.log("hum 2 pe hai")
       setchat({});
-      console.log("2 ho gya ")
     }
 
   }, [activeChat])
@@ -139,9 +135,7 @@ console.log(chatsList  )
 
   useEffect(() => {
     socket.on("setChat", (data) => {
-      console.log("hum chat mgaaye ab save kr rhe")
       setchat(data.chat);
-      console.log("sab set ho gya")
     })
     return () => { socket.off("setChat") }
   })
@@ -186,7 +180,7 @@ console.log(chatsList  )
 
         keyHepler.set(msg._id, data.oldMsgId)  // to save temp key
         setchat((prev: any) => ({ ...prev, [data.oldMsgId]: msg }));
-        console.log(" tmhara tick kr diya yrr")
+
 
       }
 
@@ -194,20 +188,13 @@ console.log(chatsList  )
       else {
 
         socket.emit("doDoubleTick", msg._id);
-        console.log("dble tick req send")
         if (activeChat._id === room._id) {
-
-          console.log("tmhare liye msg aaya hai")
-
           setchat((prev: any) => ({ ...prev, [msg._id]: msg }))
 
           socket.emit("doBlueTick", msg._id);
-          console.log("blue  tick req send")
 
         }
       }
-
-      console.log("receiving done")
 
     })
 
@@ -219,16 +206,12 @@ console.log(chatsList  )
   // to update tick  ??????? not working
   useEffect(() => {
     socket.on("updateTick", (data: any) => {
-      console.log("we will update the tick")
       if (activeChat._id === data.roomId) {
-        console.log(" ha yrr tm hi sender ho tmharab hi kr rhe")
 
         let msgid = data.msg._id
         if (keyHepler.has(msgid)) msgid = keyHepler.get(msgid)
         if (chat[msgid]) setchat((prev: any) => ({ ...prev, [msgid]: { ...prev[msgid], tickStatus: data.keyStatus } }))
 
-        console.log("tick updated")
-        console.log(data)
       }
 
     })

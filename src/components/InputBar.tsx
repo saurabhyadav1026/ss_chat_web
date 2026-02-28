@@ -65,8 +65,7 @@ const getMemberTextCopy=(members:any,inputText:String)=>{
 
   let texts:any=[]
    members.forEach((x:any) =>{ texts.push({memberId:x,text:inputText})});
-  console.log(members)
-  console.log(texts)
+ 
   return texts;
   
 }

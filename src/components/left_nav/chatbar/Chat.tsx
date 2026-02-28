@@ -17,7 +17,7 @@ const Chat = (props: any) => {
   const updateSearchInput = (e: any) => {
     setSearchInput(e.target.value)
   }
-  console.log(chatsList)
+ 
   return (
     <>
       <div id="left_nav_main_bar" className="left_bar left_nav_menu_bar col-12  flex-grow-1" style={{position:"relative",height:"80%"}}>

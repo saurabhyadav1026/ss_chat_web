@@ -49,7 +49,10 @@ const sbhunk:any={
 export const googleLoggin=async(token:any)=>{
    let data=false;
   try{  await api.post(responser+'/googleAuthVerification',{token:token}).
-  then((res)=>{data=res.data})
+  then((res)=>{
+    data=res.data
+console.log(data)
+})
 }
 catch(e){
     console.log(e)
@@ -194,15 +197,16 @@ export const getOtp=async (mail:string)=>{
 
 
 export const getMediaAuthinticator=async()=>{
-    let auth=await api.get(import.meta.env.VITE_api_KEY+'/get_authentiator');
+    console.log("we auth the imagekit")
+    let auth=await api.get('/get_authentiator');
     return await auth.data;
 }
 
 
-export const setDp=async(accessToken:any,_id:String,imgurl:String)=>{
-    console.log(accessToken)
+export const setDp=async(imgurl:String)=>{
+
 let data={status:false}
-await api.post(responser+'/setdp',{_id:_id,dpurl:imgurl},{headers:{authorization:`Bearer ${accessToken}`}})
+await api.post(responser+'/setdp',{dpurl:imgurl})
 .then((res)=>data=res.data);
 
 return data;
