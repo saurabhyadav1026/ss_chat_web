@@ -12,6 +12,9 @@ import ChatContext from './contexts/chatscontext/ChatContext';
 import DemoAICatPageSection from './components/pages/demoAI/DemoAICatPageSection';
 
 
+import UserProfile from './components/userProfile/UserProfile';
+
+
 export const App= () => { 
 
 const [page,setPage]=useState('ProfileSection');
@@ -30,12 +33,13 @@ return <>
             urlEndpoint={import.meta.env.VITE_MEDIA_ENDPOINTURL}
             authenticator={getMediaAuthinticator}
 >
-    <div id="main_content" className='container-fluid' >
+    <div id="main_content" className='m-0 p-0  d-flex container-fluid' >
 {page==='ProfileSection'&&<ProfileSection  setPage={setPage}/>}
 {page==='ChatPageSection'&& <ChatPageSection    setPage={setPage}/>}
 {page==='demoAICatPageSection'&&<DemoAICatPageSection/>}
 
 <PicShow/>
+<UserProfile/>
 
 </div>
 

@@ -1,31 +1,14 @@
 
-
-import ListenerContext from "../../voiceassistance/listener/ListenerContext"
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import ChatContext from "../../contexts/chatscontext/ChatContext";
 
 
   const Profile=(props:any)=>{
 
-const {transcript,resetTranscript}:any=useContext(ListenerContext);
-const [text,setText] =useState("");
 const {setLogout,setPicShow}:any=useContext(ChatContext)
 
 
 
-useEffect(()=>{
-
-
-  console.log(transcript);
-
- if(transcript.length>100) {
-  console.log(text)
-/*   let t:string=text+transcript */
-setText(text+transcript);
-resetTranscript();
- }
- 
-},[transcript])
 
 
 
@@ -61,10 +44,6 @@ return<>
 
 
 
-<div style={{height:'200px',width:"100%",padding:"10px",fontSize:"larger"}}>
-{text+(transcript||"")}
-
-</div>
 
 
 </div>

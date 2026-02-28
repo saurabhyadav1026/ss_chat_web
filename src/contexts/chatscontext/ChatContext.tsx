@@ -4,7 +4,7 @@
 import { createContext, useState, useEffect } from "react";
 import { socket } from '../socketcontext/SocketContext.tsx'
 
-
+import api from "../../api/api.ts";
 
 // for temp key of messages
 export const keyHepler = new Map();
@@ -247,11 +247,25 @@ setChatList({info:"loggin yourself to connect with your friend"})
     setActiveUser({ username: 'sbhunk', name: "Loggin here", dp: "https://ik.imagekit.io/sbhtechhub/no_dp.jpg", loggin_token: "" });
 
   }
+  const [userProfileShow,setUserProfilePicShow]=useState({status:false});
 
+  const showUserProfile=(user:any)=>{
 
+    user["status"]=true;
+    setUserProfilePicShow(user)
 
+  }
+const showUserById=async(members:any)=>{
+let id;
+if(members[0]==activeUser._id)id=members[1];
+else id=members[0];
+alert(id)
+  let u:any;
+  await api.get(`/getuserbyid?id=${id}`).then((res)=>u=res.data).catch((err)=>console.log(err))
+setUserProfilePicShow({...u,status:true})
+}
 
-  return <ChatContext.Provider value={{picShow,setPicShow, appOption, setAppOption, setLogout, activeUser, activeChat, setActiveUser, setActiveChat, chatsList, setChatList, chat, setchat, searchInput, setSearchInput, sendMessage }}>
+  return <ChatContext.Provider value={{showUserById,showUserProfile,userProfileShow,setUserProfilePicShow,picShow,setPicShow, appOption, setAppOption, setLogout, activeUser, activeChat, setActiveUser, setActiveChat, chatsList, setChatList, chat, setchat, searchInput, setSearchInput, sendMessage }}>
     {children}
   </ChatContext.Provider>
 }

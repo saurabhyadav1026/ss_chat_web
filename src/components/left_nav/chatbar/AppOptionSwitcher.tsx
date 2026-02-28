@@ -6,13 +6,13 @@ import AIChatList from "./AIChatList";
 
 
 
- const AppOptionSwitcher=()=>{
+ const AppOptionSwitcher=(props:any)=>{
 
 const {appOption}:any=useContext(ChatContext)
 
 return <>
-{appOption==="Chat"?<ChatList/>:
- appOption==='AI'?<AIChatList/>:
+{appOption==="Chat"?<ChatList   />:
+ appOption==='AI'?<AIChatList   />:
  <div className="container p-0 m-0 d-flex flex-column"><h3>Select your option</h3></div>
 }
 

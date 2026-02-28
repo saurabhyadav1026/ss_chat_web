@@ -9,7 +9,7 @@ import ChatContext from "../contexts/chatscontext/ChatContext.tsx";
 import InputBar from "./InputBar.tsx";
 
 
-const ChatPage = (props:any)=> {
+const ChatPage = ()=> {
 
 const {activeChat,chat,activeUser}:any=useContext(ChatContext);
 const chatPageRef=useRef(null);
@@ -54,9 +54,19 @@ else if (chat === null) return <div className="scrollbar-only-rod chat_page"  re
     }
     </div>
 
-    {activeChat? <div className="container-fluid  " ><InputBar  sty_input={props.controProperty.input} /></div>:<></>}
+    {activeChat? <div className="container-fluid  " ><InputBar   /></div>:<></>}
     </div>
 
   }
 
   export default ChatPage;
+
+
+
+
+  /* 
+  
+   {activeChat? <div className="container-fluid  " ><InputBar  sty_input={props.controProperty.input} /></div>:<></>}
+   
+  
+  */
