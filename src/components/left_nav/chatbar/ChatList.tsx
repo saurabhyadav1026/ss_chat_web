@@ -10,38 +10,15 @@ import ChatContext from "../../../contexts/chatscontext/ChatContext";
 
 export const ChatList = () => {
 
-    const { activeUser, searchInput, chatsList, setActiveChat ,showUserById,showUserProfile}: any = useContext(ChatContext)
+    const { setActiveChatByChatRoom,setActiveChatOfNewUser, searchInput, chatsList ,showUserByRoom,showUserProfile}: any = useContext(ChatContext)
 
 
 
-    const update = (u: any) => {
-     alert("yyyyyy")
-        setActiveChat(u)
-      
-    }
-
-
-    const newChat = (member2: any) => {
-
-        const tempRoom = {
-            _id: null,
-            members: [activeUser._id, member2._id],
-            name: member2.name,
-            roomDP: member2.dp,
-            roomName: member2.username,
-
-        }
-
-    
-        update(tempRoom);
-     
-
-    }
 
 
     if (searchInput === "") return <>
 
-        <table id="menu_show_bar" className="table table-hover p-0 " style={{height:"100%"}} >
+        <table id="menu_show_bar" className="table table-hover  p-0 " style={{height:"100%"}} >
             {/*  <!-- list of chats  --> */}
             <tbody className='overflow-y-scroll m-0'>
                 {Object.values(chatsList).map((u: any, i: any) => {
@@ -50,10 +27,10 @@ export const ChatList = () => {
 
 
                         <React.Fragment key={i}>
-                            <tr className="listshow container-fluid" style={{ cursor: "pointer" }}  >
-                                <td className="my-2  chatlist_dp" onClick={()=>showUserById(u.members)} style={{ backgroundImage: `url(${u.roomDP})` }}></td>
-                                <td  onClick={() => { update(u) }} className="container mx-3" style={{ width: '100%' }}>
-                                    <div >
+                            <tr className="listshow  container-fluid" style={{backgroundColor:" rgb(255, 255, 255)", cursor: "pointer" }}  >
+                                <td className="my-2  chatlist_dp" onClick={()=>showUserByRoom(u)} style={{ backgroundImage: `url(${u.roomDP})` }}></td>
+                                <td  onClick={() => { setActiveChatByChatRoom(u) }} className=" mx-3 " style={{ backgroundColor:" rgb(255, 255, 255)", width: '100%' }}>
+                                    <div className="" >
                                         <span >{u.name}</span>
                                         <span>{u.username}</span>
                                         {u.unreadCount > 0 ? <span style={stty_unread} className="unread_show">{u.unreadCount}</span> : <></>}
@@ -92,7 +69,7 @@ export const ChatList = () => {
                             <React.Fragment key={i}>
                                 <tr className="listshow " style={{ cursor: "pointer" }}    >
                                     <td className="chatlist_dp" onClick={()=>showUserProfile(u)} style={{ backgroundImage: `url(${u.dp})` }}></td>
-                                    <td className="container mx-3" onClick={() => { newChat(u) }} style={{ width: '100%' }}>
+                                    <td className="container mx-3" onClick={() => { setActiveChatOfNewUser(u) }} style={{ width: '100%' }}>
                                         <div >
                                             <span >{u.name}</span>
                                             <span>{u.username}</span>

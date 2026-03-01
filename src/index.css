@@ -95,11 +95,14 @@
   background-color: rgb(255, 255, 255);
 }
 
-
+.app_option {
+  text-align: center;
+}
 
 .app_option:hover {
-  border: 2px solid yellow;
-  border-radius: 3px;
+  text-align: center;
+  background-color:  rgb(111, 212, 243);
+  border-radius: 10px;
 }
 
 
@@ -210,14 +213,7 @@
   justify-content: space-around;
 }
 
-.listshow:hover {
-  border-radius: 5px solid grey;
-  background-color: rgb(237, 248, 248);
-}
 
-.listshow:active {
-  background-color: greenyellow;
-}
 
 
 /* message box css */

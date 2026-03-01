@@ -29,7 +29,7 @@ const [tempUser,setTempUser]:any=useState(activeUser);
 
 const saveProfile=()=>{
 setTempUser(activeUser);
-    alert("saved")
+    
 }
 
 

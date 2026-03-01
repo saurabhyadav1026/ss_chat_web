@@ -22,7 +22,7 @@ const Chat = (props: any) => {
     <>
       <div id="left_nav_main_bar" className="container-fluid m-0  left_bar left_nav_menu_bar col-12  flex-grow-1" style={{position:"relative",height:"80%"}}>
 
-        <div className="m-0  p-2 col-12 container-fluid d-flex justify-content-around align-items-center  " style={{backgroundColor:"pink", height:"10%"}}>
+        <div className="m-0  p-2 col-12 container-fluid d-flex justify-content-around align-items-center  " style={{backgroundColor:"pink", height:"50px"}}>
           <div className=' fw-bold col-sm-4 app_option'  onClick={() => {if(appOption!=="Chat")setAppOption("Chat")}}>Chat</div>
          
           <div className=' fw-bold col-sm-4 app_option' onClick={() => {if(appOption!=="AI")setAppOption("AI")}}> AI</div>

@@ -236,6 +236,30 @@ setChatList({info:"loggin yourself to connect with your friend"})
 
 
 
+const setActiveChatByChatRoom=(room:any)=>{
+
+
+  setActiveChat(room);
+}
+const setActiveChatOfNewUser=(member2:any)=>{
+
+   const tempRoom = {
+            _id: null,
+            members: [activeUser._id, member2._id],
+            name: member2.name,
+            roomDP: member2.dp,
+            roomName: member2.username,
+
+        }
+setActiveChat(tempRoom);
+
+}
+
+
+
+
+
+
 
 
 
@@ -255,17 +279,17 @@ setChatList({info:"loggin yourself to connect with your friend"})
     setUserProfilePicShow(user)
 
   }
-const showUserById=async(members:any)=>{
+const showUserByRoom=async(room:any)=>{
 let id;
-if(members[0]==activeUser._id)id=members[1];
-else id=members[0];
-alert(id)
+if(room.members[0]==activeUser._id)id=room.members[1];
+else id=room.members[0];
+
   let u:any;
   await api.get(`/getuserbyid?id=${id}`).then((res)=>u=res.data).catch((err)=>console.log(err))
-setUserProfilePicShow({...u,status:true})
+setUserProfilePicShow({...u,room:room, status:true})
 }
 
-  return <ChatContext.Provider value={{showUserById,showUserProfile,userProfileShow,setUserProfilePicShow,picShow,setPicShow, appOption, setAppOption, setLogout, activeUser, activeChat, setActiveUser, setActiveChat, chatsList, setChatList, chat, setchat, searchInput, setSearchInput, sendMessage }}>
+  return <ChatContext.Provider value={{setActiveChatByChatRoom,setActiveChatOfNewUser,showUserByRoom,showUserProfile,userProfileShow,setUserProfilePicShow,picShow,setPicShow, appOption, setAppOption, setLogout, activeUser, activeChat, setActiveUser, setActiveChat, chatsList, setChatList, chat, setchat, searchInput, setSearchInput, sendMessage }}>
     {children}
   </ChatContext.Provider>
 }
