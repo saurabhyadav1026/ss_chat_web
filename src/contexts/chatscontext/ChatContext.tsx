@@ -259,7 +259,7 @@ const showUserById=async(members:any)=>{
 let id;
 if(members[0]==activeUser._id)id=members[1];
 else id=members[0];
-alert(id)
+
   let u:any;
   await api.get(`/getuserbyid?id=${id}`).then((res)=>u=res.data).catch((err)=>console.log(err))
 setUserProfilePicShow({...u,status:true})
