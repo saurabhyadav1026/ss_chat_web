@@ -4,7 +4,7 @@ import ChatContext from "../contexts/chatscontext/ChatContext";
 
 const TopNav =(props:any)=>{
 
-    const {setActiveChat,showUserById}:any=useContext(ChatContext);
+    const {setActiveChat,showUserByRoom}:any=useContext(ChatContext);
     
     return <>
 
@@ -15,7 +15,7 @@ const TopNav =(props:any)=>{
  
 
 
-{props.activeChat?<><span>{props.activeChat.name}</span><span id='chat_dp' onClick={()=>showUserById(props.activeChat.members)} style={{backgroundImage:`url(${props.activeChat.roomDP})`}}></span></>: <span id='logo_icon'></span>}
+{props.activeChat?<><span>{props.activeChat.name}</span><span id='chat_dp' onClick={()=>showUserByRoom(props.activeChat.members)} style={{backgroundImage:`url(${props.activeChat.roomDP})`}}></span></>: <span id='logo_icon'></span>}
 
 
     </div>
