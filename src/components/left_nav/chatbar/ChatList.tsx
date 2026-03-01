@@ -15,8 +15,7 @@ export const ChatList = () => {
 
 
     const update = (u: any) => {
-     alert("yyyyyy")
-        setActiveChat(u)
+             setActiveChat(u)
       
     }
 
