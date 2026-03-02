@@ -15,7 +15,7 @@ const TopNav =(props:any)=>{
  
 
 
-{props.activeChat?<><span>{props.activeChat.name}</span><span id='chat_dp' onClick={()=>showUserByRoom(props.activeChat.members)} style={{backgroundImage:`url(${props.activeChat.roomDP})`}}></span></>: <span id='logo_icon'></span>}
+{props.activeChat?<><span onClick={()=>showUserByRoom(props.activeChat)}>{props.activeChat.name}</span><span id='chat_dp' onClick={()=>showUserByRoom(props.activeChat)} style={{backgroundImage:`url(${props.activeChat.roomDP})`}}></span></>: <span id='logo_icon'></span>}
 
 
     </div>
