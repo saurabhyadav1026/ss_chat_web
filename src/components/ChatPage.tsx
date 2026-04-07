@@ -1,18 +1,29 @@
 
 import ReqShow from "./ReqShow";
 import ResShow from "./ResShow";
-import React, { useContext, useEffect, useRef } from "react";
-import BlankChatPage from "./userProfile/BlankChatPage.tsx";
-
-import ChatContext from "../contexts/chatscontext/ChatContext.tsx";
+import React, { useContext, useEffect, useRef, useState } from "react";
 
 import InputBar from "./InputBar.tsx";
+import TopNav from "./TopNav.tsx";
+import { useOutletContext, useParams } from "react-router-dom";
+import api from "../api/api.ts";
+import UserContext from "../contexts/UserContext.tsx";
+import MessageContext from "../contexts/MessagesContext.tsx";
 
 
 const ChatPage = ()=> {
+const {messages,setMessages,activeChat,setActiveChatByChatRoomId}:any=useContext(MessageContext);
+const {page2Id}=useParams();
+const {activeUser}:any=useContext(UserContext);
 
-const {activeChat,chat,activeUser}:any=useContext(ChatContext);
 const chatPageRef=useRef(null);
+
+
+useEffect(()=>{
+ if(page2Id)setActiveChatByChatRoomId(page2Id);
+  
+
+},[page2Id])
 
 useEffect(()=>{
 
@@ -20,44 +31,44 @@ useEffect(()=>{
     if(chatPageRef){
     div_ref.scrollTop=div_ref.scrollHeight
   }
-},[chat])
+},[messages])
+
+
 
  
 
 
   
-  // for new chat page return empty chat page
-  
- if (!activeChat) {
-  
-  return <div  ref={chatPageRef} id="chat_page" >
-    <h5>we get soon</h5>
-  <BlankChatPage></BlankChatPage>
-  </div>}
-
-else if (chat === null) return <div className="scrollbar-only-rod chat_page"  ref={chatPageRef} id="chat_page_ad"></div>
 
 
-    return <div className=" chat_page flex-grow-1"    id="chat_page_chat" style={{backgroundImage:`url("https://ik.imagekit.io/sbhtechhub/chatpagewallpaper.png?updatedAt=1772015853286")`}}>
+    return <>
+
+      <TopNav  activeChat={activeChat.receiver} toBack={"/u/chats"}/>
+     <div className=" chat_page flex-grow-1"    id="chat_page_chat" style={{backgroundImage:`url("https://ik.imagekit.io/sbhtechhub/chatpagewallpaper.png?updatedAt=1772015853286")`}}>
       
       <div className="scrollbar-only-rod  " ref={chatPageRef} style={{overflowX:"hidden", flexDirection:"column",height:"80%"}}>
      
       {
   
-       Object.values(chat).map((u:any, i:any) :any=> {
+       Object.values(messages).map((u:any, i:any) :any=> {
+           {console.log(u);}
             return <React.Fragment key={i}>
+           
               
-        {u.senderId=== activeUser._id? <ReqShow activeChat={activeChat} chat_c={u} tick={u.tick} tickStatus={u.tickStatus} req_={u.text} r_no={i} time={u.tickStatus.send && new Date(u.tickStatus.send).toLocaleTimeString()}> </ReqShow> : <ResShow activeChat={activeChat}  time={u.time && new Date(u.time).toLocaleTimeString()} res_={u['text']} r_no={i}></ResShow>}
+        {u.senderId=== activeUser._id? <ReqShow activeChat={activeChat} chat_c={u}   req_={u.text} r_no={i}> </ReqShow> : <ResShow activeChat={activeChat} res_={u['text']} r_no={i}></ResShow>}
       </React.Fragment>
 
        })
     }
     </div>
 
-    {activeChat? <div className="container-fluid  " ><InputBar   /></div>:<></>}
+    {activeChat? <div className="container-fluid  " ><InputBar activeChat={activeChat} setMessages={setMessages}    /></div>:<></>}
     </div>
+    
 
-  }
+    </>
+
+}
 
   export default ChatPage;
 

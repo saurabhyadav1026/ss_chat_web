@@ -4,13 +4,13 @@ import {setDp} from './users'
 
 
 import { useContext,useState } from "react";
-import ChatContext from "../../contexts/chatscontext/ChatContext";
+import UserContext from "../../contexts/UserContext";
 
 
 
   const EditProfile=(props:any)=>{
 
-const {activeUser, setActiveUser}:any=useContext(ChatContext);
+const {activeUser, setActiveUser}:any=useContext(UserContext);
 
 
 const changedp:any=async(imgurl:any)=>{

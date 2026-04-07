@@ -1,0 +1,121 @@
+.user-card {
+  display: flex;
+  padding: 15px;
+  border-radius: 15px;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  transition: 0.3s;
+  backdrop-filter: blur(10px);
+  cursor: pointer;
+}
+
+.user-card:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+}
+
+/* Profile Image */
+.user-dp {
+  width: 80px;
+  height: 80px;
+  border-radius: 15px;
+  flex-shrink: 0;
+}
+
+/* Info */
+.user-info {
+  flex: 1;
+}
+
+.name {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.username {
+  opacity: 0.7;
+  margin-bottom: 10px;
+}
+
+/* Buttons */
+.btn-row {
+  display: flex;
+  gap: 8px;
+}
+
+button {
+  border: none;
+  border-radius: 8px;
+  padding: 6px 10px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.follow {
+  background: #3b82f6;
+  color: white;
+}
+
+.message {
+  background: #10b981;
+  color: white;
+}
+
+.profile-btn {
+  width: 100%;
+  margin-top: 8px;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: white;
+}
+
+button:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
+}
+
+/* 📱 Mobile */
+@media (max-width: 600px) {
+  .user-card {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .user-dp {
+    width: 70px;
+    height: 70px;
+  }
+
+  .btn-row {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .btn-row button {
+    width: 100%;
+  }
+
+  .profile-btn {
+    width: 100%;
+  }
+}
+
+/* 📲 Tablet */
+@media (min-width: 601px) and (max-width: 900px) {
+  .user-dp {
+    width: 70px;
+    height: 70px;
+  }
+}
+
+/* 💻 Large Screens */
+@media (min-width: 1200px) {
+  .user-card {
+    padding: 20px;
+  }
+
+  .user-dp {
+    width: 90px;
+    height: 90px;
+  }
+}

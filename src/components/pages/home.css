@@ -1,0 +1,101 @@
+/* Reset + Base */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: linear-gradient(135deg, #0f172a, #1e293b);
+  font-family: "Poppins", sans-serif;
+  color: white;
+}
+
+/* Wrapper */
+.home-wrapper {
+  padding: 20px;
+  width: 100%;
+  max-width: 1200px;
+  margin: auto;
+}
+
+/* Glass Card */
+.glass {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  backdrop-filter: blur(15px);
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* Home Card */
+.home-card {
+  text-align: center;
+  animation: fadeIn 0.6s ease;
+}
+
+.username {
+  font-size: 26px;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+/* Buttons */
+.btn-group {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.modern-btn {
+  padding: 10px 18px;
+  border-radius: 10px;
+  border: none;
+  background: linear-gradient(135deg, #3b82f6, #6366f1);
+  color: white;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.modern-btn:hover {
+  transform: scale(1.08);
+  box-shadow: 0 0 15px #6366f1;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 📱 Mobile */
+@media (max-width: 768px) {
+  .home-wrapper {
+    padding: 10px;
+  }
+
+  .username {
+    font-size: 20px;
+  }
+
+  .btn-group {
+    flex-direction: column;
+  }
+
+  .modern-btn {
+    width: 100%;
+  }
+}
+
+/* 📲 Tablet */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .username {
+    font-size: 22px;
+  }
+}

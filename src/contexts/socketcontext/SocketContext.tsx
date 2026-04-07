@@ -1,18 +1,21 @@
 
 
-import {createContext} from 'react';
+import { createContext } from 'react';
 
 import io from 'socket.io-client';
 
-const SocketContext=createContext({});
-export const socket=io(import.meta.env.VITE_API_KEY);
+const SocketContext = createContext({});
+export const socket = io(import.meta.env.VITE_API_KEY, {
+    autoConnect:false
 
-export const SocketContextProvider=({children}:any)=>{
-    
-   
- 
+});
+
+export const SocketContextProvider = ({ children }: any) => {
+
+
+
     return <SocketContext.Provider
-    value={{}}
+        value={{}}
     >{children}</SocketContext.Provider>
 }
 

@@ -1,6 +1,7 @@
 
 import { useState } from 'react';
-import {addUser,checkIsUsernameAvailble,getOtp} from './users'
+import api from '../../api/api';
+import { useNavigate } from 'react-router-dom';
 
 //import { generateKeyBundle } from '../../securety/msgencryption';
 
@@ -17,6 +18,9 @@ const [isReadOnly,setIsReadOnly]=useState(false);
 const [otpDivVisibility,setOtpDivVisibility]=useState(false)
 
 const [User,setUser]=useState({name:"",username:"",userpassword:'', confirm_password:'',email:''})
+
+
+const navigate=useNavigate();
 
 const updateUser=(e:any)=>{
     const {name,value}=e.target;
@@ -35,7 +39,9 @@ if(!isUsernameAvailble){
         alert("password missmatch");
         return;
     }
-const new_otp:any= await getOtp(User.email);
+let new_otp:any=(await api.get("/getotp",{params:{email:User.email}})).data || {status:"nt"};
+
+
 if(new_otp.status==='ok'){
     setIsReadOnly(true)
     alert("We have send the otp on your register contact. otp code is : "+new_otp.otp_code);
@@ -48,7 +54,7 @@ if(new_otp.status==='ok'){
 
 
     const resendOtp=async()=>{
-    const new_otp:any= await getOtp(User.email);
+    const new_otp:any= (await api.get("/getotp",{params:{email:User.email}})).data || {status:"nt"};
     if(new_otp.status==='ok'){
     alert("We have resend the otp on your register contact. otp code is : "+new_otp.otp_code);
     setotp(new_otp);
@@ -76,24 +82,44 @@ const      otp:any=otp_.value;
     alert("Enter correct OTP  ");
     return;
  }
- else{
-const user:any =User;
-   [ user["storekey"],user["public_bundle"]]=["str key","bundle key"]  //await generateKeyBundle(User.username);
- await  addUser(user)
-    props.setProfileSectionPage('log');
-    alert("register successfully");
+ else{ 
+ await  addUser()
+ alert("register successfully");
+   navigate('/user/login');
+    
  }
 
 
     }
-const checkUsername=async()=>{
- const isUA=await checkIsUsernameAvailble(User.username);
- if(User.username.trim()!==''&&isUA){
-setIsAvailbleUsername(true);
 
- }
- else setIsAvailbleUsername(false);
+const addUser=async()=>{
+try{
+                 const user={
+                name:User.name,
+        username:User.username,
+        password:User.userpassword,
+        email:User.email
+    }
+                            //    [ user["storekey"],user["public_bundle"]]=["str key","bundle key"]  //await generateKeyBundle(User.username);
+await api.post('/newuser',user);
  
+}
+    catch(error){
+    console.log("eror  "+error)
+    }
+}
+
+
+
+
+const checkUsername=()=>{
+     if(User.username.trim()=='')setIsAvailbleUsername(false);
+ else{ 
+   
+    api.get("/isuseravailble",{params:{username:User.username}})
+ .then((res)=>setIsAvailbleUsername(res.data.status))
+ .catch((err:any)=>alert(err)); 
+}
 
 }
 
@@ -157,7 +183,7 @@ return<>
 </table>
 
 
-<div>if you have account <span style={{color:'blue',margin:"3px"}} onClick={()=>props.setProfileSectionPage('log')}>sign in</span></div>
+<div>if you have account <span style={{color:'blue',margin:"3px"}} onClick={()=>navigate("/user/login")}>sign in</span></div>
 
 
 </>    

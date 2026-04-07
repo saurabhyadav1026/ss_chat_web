@@ -1,32 +1,28 @@
-
+/* 
 
 
 import api from "./api";
 
 let active_user:any= (localStorage.getItem('ssapp_activeUser')) 
  active_user=JSON.parse(active_user);
+ 
 
-
+export  const au:any=active_user;
 
 
 api.interceptors.request.use(
 
 
 (config)=>{
-console.log("we adding the token")
-    const token=active_user.active.accessToken ||'saurabh ka token';
-console.log(" your token is :      "+token)
+    const token:String=active_user.accessToken ||'saurabh ka token';
     if(token){ 
         config.headers.Authorization=`bearer ${token}`
-        console.log("token added")
+        console.log("token ho gya addddd")
     }
 
     return config;
 },
 (err)=>{
-console.log("token missing")
-    Promise.reject(err)
+console.log("token missing "+err)
 }
-
-
-)
+) */

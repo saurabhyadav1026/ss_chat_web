@@ -1,8 +1,10 @@
 
-import { useState } from 'react';
-//import { ConditionAlert } from '../bootstrapCoponents/Alert.tsx';
-import { googleLoggin, verifyUser } from './users.ts'
+import { useContext} from 'react';
+import { googleLoggin } from './users.ts'
 import { GoogleLogin } from '@react-oauth/google';
+import { useNavigate } from 'react-router-dom';
+import UserContext from '../../contexts/UserContext.tsx';
+import api from '../../api/api.ts';
 
 
 
@@ -13,10 +15,9 @@ import { GoogleLogin } from '@react-oauth/google';
 
 
 
-const Loggin=(props:any)=>{
-
-const [condition ,setCondition]=useState(false)
-
+const Loggin=()=>{
+const navigate= useNavigate();
+const {setActiveUser}:any=useContext(UserContext);
 
 
 
@@ -27,33 +28,34 @@ const usname_:string=(document.getElementById('log_usname_input'!)as HTMLInputEl
 const uspassword_:string=(document.getElementById('log_uspassword_input'!)as HTMLInputElement).value;
 
 
-const a_user:any=(await verifyUser(usname_,uspassword_))
-if(!a_user.status){
-    setCondition(true)
-  
-    alert("usernae or password is incorrect");
-    return;
-}
-else{
-   
-    props.setActiveUser(a_user.value)
-        props.setPage('ChatPageSection')
-}
 
-    }
+let status:any= false;
+
+await api.get("/logging/verifyuser",{params:{username:usname_,password:uspassword_}})
+.then((res)=>{status=res.data.status;}).catch((err)=>console.log(err));
+
+
+if(status){
+    await setActiveUser();
+    alert("logging successfully");
+     navigate('/u/chats');
     
+ 
+}else{
+    alert("invalid username or password")
+}
+    }
+
     const verifygoogleLoggin=async (res:any)=>{
 
         
         
     const a_user:any=(await googleLoggin(res.credential))
 if(a_user.status){
-    createNewPassword();
-    props.setActiveUser(a_user.value)
-        props.setPage('ChatPageSection')
+    setActiveUser()  
+    navigate('/u/chats')
 }
 else{
-    setCondition(true)
     alert("username or password is incorrect");
     return;
 }
@@ -62,10 +64,6 @@ else{
 
    
 
-    const createNewPassword=()=>{
-return;
-    }
-console.log(condition)
 //<ConditionAlert condition={condition} message='Incorrect Password'></ConditionAlert>
 return<>
 
@@ -89,17 +87,20 @@ return<>
 <td  colSpan={2}><button className='btn btn-success text-bg-color' style={{width:"100%",height:"80%"}} onClick={verifyLoggin}>Log in</button></td>
 </tr>
 <tr  ><td  >or log in with : </td><td><GoogleLogin onSuccess={verifygoogleLoggin}></GoogleLogin></td></tr>
+
 <tr  style={{display:'none'}}><td  colSpan={2}></td></tr>
+
 
 </tbody>
 </table>
 
-{/* <div  >  <span style={{color:'blue',margin:"3px"}}onClick={()=>props.setProfileSectionPage('forgetPassword')}>Forget Password</span></div>
 
- */}
+<div  >  <span style={{color:'blue',margin:"3px"}}onClick={()=>navigate("/user/forgetpassword")}>Forget Password</span></div>
 
-{/* <div  >click here to <span style={{color:'blue',margin:"3px"}} onClick={()=>props.setProfileSectionPage('reg')}>Register</span></div>
- */}
+<div  >click here to <span style={{color:'blue',margin:"3px"}} onClick={()=>navigate('/user/register')}>Register</span></div>
+
+
+
 
 {/* <div  >click to <span style={{color:'blue',margin:"3px"}}onClick={()=>props.setPage('demoAICatPageSection')}>stay without logging</span></div>
  */}

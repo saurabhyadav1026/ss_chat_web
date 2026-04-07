@@ -6,6 +6,7 @@ import remarkGfm from 'remark-gfm';
 
 import SpeakerContext from '../voiceassistance/speaker/SpeakerContext';
 import { useEffect, useState, useContext } from 'react';
+import UserContext from '../contexts/UserContext';
 
 
 
@@ -21,9 +22,8 @@ const ReqShow = (props: any) => {
 
 
     const [isSpeaking, setIsSpeaking] = useState(false);
-    const { startSpeaking, stopSpeaking }: any = useContext(SpeakerContext);
-
-
+    const { startSpeaking, stopSpeaking }: any = useContext(SpeakerContext);   
+    
     const editReq = (r: any) => {
         const text: any = document.getElementsByClassName("req_cammand"!)[r].innerHTML;
         (document.getElementById("cammand_input"!) as HTMLInputElement).value = text;
@@ -75,13 +75,13 @@ const ReqShow = (props: any) => {
                     <Markdown remarkPlugins={[remarkGfm]}>{props.req_}</Markdown>
                 </span>
                 <span className='p-2 message-time '>
-                    {props.time.slice(0, 6) ? props.time : ""}
+                   
 
                 </span>
-                <span className='py-1' style={{ display: "inline-block" }}> {props.tick === 0 ? <UnsendIcon></UnsendIcon> : props.tickStatus.read !== null ? <BlueTickIcon></BlueTickIcon> : props.tickStatus.delivered !== null ? <DoubleTickIcon></DoubleTickIcon> : <SingleTickIcon></SingleTickIcon>}
+              {/*   <span className='py-1' style={{ display: "inline-block" }}> {props.tick === 0 ? <UnsendIcon></UnsendIcon> : props.tickStatus.read !== null ? <BlueTickIcon></BlueTickIcon> : props.tickStatus.delivered !== null ? <DoubleTickIcon></DoubleTickIcon> : <SingleTickIcon></SingleTickIcon>}
                 </span>
 
-
+ */}
             </div>
 
 

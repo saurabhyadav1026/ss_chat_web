@@ -2,13 +2,13 @@
 
 'use client';
 import React, { useContext } from "react";
-import AIChatContext from "../../../contexts/chatscontext/AIChatContext";
+import ChatsListContext from "../../../contexts/ChatsListContext";
 
 
 const AIChatList = () => {
 
 
-    const {  aiChatsList, setActiveAIChat }: any = useContext(AIChatContext)
+    const {  aiChatsList, setActiveAIChat }: any = useContext(ChatsListContext)
 
 
     return <div > Come soon bro </div>

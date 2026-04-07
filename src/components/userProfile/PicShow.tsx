@@ -1,4 +1,4 @@
-import ChatContext from "../../contexts/chatscontext/ChatContext"
+import ChatContext from "../../contexts/chatscontext/AppVariablesContext"
 import { useContext } from "react";
 
 

@@ -1,15 +1,32 @@
 
-import { useContext } from "react";
-import ChatContext from "../../contexts/chatscontext/ChatContext";
+import { useContext, useEffect } from "react";
+import ChatContext from "../../contexts/chatscontext/AppVariablesContext";
+import UserContext from "../../contexts/UserContext";
+import { useNavigate } from "react-router-dom";
 
 
   const Profile=(props:any)=>{
 
-const {setLogout,setPicShow,activeUser}:any=useContext(ChatContext)
+const {setPicShow}:any=useContext(ChatContext);
+const {setLogout,activeUser}:any=useContext(UserContext);
+
+const navigate=useNavigate();
+
+useEffect(()=>{
+if(!activeUser._id)navigate('/user/login')
+ 
+},[activeUser])
 
 
+const logOut=()=>{
+  setLogout();
+    alert("logout successfully");
+        navigate('/user/login')
+        
 
+  
 
+}
 
 
 
@@ -17,12 +34,12 @@ const {setLogout,setPicShow,activeUser}:any=useContext(ChatContext)
 
 return<>
 
-<div className="container-fluid p-0 m-0 bg-white d-flex col-12 align-items-center justify-content-center vh-100" >
+<div className="container-fluid p-0 m-0 bg-white d-flex col-12 align-items-center border justify-content-center " style={{height:"100%"}} >
 
-    <div className="container-fluid m-0 p-0  col-12 vh-100 border   " >
+    <div className="container-fluid m-0 p-0  col-12 border   " style={{height:"100%"}}>
 {/* username */}
 <div className="d-flex align-items-center justify-content-between mb-2">
-          <button className=" btn btn-light mr-2"  onClick={()=>{props.setPage('ChatPageSection');}}><b>←</b></button>
+          <button className=" btn btn-light mr-2"  onClick={()=>{navigate('/u/chats');}}><b>←</b></button>
           <h6 className="mb-0 fw-bold">{activeUser.username}</h6>
           <button className="btn btn-light btn-suserProfileShow.username border">...</button>
          </div>
@@ -83,7 +100,7 @@ return<>
 </div>
 
 <div className=" container col-12 d-flex gap-1">
-    <button className="btn  btn-transparent text-danger"  onClick={()=>{setLogout();props.setProfileSectionPage("log");props.setPage('ProfileSection');}}>logout</button> 
+    <button className="btn  btn-transparent text-danger"  onClick={()=>{logOut();}}>logout</button> 
        
 </div>
 

@@ -22,17 +22,7 @@ import api from '../../api/api';
 
 const responser:string='/users';
 
-
-export const addUser=async(u:any)=>{
-try{
-await api.post(responser+'/newuser?name='+u.name+"&&username="+u.username+"&&password="+u.userpassword+"&&email="+u.email);
  
-}
-    catch(error){
-    console.log("eror  "+error)
-    }
-}
-
 
 const sbhunk:any={
     username:'sbhunk',
@@ -60,12 +50,6 @@ catch(e){
 return data;
 }
 
-export const checkIsUsernameAvailble=async(username:string)=>{
-let data
-    try{await api.post(responser+'/checkisusernameavailble',{username:username}).then((res)=>data=res.data.value);
-    }catch(e){console.log(e)}
-    return data;
-}
 
 
 export const newChat=async(activeuser:string,activechat:string)=>{
