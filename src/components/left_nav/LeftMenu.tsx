@@ -1,52 +1,82 @@
-import { useContext } from "react"
-import UserContext from "../../contexts/UserContext"
-import { AboutIcon, ChatIcon, MicIcon, SearchIcon, SettingIcon } from "../icons";
+import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import ChatContext from "../../contexts/chatscontext/AppVariablesContext";
+import UserContext from "../../contexts/UserContext";
+import { AboutIcon, ChatIcon, MicIcon, SearchIcon, SettingIcon } from "../icons";
 
+const LeftMenu = () => {
+  const { activeUser }: any = useContext(UserContext);
+  const { theme, toggleTheme }: any = useContext(ChatContext);
+  const navigate = useNavigate();
+  const nextTheme = theme === "dark" ? "Light" : "Dark";
 
+  return (
+    <aside className="left-rail">
+      <div id="logo_icon" className="left-rail__brand" />
 
+      <nav className="left-rail__nav">
+        <div className="left-rail__item left-rail__item--primary" onClick={() => navigate("search")}>
+          <span className="left-rail__glyph">
+            <SearchIcon />
+          </span>
+          <span className="left-rail__label">Search</span>
+        </div>
 
+        <div className="left-rail__item" onClick={() => navigate("chats")}>
+          <span className="left-rail__glyph">
+            <ChatIcon />
+          </span>
+          <span className="left-rail__label">Chats</span>
+        </div>
 
-const LeftMenu = (props: any) => {
+        <div className="left-rail__item" onClick={() => navigate("aichats")}>
+          <span className="left-rail__glyph">AI</span>
+          <span className="left-rail__label">AI</span>
+        </div>
 
-    const { activeUser }: any = useContext(UserContext);
-    const navigate =useNavigate();
+        <div className="left-rail__item left-rail__item--static">
+          <span className="left-rail__glyph">
+            <MicIcon />
+          </span>
+          <span className="left-rail__label">Voice</span>
+        </div>
+      </nav>
 
+      <div className="left-rail__footer">
+        <div className="left-rail__profile">
+          <div
+            className="left-rail__avatar"
+            style={{ backgroundImage: `url(${activeUser && activeUser.dp ? activeUser.dp : "https://i.ibb.co/QvwtKDYz/nodp.jpg"})` }}
+            onClick={() => {
+              if (activeUser && activeUser.dp) navigate("/user/myprofile");
+              else navigate("/user");
+            }}
+          />
 
-    const sty: any = {
-        flexDirection: "column",
-        alignItems: "center",
-        backgroundColor: "gray",
-        height: "70%",
-        borderRadius: "10px",
+          <button type="button" className="left-rail__mobile-theme" onClick={toggleTheme} aria-label={`Switch to ${nextTheme} mode`} title={`Switch to ${nextTheme} mode`}>
+            <SettingIcon />
+            <span>{nextTheme}</span>
+          </button>
 
-
-    }
-
-    return <>
-        <div className="container col-1 p-1   d-flex m-1" style={{  flexDirection: "column" ,alignItems: "center",}}>
-            <div id="logo_icon" className="col-2 mb-2 border p-4" ></div>
-            <div className="continer col-12 p-1 d-flex m-0" style={sty}>
-
-                <div className='mb-2 p-2 fw-bold  app_option' onClick={() => { navigate("search") }} > <SearchIcon/></div>
-                <div className=' mb-2 p-3 fw-bold app_option' onClick={() => { navigate("chats") }}><ChatIcon /></div>
-
-                <div className='mb-2 p-3 fw-bold  app_option' onClick={() => {  navigate("aichats") }}> AI</div>
-
- <div className='mb-2 p-3 fw-bold  app_option' > <MicIcon/></div>
-                
-
-                {activeUser.dp !== "" ? <div className=' p-3 mt-4 mb-2 col-sm-4' id="user_dp" style={{ backgroundImage: `url(${activeUser.dp})` }} onClick={() => { navigate('/user/myprofile') }}></div> : <div className=' col-sm-4 ' id="user_dp" onClick={() => navigate('/user')}></div>}
-                <div className='mb-2 p-3 fw-bold  app_option' > <SettingIcon /></div>
-                <div className='mb-2 p-3 fw-bold  app_option' > <AboutIcon /></div>
-
-
+          <div className="left-rail__subactions">
+            <div className="left-rail__item left-rail__item--toggle" onClick={toggleTheme} aria-label={`Switch to ${nextTheme} mode`} title={`Switch to ${nextTheme} mode`}>
+              <span className="left-rail__glyph">
+                <SettingIcon />
+              </span>
+              <span className="left-rail__label">{nextTheme} Mode</span>
             </div>
 
-
+            <div className="left-rail__item left-rail__item--static">
+              <span className="left-rail__glyph">
+                <AboutIcon />
+              </span>
+              <span className="left-rail__label">About</span>
+            </div>
+          </div>
         </div>
-    </>
+      </div>
+    </aside>
+  );
+};
 
-}
-
-export default LeftMenu
+export default LeftMenu;

@@ -1,130 +1,78 @@
-
-
-import MessageContext from "../../../contexts/MessagesContext";
-import { useContext, useState ,useEffect} from "react";
-import SearchBar from "../../left_nav/SearchBar";
-import React from "react";
+import { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import api from "../../../api/api";
-import UserContext from "../../../contexts/UserContext";
-import { Outcome } from "@google/generative-ai";
-import { Navigate, Outlet, useNavigate } from "react-router-dom";
+import MessageContext from "../../../contexts/MessagesContext";
+import SearchBar from "../../left_nav/SearchBar";
 
-
-
-
-
-
-
-const device_ = {
-
-    sm_hide: "d-none",        // page1 will display none on sm
-    sm_visible: " d-flex"
-
-}
 const SearchList = () => {
+  const navigate = useNavigate();
+  const { getRoomIdByReceiverId }: any = useContext(MessageContext);
+  const [searchInput, setSearchInput]: any = useState("");
+  const [searchList, setSearchList]: any = useState({});
 
-
-
-    const navigate=useNavigate();
-    
-        const {getRoomIdByReceiverId,activeChat}: any = useContext(MessageContext);
-        const [searchInput,setSearchInput]:any=useState("");
-        const [searchList,setSearchList]:any=useState({});
-
-
-
-            
-useEffect(()=>{
-if(searchInput!==""){
-    console.log(searchInput)
-  api.get("/users/searchlist",{params:{input:searchInput}})
-  .then((res:any)=>setSearchList(res.data))
-  .catch((err:any)=>{console.log(err)})
-}
-
-},[searchInput])
-  
-
-
-
-    const [device_show, setdevice_show] = useState({ d1: device_.sm_visible, d2: device_.sm_hide });
-
-
-
-
-    const change_device_show = (flag: number) => {
-
-        if (!flag || !activeChat._id) {
-            setdevice_show({ d1: device_.sm_visible, d2: device_.sm_hide });
-
-        }
-        else {
-            setdevice_show({ d1: device_.sm_hide, d2: device_.sm_visible });
-
-        }
-
+  useEffect(() => {
+    if (searchInput !== "") {
+      api
+        .get("/users/searchlist", { params: { input: searchInput } })
+        .then((res: any) => setSearchList(res.data))
+        .catch((err: any) => {
+          console.log(err);
+        });
     }
+  }, [searchInput]);
 
-    useEffect(() => {
+  const searchItems = Object.values(searchList || {});
 
-        change_device_show(1);
-    }, [activeChat])
+  return (
+    <div className="list-panel">
+      <div className="list-panel__header">
+        <div>
+          <p className="list-panel__eyebrow">Discover</p>
+          <h2 className="list-panel__title">People</h2>
+          <p className="list-panel__subtitle">Search for users, open their profile, or jump straight into a direct message.</p>
+        </div>
+      </div>
 
+      <SearchBar searchInput={searchInput} _placeholder="Search friends..." setSearchInput={setSearchInput} />
 
+      <div className="list-panel__body scrollbar-only-rod">
+        {searchItems.length ? (
+          searchItems.map((u: any, i: any) => (
+            <article key={u._id || i} className="list-card">
+              <div className="chatlist_dp" style={{ backgroundImage: `url(${u.dp})` }} />
 
+              <div className="list-card__body">
+                <div className="list-card__title-row">
+                  <span className="list-card__title">{u.name}</span>
+                </div>
+                <p className="list-card__handle">@{u.username}</p>
 
-    return (
-        <>
-            <div className='container-fluid m-0 p-0 vh-100 table-responsive scrollbar-only-rod m-0 p-0  overflow-auto' style={{ height:"calc(100% - 100px )",overflowY:"auto", backgroundColor: "rgb(255, 255, 255)"}} >
-                <SearchBar searchInput={searchInput} _placeholder={"search friends..."} setSearchInput={setSearchInput}/>
-
-             <table id="menu_show_bar" className="table table-hover " >
-            {/*  <!-- list of chats  --> */}
-            <tbody className='overflow-y-scroll m-0'>
-
-                {
-                    Object.values(searchList).map((u: any, i: any) => {
-                      
-
-                        return <>
-
-                            <React.Fragment key={i}>
-                                <tr className="listshow " style={{ cursor: "pointer" }}    >
-                                    <td className="chatlist_dp"  style={{ backgroundImage: `url(${u.dp})` }}></td>
-                                    <td className=" mx-3"  style={{ width: '100%' }}>
-                                        <div >
-                                           <b> {u.name} </b>
-                                            <br />
-                                            <sub>@{u.username}</sub>
-
-                                            <span className="list_option" style={{ visibility: "hidden" }}><b>:</b></span>
-                                        </div>
-                                        <div>
-                                            <button className="btn" onClick={()=>navigate(u._id)}>Profile</button>
-                                            <button className="btn" onClick={async() => { const t= await getRoomIdByReceiverId(u._id); if(t.status)navigate(`/u/chats/${t.roomId}`) }}>Message</button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </React.Fragment>
-
-
-                        </>
-                    }
-                    )
-
-
-                }
-
-
-            </tbody>
-        </table>
-                
-
-</div>
-
-  </>
-    );
-
-}
+                <div className="list-card__actions">
+                  <button type="button" className="list-card__action" onClick={() => navigate(u._id)}>
+                    Profile
+                  </button>
+                  <button
+                    type="button"
+                    className="list-card__action list-card__action--primary"
+                    onClick={async () => {
+                      const t = await getRoomIdByReceiverId(u._id);
+                      if (t.status) navigate(`/u/chats/${t.roomId}`);
+                    }}
+                  >
+                    Message
+                  </button>
+                </div>
+              </div>
+            </article>
+          ))
+        ) : (
+          <div className="list-empty-state">
+            {searchInput ? "No users matched your search yet. Try another username or name." : "Start typing to find people across the app."}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
 
 export default SearchList;

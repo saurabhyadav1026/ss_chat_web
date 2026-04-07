@@ -1,101 +1,238 @@
-/* Reset + Base */
-* {
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-  background: linear-gradient(135deg, #0f172a, #1e293b);
-  font-family: "Poppins", sans-serif;
-  color: white;
-}
-
-/* Wrapper */
-.home-wrapper {
-  padding: 20px;
+﻿.home-shell {
+  position: relative;
+  min-height: 100svh;
   width: 100%;
-  max-width: 1200px;
-  margin: auto;
+  padding: var(--shell-gutter);
+  overflow: hidden;
 }
 
-/* Glass Card */
+.home-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(18px);
+  opacity: 0.9;
+  pointer-events: none;
+  animation: orbFloat 15s ease-in-out infinite;
+}
+
+.home-orb--one {
+  top: 5%;
+  left: -6%;
+  width: 260px;
+  height: 260px;
+  background: radial-gradient(circle, var(--page-glow-1), transparent 65%);
+}
+
+.home-orb--two {
+  right: -5%;
+  top: 18%;
+  width: 320px;
+  height: 320px;
+  background: radial-gradient(circle, rgba(240, 182, 101, 0.25), transparent 68%);
+  animation-direction: reverse;
+  animation-duration: 18s;
+}
+
 .glass {
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 20px;
-  backdrop-filter: blur(15px);
-  padding: 20px;
-  margin-bottom: 20px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--border);
+  border-radius: 32px;
+  background: linear-gradient(180deg, var(--panel-grad-1), var(--panel-grad-2));
+  backdrop-filter: blur(18px);
+  box-shadow: var(--shadow-lg);
+  animation: riseIn 650ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
 }
 
-/* Home Card */
-.home-card {
-  text-align: center;
-  animation: fadeIn 0.6s ease;
-}
-
-.username {
-  font-size: 26px;
-  font-weight: bold;
-  margin-bottom: 15px;
-}
-
-/* Buttons */
-.btn-group {
+.home-wrapper {
+  width: 100%;
+  margin: 0 auto;
   display: flex;
+  flex-direction: column;
+  gap: clamp(0.9rem, 1.6vw, 1.35rem);
+  position: relative;
+  z-index: 1;
+}
+
+.home-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(320px, 0.85fr);
+  gap: clamp(1rem, 2vw, 1.8rem);
+  padding: clamp(1.35rem, 2.6vw, 2.6rem);
+  min-height: min(82svh, 760px);
+  align-items: stretch;
+}
+
+.home-copy {
+  display: flex;
+  flex-direction: column;
   justify-content: center;
-  gap: 10px;
+}
+
+.home-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.home-kicker {
+  margin: 0;
+  color: var(--accent-cool);
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.home-theme-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.82rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: rgba(125, 211, 252, 0.08);
+  color: var(--text);
+  font-weight: 800;
+  white-space: nowrap;
+  transition: transform 180ms ease, box-shadow 180ms ease, background-color 180ms ease, border-color 180ms ease;
+}
+
+.home-theme-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 30px rgba(4, 18, 28, 0.14);
+  background: rgba(125, 211, 252, 0.14);
+  border-color: rgba(125, 211, 252, 0.28);
+}
+
+.home-theme-btn__icon {
+  width: 2rem;
+  height: 2rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: rgba(44, 201, 167, 0.16);
+}
+
+.home-theme-btn__icon svg,
+.home-theme-btn__icon i {
+  font-size: 0.9rem;
+}
+
+.home-title {
+  margin: 0;
+  color: var(--headline);
+  font-family: "Space Grotesk", "Segoe UI", sans-serif;
+  font-size: clamp(2.6rem, 7vw, 6rem);
+  line-height: 0.94;
+  max-width: 12ch;
+}
+
+.home-subtitle {
+  max-width: 760px;
+  margin: 1rem 0 0;
+  color: var(--muted);
+  line-height: 1.8;
+  font-size: clamp(0.98rem, 1.2vw, 1.08rem);
+}
+
+.btn-group,
+.home-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin-top: 1.5rem;
 }
 
 .modern-btn {
-  padding: 10px 18px;
-  border-radius: 10px;
-  border: none;
-  background: linear-gradient(135deg, #3b82f6, #6366f1);
-  color: white;
-  cursor: pointer;
-  transition: 0.3s;
+  min-width: 154px;
+  padding: 0.95rem 1.2rem;
+  border: 0;
+  border-radius: 18px;
+  background: linear-gradient(135deg, var(--accent), #65efd2);
+  color: #032029;
+  font-weight: 800;
+  transition: transform 180ms ease, box-shadow 180ms ease, filter 180ms ease;
 }
 
 .modern-btn:hover {
-  transform: scale(1.08);
-  box-shadow: 0 0 15px #6366f1;
+  transform: translateY(-2px);
+  box-shadow: 0 18px 30px rgba(44, 201, 167, 0.24);
+  filter: brightness(1.05);
 }
 
-/* Animations */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+.modern-btn--ghost {
+  background: var(--surface-soft);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.home-stat-grid {
+  display: grid;
+  gap: 0.9rem;
+  align-self: stretch;
+}
+
+.home-stat-card {
+  padding: 1.15rem;
+  border-radius: 24px;
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
+}
+
+.home-stat-card span,
+.home-stat-card p {
+  color: var(--muted);
+}
+
+.home-stat-card strong {
+  display: block;
+  font-size: clamp(1.8rem, 2.6vw, 2.5rem);
+  font-family: "Space Grotesk", "Segoe UI", sans-serif;
+  color: var(--headline);
+}
+
+.trend-section {
+  padding: clamp(1rem, 2vw, 1.8rem);
+}
+
+@media (min-width: 1600px) {
+  .home-card {
+    grid-template-columns: minmax(0, 1.7fr) minmax(360px, 0.85fr);
+    min-height: min(84svh, 860px);
   }
 }
 
-/* 📱 Mobile */
-@media (max-width: 768px) {
-  .home-wrapper {
-    padding: 10px;
+@media (max-width: 1100px) {
+  .home-card {
+    grid-template-columns: 1fr;
+    min-height: auto;
   }
 
-  .username {
-    font-size: 20px;
+  .home-title {
+    max-width: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .home-card {
+    padding: 1.2rem;
   }
 
-  .btn-group {
+  .home-toolbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .btn-group,
+  .home-actions {
     flex-direction: column;
   }
 
-  .modern-btn {
+  .modern-btn,
+  .home-theme-btn {
     width: 100%;
-  }
-}
-
-/* 📲 Tablet */
-@media (min-width: 769px) and (max-width: 1024px) {
-  .username {
-    font-size: 22px;
+    justify-content: center;
   }
 }

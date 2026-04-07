@@ -1,130 +1,84 @@
-import ChatContext from "../../contexts/chatscontext/AppVariablesContext"
 import { useContext, useEffect, useState } from "react";
-
-import "./user_profile_css.css";
-import MessageContext from "../../contexts/MessagesContext";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import api from "../../api/api";
-
+import MessageContext from "../../contexts/MessagesContext";
+import ChatContext from "../../contexts/chatscontext/AppVariablesContext";
+import "./user_profile_css.css";
 
 const UserProfile = () => {
-
   const { setPicShow }: any = useContext(ChatContext);
   const { getRoomIdByReceiverId }: any = useContext(MessageContext);
-  const [user, setUser] :any= useState({});
-  const { userId,page2Id } = useParams();
+  const [user, setUser]: any = useState({});
+  const { userId, page2Id } = useParams();
+  const navigate = useNavigate();
 
-  const navigate=useNavigate();
-  const location=useLocation();
   useEffect(() => {
-   if(userId) api.get("users/userprofile", { params: { _id: userId } })
-      .then((res) => { if (res.data.status) setUser(res.data.user) })
-      .catch((err) => {
-        console.log(err);
-      })
-   
-  }, [userId])
- useEffect(() => {
-  
-      if(page2Id) api.get("users/userprofile", { params: { _id: page2Id } })
-      .then((res) => { if (res.data.status) setUser(res.data.user) })
-      .catch((err) => {
-        console.log(err);
-      })
-  }, [page2Id])
+    if (userId)
+      api
+        .get("users/userprofile", { params: { _id: userId } })
+        .then((res) => {
+          if (res.data.status) setUser(res.data.user);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+  }, [userId]);
 
-  return <>
+  useEffect(() => {
+    if (page2Id)
+      api
+        .get("users/userprofile", { params: { _id: page2Id } })
+        .then((res) => {
+          if (res.data.status) setUser(res.data.user);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+  }, [page2Id]);
 
-    <div className="container-fluid p-0 m-0 bg-white d-flex col-12 align-items-center justify-content-center vh-100" >
-
-      <div className="container-fluid m-0 p-0  col-12 vh-100 border col-md-6  " >
-        {/* username */}
-        <div className="d-flex align-items-center justify-content-between mb-2">
-          <button className=" btn btn-light mr-2" onClick={() => navigate("/u/chats")}><b>←</b></button>
-          <h6 className="mb-0 fw-bold">@{user.username}</h6>
-          <button className="btn btn-light btn-suserProfileShow.username border">...</button>
+  return (
+    <div className="user-profile-screen">
+      <div className="user-profile-card">
+        <div className="user-profile-topbar">
+          <button className="user-profile-back" onClick={() => navigate("/u/chats")}>
+            Back
+          </button>
+          <div className="user-profile-handle-chip">@{user.username}</div>
+          <button className="user-profile-menu">Profile</button>
         </div>
 
-        <div className="row align-items-center py-3">
-          {/* profile image */}
-          <div className="col-4 text-center">
-            <img onClick={() => setPicShow({ status: true, url: user.dp })} src={user.dp} className="rounded-circle profile-img"></img>
-
+        <div className="user-profile-hero">
+          <div>
+            <img onClick={() => setPicShow({ status: true, url: user.dp })} src={user.dp} className="user-profile-avatar" />
           </div>
 
+          <div>
+            <h2 className="user-profile-name">{user.name}</h2>
+            <p className="user-profile-handle">@{user.username}</p>
+            <p className="user-profile-bio">{user.about || "This user has not added a bio yet."}</p>
 
-
-
-          <div className="col-8">
-
-
-
-            {/* for post fallower fallowing */}
-            <div className="d-flex justify-content-between d-none text-center small">
-              <div><b>12</b><br />Posts</div>
-              <div><b>102</b><br />Followers</div>
-              <div><b>120</b><br />Fallowing</div>
-
+            <div className="user-profile-stats">
+              <span className="user-profile-chip">Direct profile view</span>
+              <span className="user-profile-chip">Messaging available</span>
+              <span className="user-profile-chip">Clean focus layout</span>
             </div>
 
-          </div>
-
-
-        </div>
-
-
-        {/* bio */}
-        <div className="px-2">
-
-          <div className="fw-semibold">{user.name}</div>
-          <div className="small">{user.about}</div>
-
-          <div className="d-flex gap-2 mt-2">
-            <button className=" d-none btn btn-light-primary btn-sm  border w-100">Fallow</button>
-            <button className="btn btn-success btn-sm  border w-100" onClick={async() => { const t= await getRoomIdByReceiverId(user._id); if(t.status)navigate(`/u/chats/${t.roomId}`) }}>Message </button>
-
+            <div className="user-profile-actions">
+              <button
+                className="user-profile-button user-profile-button--primary"
+                onClick={async () => {
+                  const t = await getRoomIdByReceiverId(user._id);
+                  if (t.status) navigate(`/u/chats/${t.roomId}`);
+                }}
+              >
+                Message
+              </button>
+            </div>
           </div>
         </div>
-
-
-        {/* highlight */}
-        <div className="d-none gap-3 overflow-auto py-3 px-2">
-
-          <div className="text-center">
-            <img src="https://picsum.photos/103" className="rounded-circle heighlight-img" />
-            <div className="small">Life1</div>
-          </div>
-
-
-
-        </div>
-
-
-
-        {/*  for post display */}
-        <div className="row g-1 d-none" id="post"></div>
-
-
-
-
-
-
       </div>
-
-
-
-
     </div>
-
-
-
-  </>
-
-
-}
+  );
+};
 
 export default UserProfile;
-
-
-
-

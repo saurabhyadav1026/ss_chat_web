@@ -1,29 +1,13 @@
-
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import LeftMenu from "./components/left_nav/LeftMenu.tsx";
 
-
-
-
-
 export const ChatPageSection = () => {
-
-
-
-
-
   return (
-
-    <>
-    
-    <LeftMenu/>
-     <Outlet/>
-    </>
-
+    <div className="chat-shell">
+      <LeftMenu />
+      <Outlet />
+    </div>
   );
-}
-export default ChatPageSection
-  ;
+};
 
-
-
+export default ChatPageSection;

@@ -1,145 +1,63 @@
-
 import { useContext, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import ChatContext from "../../contexts/chatscontext/AppVariablesContext";
 import UserContext from "../../contexts/UserContext";
-import { useNavigate } from "react-router-dom";
 
+const Profile = (props: any) => {
+  const { setPicShow }: any = useContext(ChatContext);
+  const { setLogout, activeUser }: any = useContext(UserContext);
+  const navigate = useNavigate();
 
-  const Profile=(props:any)=>{
+  useEffect(() => {
+    if (!activeUser._id) navigate("/user/login");
+  }, [activeUser]);
 
-const {setPicShow}:any=useContext(ChatContext);
-const {setLogout,activeUser}:any=useContext(UserContext);
-
-const navigate=useNavigate();
-
-useEffect(()=>{
-if(!activeUser._id)navigate('/user/login')
- 
-},[activeUser])
-
-
-const logOut=()=>{
-  setLogout();
+  const logOut = () => {
+    setLogout();
     alert("logout successfully");
-        navigate('/user/login')
-        
+    navigate("/user/login");
+  };
 
-  
-
-}
-
-
-
-
-
-return<>
-
-<div className="container-fluid p-0 m-0 bg-white d-flex col-12 align-items-center border justify-content-center " style={{height:"100%"}} >
-
-    <div className="container-fluid m-0 p-0  col-12 border   " style={{height:"100%"}}>
-{/* username */}
-<div className="d-flex align-items-center justify-content-between mb-2">
-          <button className=" btn btn-light mr-2"  onClick={()=>{navigate('/u/chats');}}><b>←</b></button>
-          <h6 className="mb-0 fw-bold">{activeUser.username}</h6>
-          <button className="btn btn-light btn-suserProfileShow.username border">...</button>
-         </div>
-
-      <div className="row align-items-center py-3">
-{/* profile image */}
-        <div className="col-4 text-center">
-          <img onClick={() => setPicShow({ status: true, url: activeUser.dp })} src={activeUser.dp} className="rounded-circle profile-img"></img>
-
+  return (
+    <div className="user-profile-screen">
+      <div className="user-profile-card">
+        <div className="user-profile-topbar">
+          <button className="user-profile-back" onClick={() => navigate("/u/chats")}>
+            Back
+          </button>
+          <div className="user-profile-handle-chip">@{activeUser.username}</div>
+          <button className="user-profile-menu">Menu</button>
         </div>
 
+        <div className="user-profile-hero">
+          <div>
+            <img onClick={() => setPicShow({ status: true, url: activeUser.dp })} src={activeUser.dp} className="user-profile-avatar" />
+          </div>
 
+          <div>
+            <h2 className="user-profile-name">{activeUser.name}</h2>
+            <p className="user-profile-handle">@{activeUser.username}</p>
+            <p className="user-profile-bio">{activeUser.about || "Add a short bio to make your profile feel more personal."}</p>
 
+            <div className="user-profile-stats">
+              <span className="user-profile-chip">Private account space</span>
+              <span className="user-profile-chip">Display picture ready</span>
+              <span className="user-profile-chip">Profile controls</span>
+            </div>
 
-        <div className="col-8">
-
-
-        
-{/* for post fallower fallowing */}
-        <div className="d-none justify-content-between text-center small">
-          <div className="p-2"><b>12</b><br/>Posts</div>
-          <div className=" p-2"><b>102</b><br/>Followers</div>
-          <div className="p-2"><b>120</b><br/>Fallowing</div>
-
+            <div className="user-profile-actions">
+              <button className="user-profile-button user-profile-button--ghost" onClick={() => props.setProfileSectionPage("editProfile")}>
+                Edit Profile
+              </button>
+              <button className="user-profile-button user-profile-button--danger" onClick={logOut}>
+                Logout
+              </button>
+            </div>
+          </div>
         </div>
-
-        </div>
-
-
       </div>
-
-
-      {/* bio */}
-      <div className="px-2">
-
-      <div className="fw-semibold">{activeUser.name}</div>
-      <div className="small">{activeUser.about}</div>
-      
-      <div className="d-flex gap-2 mt-2"> 
-         <button className=" d-none btn btn-light-primary btn-sm  border w-100">Fallow</button> 
-        <button onClick={()=>props.setProfileSectionPage("editProfile")} className="btn btn-light-primary btn-sm  border w-100">Edit Profile </button>
-    
-      </div>
-         
-      </div>
-
-
-{/* highlight */}
-<div className="d-none gap-3 overflow-auto py-3 px-2">
-
-<div className="text-center">
-  <img  src="https://picsum.photos/103" className="rounded-circle heighlight-img"/>
-  <div className="small">Life1</div>
-</div>
-
-
-
-</div>
-
-<div className=" container col-12 d-flex gap-1">
-    <button className="btn  btn-transparent text-danger"  onClick={()=>{logOut();}}>logout</button> 
-       
-</div>
-
-{/*  for post display */}
-<div className=" d-none row g-1" id="post"></div>
-
-
-
-
-
-
     </div>
+  );
+};
 
-
-
-
-</div>
-
-
-</>
-
-  }
-
-  export default Profile;
-
-
-
-
-  {/* 
-  
-  
-  <div id="profile_dp_bar">
-   <div className="card_dp" style={{backgroundImage:`url(${activeUser.dp})`}}></div>
-   
-
-  </div>
-  
-  
-  </div>
-  
-  
-  */}
+export default Profile;

@@ -1,212 +1,177 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import api from "../../api/api";
 
-import { useState } from 'react';
-import api from '../../api/api';
-import { useNavigate } from 'react-router-dom';
+const Register = () => {
+  const [isUsernameAvailble, setIsAvailbleUsername] = useState(false);
+  const [OTP, setotp]: any = useState({ otp_code: null, otp: null });
+  const [isReadOnly, setIsReadOnly] = useState(false);
+  const [otpDivVisibility, setOtpDivVisibility] = useState(false);
+  const [User, setUser] = useState({ name: "", username: "", userpassword: "", confirm_password: "", email: "" });
+  const navigate = useNavigate();
 
-//import { generateKeyBundle } from '../../securety/msgencryption';
+  const updateUser = (e: any) => {
+    const { name, value } = e.target;
+    setUser({ ...User, [name]: value });
+  };
 
-const Register=(props:any)=>{
-
-
-const [isUsernameAvailble,setIsAvailbleUsername]=useState(false);
-
-// {otp_code:54425,otp:123654}
-const [OTP,setotp]:any=useState({otp_code:null,otp:null})
-  
-
-const [isReadOnly,setIsReadOnly]=useState(false);
-const [otpDivVisibility,setOtpDivVisibility]=useState(false)
-
-const [User,setUser]=useState({name:"",username:"",userpassword:'', confirm_password:'',email:''})
-
-
-const navigate=useNavigate();
-
-const updateUser=(e:any)=>{
-    const {name,value}=e.target;
-    
-setUser({...User,[name]:value})
-}
-
-
-
-const sendOtp=async ()=>{
-
-if(!isUsernameAvailble){
-    alert("Username is not availble. Try other username.")
-    return;}
-    if(User.userpassword!==User.confirm_password){
-        alert("password missmatch");
-        return;
+  const sendOtp = async () => {
+    if (!isUsernameAvailble) {
+      alert("Username is not availble. Try other username.");
+      return;
     }
-let new_otp:any=(await api.get("/getotp",{params:{email:User.email}})).data || {status:"nt"};
-
-
-if(new_otp.status==='ok'){
-    setIsReadOnly(true)
-    alert("We have send the otp on your register contact. otp code is : "+new_otp.otp_code);
-    setotp(new_otp);
-    setOtpDivVisibility(true)
-     
-  }
-  else alert(new_otp.status)
+    if (User.userpassword !== User.confirm_password) {
+      alert("password missmatch");
+      return;
     }
 
+    const newOtp: any = (await api.get("/getotp", { params: { email: User.email } })).data || { status: "nt" };
 
-    const resendOtp=async()=>{
-    const new_otp:any= (await api.get("/getotp",{params:{email:User.email}})).data || {status:"nt"};
-    if(new_otp.status==='ok'){
-    alert("We have resend the otp on your register contact. otp code is : "+new_otp.otp_code);
-    setotp(new_otp);
-       
-  }
-  else alert(new_otp.status)
+    if (newOtp.status === "ok") {
+      setIsReadOnly(true);
+      alert(`We have send the otp on your register contact. otp code is : ${newOtp.otp_code}`);
+      setotp(newOtp);
+      setOtpDivVisibility(true);
+    } else {
+      alert(newOtp.status);
+    }
+  };
 
+  const resendOtp = async () => {
+    const newOtp: any = (await api.get("/getotp", { params: { email: User.email } })).data || { status: "nt" };
+    if (newOtp.status === "ok") {
+      alert(`We have resend the otp on your register contact. otp code is : ${newOtp.otp_code}`);
+      setotp(newOtp);
+    } else {
+      alert(newOtp.status);
+    }
+  };
+
+  const edit = () => {
+    (document.getElementById("otp_input") as HTMLInputElement).value = "";
+    setOtpDivVisibility(true);
+    setIsReadOnly(false);
+  };
+
+  const addUser = async () => {
+    try {
+      const user = {
+        name: User.name,
+        username: User.username,
+        password: User.userpassword,
+        email: User.email,
+      };
+      await api.post("/newuser", user);
+    } catch (error) {
+      console.log(`eror  ${error}`);
+    }
+  };
+
+  const verifyRegisterDetail = async () => {
+    const otpInput = document.getElementById("otp_input") as HTMLInputElement;
+    const otp: any = otpInput.value;
+    otpInput.value = "";
+
+    if (OTP.otp.toString() !== otp) {
+      alert("Enter correct OTP  ");
+      return;
     }
 
-    
-    const edit=()=>{
-(document.getElementById("otp_input") as HTMLInputElement).value=""
-      setOtpDivVisibility(true)
-        setIsReadOnly(false)
+    await addUser();
+    alert("register successfully");
+    navigate("/user/login");
+  };
 
+  const checkUsername = () => {
+    if (User.username.trim() === "") setIsAvailbleUsername(false);
+    else {
+      api
+        .get("/isuseravailble", { params: { username: User.username } })
+        .then((res) => setIsAvailbleUsername(res.data.status))
+        .catch((err: any) => alert(err));
     }
+  };
 
+  const OtpDiv = () => {
+    return (
+      <div className="auth-otp">
+        <label className="auth-field">
+          <span className="auth-label">Enter OTP</span>
+          <input type="number" className="auth-input" id="otp_input" required />
+        </label>
 
-    const verifyRegisterDetail=async()=>{
+        <div className="auth-inline">
+          <button className="auth-button auth-button--primary" id="otp_verify_btn" onClick={verifyRegisterDetail}>
+            Complete Registration
+          </button>
+          <button className="auth-button auth-button--secondary" onClick={resendOtp}>
+            Resend OTP
+          </button>
+        </div>
 
-      const  otp_=(document.getElementById("otp_input")as HTMLInputElement);
-const      otp:any=otp_.value;
- otp_.value="";
- if(OTP.otp.toString()!==otp){    
-    alert("Enter correct OTP  ");
-    return;
- }
- else{ 
- await  addUser()
- alert("register successfully");
-   navigate('/user/login');
-    
- }
+        <div className="auth-helper">
+          Need to edit your email?
+          <span className="auth-link" onClick={edit}> Update it first</span>
+        </div>
+      </div>
+    );
+  };
 
+  return (
+    <div className="auth-card">
+      <div className="app_logo auth-logo" />
 
-    }
+      <div className="auth-header">
+        <p className="auth-eyebrow">Create account</p>
+        <h2 className="auth-title">Register</h2>
+        <p className="auth-subtitle">Set up your profile details and verify the account with OTP before entering the app.</p>
+      </div>
 
-const addUser=async()=>{
-try{
-                 const user={
-                name:User.name,
-        username:User.username,
-        password:User.userpassword,
-        email:User.email
-    }
-                            //    [ user["storekey"],user["public_bundle"]]=["str key","bundle key"]  //await generateKeyBundle(User.username);
-await api.post('/newuser',user);
- 
-}
-    catch(error){
-    console.log("eror  "+error)
-    }
-}
+      <div className="auth-form">
+        <label className="auth-field">
+          <span className="auth-label">Name</span>
+          <input className="auth-input" name="name" onChange={updateUser} readOnly={isReadOnly} value={User.name} required />
+        </label>
 
+        <label className="auth-field">
+          <span className="auth-label">Username</span>
+          <input className="auth-input" name="username" onKeyUp={checkUsername} onChange={updateUser} readOnly={isReadOnly} value={User.username} required />
+          <UserNameAvailble value={isUsernameAvailble} />
+        </label>
 
+        <label className="auth-field">
+          <span className="auth-label">Password</span>
+          <input className="auth-input" name="userpassword" onChange={updateUser} readOnly={isReadOnly} type="password" value={User.userpassword} required />
+        </label>
 
+        <label className="auth-field">
+          <span className="auth-label">Confirm Password</span>
+          <input className="auth-input" name="confirm_password" onChange={updateUser} readOnly={isReadOnly} type="password" value={User.confirm_password} required />
+        </label>
 
-const checkUsername=()=>{
-     if(User.username.trim()=='')setIsAvailbleUsername(false);
- else{ 
-   
-    api.get("/isuseravailble",{params:{username:User.username}})
- .then((res)=>setIsAvailbleUsername(res.data.status))
- .catch((err:any)=>alert(err)); 
-}
+        <label className="auth-field">
+          <span className="auth-label">Email</span>
+          <input className="auth-input" name="email" onChange={updateUser} readOnly={isReadOnly} value={User.email} type="email" required />
+        </label>
 
-}
+        <button className="auth-button auth-button--primary" onClick={sendOtp}>
+          Send OTP
+        </button>
 
+        {otpDivVisibility ? <OtpDiv /> : null}
+      </div>
 
-
-
-const OtpDiv=()=>{
-   return <>
-    <tr ><td>Enter OTP</td><td><input type='Number' className='form-control'   id="otp_input" required /></td><td onClick={resendOtp} style={{color:"blue",fontSize:"small"}} >Resend OTP</td></tr>
-<tr ><td colSpan={2}><button style={{margin:"3px",width:'100%',height:"30px",backgroundColor:"blue",color:'white',borderRadius:'10px'}} id='otp_verify_btn' onClick={verifyRegisterDetail}>Register</button></td></tr>
-<tr ><td colSpan={2}>To edit Email/ Contact no. <span onClick={edit} style={{color:'blue'}}>click here</span> </td></tr>
-</>
-}
-
-
-
-
-return<>
-
-<div className='d-flex m-0'>
-    <div className='app_logo' style={{height:"100px", width:"100px", borderRadius:"50%"}}></div>
-</div>
-
-<h2 className='m-0' style={{color:'green'}}>Register...</h2>
-<hr/>
-<table style={tabSty}>
-    <tbody>
-
-    
-
-
-<tr>
-    <td>Name</td><td><input className='form-control'    style={{height:'25px'}}  name='name' onChange={updateUser} readOnly={isReadOnly}   value={User.name}  required /></td>
-</tr>
-<tr>
-    <td>Username</td><td><input  className='form-control' style={{height:'25px'}}  name='username' onKeyUp={checkUsername} onChange={updateUser} readOnly={isReadOnly}   value={User.username} required /></td><UserNameAvailble value={isUsernameAvailble}></UserNameAvailble>
-</tr>
-<tr>
-    <td>Password :</td><td><input  className='form-control'  style={{height:'25px'}} name='userpassword' onChange={updateUser} readOnly={isReadOnly}  type="password" value={User.userpassword} required></input></td>
-</tr>
-<tr>
-    <td>Confirm Password :</td><td><input  className='form-control' style={{height:'25px'}}  name='confirm_password' onChange={updateUser} readOnly={isReadOnly}   type="password" value={User.confirm_password} required></input></td>
-</tr>
-<tr>
-    <td>Email id :</td><td><input className='form-control'  style={{height:'25px'}}  name='email' onChange={updateUser} readOnly={isReadOnly}   value={User.email} type='email' required></input></td>
-</tr>
-<tr>
-   <td style={{display:'flex'}} colSpan={2}> <button className='btn btn-warning text-bg-color' onClick={sendOtp}>Send OTP</button></td>
-</tr>
-
-{/* 
-<tr id='otp_verify_div' style={{backgroundColor:'red',visibility:'hidden',position:'absolute',height:"100%",width:'100%'}}>
- */}
-{otpDivVisibility?<OtpDiv></OtpDiv>:<></>}
-{/* 
-<tr><td colSpan={2}>or loggin with</td></tr>
-<tr><td colSpan={2} style={{display:'flex',alignItems:'center',justifyContent:'space-evenly'}}><span>g</span><span>m</span><span>t</span></td></tr>
- */}
-
-</tbody>
-</table>
-
-
-<div>if you have account <span style={{color:'blue',margin:"3px"}} onClick={()=>navigate("/user/login")}>sign in</span></div>
-
-
-</>    
-
-
-}
+      <div className="auth-link-row">
+        Already have an account?
+        <span className="auth-link" onClick={() => navigate("/user/login")}> Sign in</span>
+      </div>
+    </div>
+  );
+};
 
 export default Register;
 
-
-
-const UserNameAvailble=(props:any)=>{
-    if(props.value) return <td id="username_availble_status" className='text-success' style={{fontSize:"small",color:'green'}}>Availble</td>
-    else return <td id="username_availble_status" className='text-danger '  style={{fontSize:"small",color:'red'}}>not Availble</td>
-}
-
-
-
-const tabSty={
-   height:'200px',
-   padding:"10px",
-   width:'100%',
-    bordeRadius:"10px",
-    borderTop:'3px solid gray',
-     borderBottom:'3px solid gray'
-}
+const UserNameAvailble = (props: any) => {
+  if (props.value) return <span id="username_availble_status" className="auth-status auth-status--ok">Username available</span>;
+  return <span id="username_availble_status" className="auth-status auth-status--bad">Username not available</span>;
+};

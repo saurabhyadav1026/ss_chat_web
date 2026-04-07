@@ -1,45 +1,27 @@
-import { useContext, useEffect, useState } from "react";
-import { Outlet, useNavigate, useParams } from "react-router-dom"
-import UserContext from "../../contexts/UserContext";
+import { Outlet, useParams } from "react-router-dom";
 
+const Page1 = ({ element }: any) => {
+  const { page2Id }: any = useParams();
+  const hasPage2Id = Boolean(page2Id);
 
-   
-
-const Page1=({element}:any)=>{
-
-     const {page2Id}:any =useParams();
-const [pageShow,setPageShow]=useState("d-flex");
-
-/* 
-const navigate =useNavigate();
-const {activeUser}:any=useContext(UserContext);
-
-useEffect(()=>{
-if(!(activeUser&& activeUser._id))navigate("user")
-},[activeUser])
-
-
- */
-
-useEffect(()=>{
-if(page2Id!==null&& pageShow!=="d-none")setPageShow("d-none");
-else if(pageShow!=="d-flex")setPageShow("d-flex");
-
-},[page2Id])
-
-
-
-
-    return<>
-    <div id="main_page1" className={`${pageShow} m-0 p-2 col-12  col-md-6 col-lg-4 col-xl-4 d-md-flex vh-100 `}>
+  return (
+    <div className="page-shell">
+      <div id="main_page1" className={`page-shell__sidebar ${hasPage2Id ? "page-shell__sidebar--mobile-hidden" : ""}`}>
         {element}
+      </div>
+
+      <div id="main_page2" className={`page-shell__content ${!hasPage2Id ? "page-shell__content--empty" : ""}`}>
+        {!hasPage2Id ? (
+          <div className="page-empty-state">
+            <span className="placeholder-chip">Ready to chat</span>
+            <h2>Select a conversation</h2>
+            <p>Choose a chat from the left panel to open the thread, or search for someone new to start talking.</p>
+          </div>
+        ) : null}
+        <Outlet />
+      </div>
     </div>
-       <div id="main_page2" className={`d-flex col-12  col-md-5  col-lg-7   col-xl-7 vh-100`} style={{ flexDirection: "column" }}>
-        <Outlet/>
-       </div>
-</>
+  );
+};
 
-}
-
-
-export default Page1
+export default Page1;

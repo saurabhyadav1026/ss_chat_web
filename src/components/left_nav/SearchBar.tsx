@@ -1,28 +1,28 @@
+import { SearchIcon } from "../icons";
 
+const SearchBar = (props: any) => {
+  const updateSearchInput = (e: any) => {
+    props.setSearchInput(e.target.value);
+  };
 
-
-const SearchBar=(props:any)=>{
-
- const sty:any={
-
-
- }
-
-
-   const updateSearchInput = (e: any) => {
-   
-    props.setSearchInput(e.target.value)
-  }
-
-    return <>
-    <div className='' style={sty}>
-        
-          <input className='form-control ' name="ignore-history" style={{ height: "40px" }} type="search" onChange={(e)=>{updateSearchInput(e)}} value={props.searchInput}  placeholder={props._placeholder} id="search_input"></input>
-
-        </div>
-
-    </>
-}
-
+  return (
+    <div className="search-shell">
+      <span className="search-shell__icon">
+        <SearchIcon />
+      </span>
+      <input
+        className="form-control search-shell__input"
+        name="ignore-history"
+        type="search"
+        onChange={(e) => {
+          updateSearchInput(e);
+        }}
+        value={props.searchInput}
+        placeholder={props._placeholder}
+        id="search_input"
+      />
+    </div>
+  );
+};
 
 export default SearchBar;

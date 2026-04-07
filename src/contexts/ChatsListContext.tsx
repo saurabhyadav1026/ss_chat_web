@@ -1,12 +1,9 @@
-import { createContext,useState,useEffect, useContext} from 'react';
+﻿// import { createContext,useState,useEffect, useContext} from 'react';
+import { createContext,useState, useContext} from 'react';
 import api from '../api/api';
 import UserContext from './UserContext';
 
-
-
-
 const ChatsListContext =createContext({});
-
 
 export const ChatsListContextProvider=({children}:any)=>{
 
@@ -21,14 +18,7 @@ export const ChatsListContextProvider=({children}:any)=>{
         else{ updateChatsList({});}
     }
 
-    
-    
-      // to set the chatlist   yani chatroom  by getfriendList or getchatList
-    
-     
-     
-  
-    
+    // to set the chatlist   yani chatroom  by getfriendList or getchatList
 
     return < ChatsListContext.Provider value={{chatsList,setChatsList,aiChatsList,setAIChatsList}}>{children}</ChatsListContext.Provider>
 }
