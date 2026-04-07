@@ -1,6 +1,6 @@
 ﻿import { useContext } from "react";
 import UserContext from "../../../contexts/UserContext";
-import "./trendUser.css";
+import "./trenduser.css";
 
 const dpstyle = {
   borderRadius: "15px",
@@ -46,3 +46,4 @@ const TrendUser = () => {
 };
 
 export default TrendUser;
+
