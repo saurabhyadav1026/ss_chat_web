@@ -29,6 +29,7 @@ api.interceptors.response.use(
             
         }catch(err:any){
                 console.log("session over, log in again" + err);
+              alert("we clearing the cookie")
                   localStorage.clear();
             window.location.reload();
             return  Promise.reject(error);
