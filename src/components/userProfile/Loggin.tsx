@@ -3,8 +3,6 @@ import { GoogleLogin } from "@react-oauth/google";
 import { useNavigate } from "react-router-dom";
 import api from "../../api/api.ts";
 import UserContext from "../../contexts/UserContext.tsx";
-import { googleLoggin } from "./users.ts";
-
 const Loggin = () => {
   const navigate = useNavigate();
   const { setActiveUser }: any = useContext(UserContext);
@@ -25,20 +23,34 @@ const Loggin = () => {
     if (status) {
       await setActiveUser();
       alert("logging successfully");
-      navigate("/u/chats");
+      navigate("/");
     } else {
       alert("invalid username or password");
     }
   };
 
   const verifygoogleLoggin = async (res: any) => {
-    const aUser: any = await googleLoggin(res.credential);
-    if (aUser.status) {
-      setActiveUser();
-      navigate("/u/chats");
-    } else {
-      alert("username or password is incorrect");
+    let status=false;
+    try{  await api.post('/logging/googleAuthVerification',{token:res.credential}).
+  then((res)=>{
+    
+    if(res.data.status){status=true;
+             
+      
     }
+else{
+  alert("username or password is incorrect. 1");
+}
+});
+
+if(status){
+   await setActiveUser();
+      navigate("/ ");
+}
+}
+catch(e){
+   alert("username or password is incorrect");
+}
   };
 
   return (

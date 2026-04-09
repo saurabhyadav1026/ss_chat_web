@@ -36,19 +36,7 @@ const sbhunk:any={
 
 
 
-export const googleLoggin=async(token:any)=>{
-   let data=false;
-  try{  await api.post(responser+'/googleAuthVerification',{token:token}).
-  then((res)=>{
-    data=res.data
-console.log(data)
-})
-}
-catch(e){
-    console.log(e)
-}
-return data;
-}
+
 
 
 

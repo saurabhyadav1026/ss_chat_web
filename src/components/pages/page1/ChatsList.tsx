@@ -8,17 +8,11 @@ import SearchBar from "../../left_nav/SearchBar";
 const ChatsList = () => {
   const { setActiveChatByChatRoomId }: any = useContext(MessageContext);
   const [searchInput, setSearchInput]: any = useState("");
-  const { setActiveUser, activeUser }: any = useContext(UserContext);
+  const { activeUser }: any = useContext(UserContext);
   const { chatsList }: any = useContext(ChatsListContext);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const func = async () => {
-      await setActiveUser();
-    };
-
-    func();
-  }, []);
+  
 
   useEffect(() => {
     if (!(activeUser && activeUser._id)) navigate("/user");
