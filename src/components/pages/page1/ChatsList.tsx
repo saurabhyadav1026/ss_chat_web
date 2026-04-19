@@ -15,7 +15,7 @@ const ChatsList = () => {
   
 
   useEffect(() => {
-    if (!(activeUser && activeUser._id)) navigate("/user");
+    if (!(activeUser && activeUser._id)) navigate("/user/login");
   }, [activeUser]);
 
   const chatItems = Object.values(chatsList || {});

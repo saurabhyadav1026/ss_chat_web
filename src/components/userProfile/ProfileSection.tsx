@@ -1,14 +1,15 @@
 import { Outlet, useNavigate } from "react-router-dom";
 import "./user_profile_css.css";
 import Promo from "../pages/page2/Promo";
-import {  useEffect } from "react";
+import { useContext, useEffect } from "react";
+import UserContext from "../../contexts/UserContext";
 
 const ProfileSection = () => {
-  const navigate = useNavigate();
-
-  useEffect(()=>{
-navigate('/')
-  },[])
+const {activeUser}:any=useContext(UserContext)
+const navigate=useNavigate()
+ useEffect(() => {
+    if (!(activeUser && activeUser._id)) navigate("/user/login");
+  }, [activeUser]);
  
  return (
     <div id="profile_section" className="profile-shell container-fluid col-12 d-flex p-0 m-0">

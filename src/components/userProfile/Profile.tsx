@@ -10,7 +10,7 @@ const Profile = (props: any) => {
 
   useEffect(() => {
     if (!activeUser._id) navigate("/user/login");
-  }, [activeUser]);
+  }, []);
 
   const logOut = () => {
     setLogout();

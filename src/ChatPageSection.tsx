@@ -6,6 +6,7 @@ import UserLoading from "./components/loading-components/UserLoading.tsx";
 
 export const ChatPageSection = () => {
  
+  
   const {isUserLoading}:any=useContext(UserContext)
   if(isUserLoading)return  <UserLoading/>
   else return (
@@ -14,6 +15,6 @@ export const ChatPageSection = () => {
       <Outlet />
     </div>
   );
-};
+}
 
 export default ChatPageSection;
