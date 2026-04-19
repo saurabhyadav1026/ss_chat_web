@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import SpeakerContext from "../voiceassistance/speaker/SpeakerContext";
-import { Copy, Dislike, Edit, LikeRes, SpeakerIcon, StopspeakIcon, Trash_binIcon } from "./icons";
+import { BlueTickIcon, Copy, Dislike, DoubleTickIcon, Edit, LikeRes, SingleTickIcon, SpeakerIcon, StopspeakIcon, Trash_binIcon, UnsendIcon } from "./icons";
 
 const ReqShow = (props: any) => {
   const [isSpeaking, setIsSpeaking] = useState(false);
@@ -23,28 +23,31 @@ const ReqShow = (props: any) => {
   }, [dislikecolor]);
 
   const editReq = (r: any) => {
-    const text: any = document.getElementsByClassName("req_cammand")[r]?.innerHTML;
-    (document.getElementById("cammand_input") as HTMLInputElement).value = text;
-
-    const tempChat: any = [...props.chats];
-    tempChat[props.active_chat].reqs = tempChat[props.active_chat].reqs.slice(0, r);
-    tempChat[props.active_chat].ress = tempChat[props.active_chat].ress.slice(0, r);
-
-    props.setChats(tempChat);
+    return;
   };
 
-  const deleteMsg = (activeUser: any, activeChat: any, time: any) => {
-    alert(`deletinng msg${activeUser}${activeChat}${time}`);
+  const deleteMsg = (msgId: any) => {
+    alert(`deletinng msg${msgId}`);
   };
 
+  const time=(timeStamp:any)=>{
+    return new Date(timeStamp).toLocaleTimeString('en-IN', {
+  hour: '2-digit',
+  minute: '2-digit',
+  hour12: false
+});
+  }
   return (
     <div className="message-row message-row--outgoing send_msg">
       <div className="message-stack message-stack--outgoing">
         <div className="message-bubble message-bubble--outgoing">
           <span className="msg_font_style req_cammand">
-            <Markdown remarkPlugins={[remarkGfm]}>{props.req_}</Markdown>
+            <Markdown remarkPlugins={[remarkGfm]}>{props.msg.text}</Markdown>
           </span>
-          <span className="message-time" />
+          <span className="message-time" >
+            { time(props.msg.tickStatus.send) || ""}
+          </span>
+          {props.msg.tick==3?<BlueTickIcon/>:props.msg.tick==2?<DoubleTickIcon/>:props.msg.tick==1?<SingleTickIcon/>:<UnsendIcon/>}
         </div>
 
         <div className="send_msg_option message-actions">
@@ -53,7 +56,7 @@ const ReqShow = (props: any) => {
               <SpeakerIcon
                 func={async () => {
                   setIsSpeaking(true);
-                  await startSpeaking(props.req_);
+                  await startSpeaking(props.msg.text);
                 }}
               />
             ) : (
@@ -67,11 +70,11 @@ const ReqShow = (props: any) => {
           </span>
 
           <span className="message-action">
-            <Edit func={editReq} r_no={props.r_no} />
+            <Edit func={editReq} r_no={props.msg._id} />
           </span>
 
           <span className="message-action">
-            <Copy func={() => copyReq(props.req_)} r_no={props.r_no} />
+            <Copy func={() => copyReq(props.msg.text)} r_no={props.msg._id} />
           </span>
 
           <span className="message-action">
@@ -81,7 +84,7 @@ const ReqShow = (props: any) => {
                 if (likecolor === "blue") setLikecolor("gray");
                 else setLikecolor("blue");
               }}
-              r_no={props.r_no}
+              r_no={props.msg._id}
             />
           </span>
 
@@ -92,12 +95,12 @@ const ReqShow = (props: any) => {
                 if (dislikecolor === "blue") setLikecolor("gray");
                 else setDislikecolor("blue");
               }}
-              r_no={props.r_no}
+              r_no={props.msg._id}
             />
           </span>
 
           <span className="message-action">
-            <Trash_binIcon func={() => deleteMsg(props.activeUser, props.active_chat, props.time)} />
+            <Trash_binIcon func={() => deleteMsg(props.msg._id)} />
           </span>
         </div>
       </div>

@@ -1,10 +1,13 @@
 import { Outlet, useParams } from "react-router-dom";
 
 const Page1 = ({ element }: any) => {
+   
   const { page2Id }: any = useParams();
   const hasPage2Id = Boolean(page2Id);
 
-  return (
+
+  return <>   
+  
     <div className="page-shell">
       <div id="main_page1" className={`page-shell__sidebar ${hasPage2Id ? "page-shell__sidebar--mobile-hidden" : ""}`}>
         {element}
@@ -21,7 +24,7 @@ const Page1 = ({ element }: any) => {
         <Outlet />
       </div>
     </div>
-  );
+  </>
 };
 
 export default Page1;

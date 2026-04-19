@@ -1,10 +1,8 @@
-﻿// import { createContext,useContext,useState} from 'react';
+﻿
 import { createContext,useState} from 'react';
 
 import { useEffect } from 'react';
-// import UserContext from './UserContext';
 import { socket } from './socketcontext/SocketContext';
-// import ChatsListContext from './ChatsListContext';
 import api from '../api/api';
 
 const MessageContext=createContext({});
@@ -18,6 +16,8 @@ export const MessageContextProvider=({children}:any)=>{
     const [messages ,setMessages ]:any=useState({});
     const [aiChat,setAIChat]=useState({})
 
+
+
     useEffect(() => {
       keyHepler.clear();
     }, [activeChat])
@@ -26,7 +26,7 @@ export const MessageContextProvider=({children}:any)=>{
   useEffect(() => {
     if (activeChat &&activeChat._id&& activeChat._id.slice(0,3)!=="new") {
      api.get("/users/getmessages",{params:{ _id: activeChat._id }})
-     .then(res=>{console.log(res);setMessages(res.data.messages); })
+     .then(res=>{setMessages(res.data.messages); socket.emit("u/chats/doBlueTick",{roomId:activeChat._id})})
      .catch(err=>console.log(err))
     }
     else if (activeChat) {
@@ -35,9 +35,64 @@ export const MessageContextProvider=({children}:any)=>{
 
   }, [activeChat])
 
+
+
+useEffect(()=>{
+ socket.on("u/chats/updateDoubleTick",(data)=>{
+  if(!data.updateRooms[activeChat._id]){
+    return
+        }
+  data.updateRooms[activeChat._id].forEach((msgId:any)=>{
+   setMessages((prev: any) => ({ ...prev, [msgId]:{...prev[msgId],tick:2,tickStatus:{...prev[msgId]["tickStatus"],read:data.deliverTime}} }));
+  })
+  })
+  return ()=>{socket.off("u/chats/updateDoubleTick")}
+})
+
+
+
+useEffect(()=>{
+ socket.on("u/chats/updateBlueTick",(data)=>{
+  if(activeChat._id!==data.roomId){
+    return;}
+    
+  data.updateMsgsId.forEach((msgId:any)=>{
+   setMessages((prev: any) => ({ ...prev, [msgId]:{...prev[msgId],tick:3,tickStatus:{...prev[msgId]["tickStatus"],read:data.readTime}} }));
+  })
+ 
+
+})
+  return ()=>{socket.off("u/chats/updateBlueTick")}
+})
+
+useEffect(()=>{
+ socket.on("u/chats/updateOneDoubleTick",(data)=>{
+  
+  if(activeChat._id!==data.roomId)return;
+    
+    setMessages((prev: any) => ({ ...prev, [data.msgId]:{...prev[data.msgId],tick:2,tickStatus:{...prev[data.msgId]["tickStatus"],deliver:data.deliverTime}} }));
+ })
+  return ()=>{socket.off("u/chats/updateOneDoubleTick")}
+})
+useEffect(()=>{
+ socket.on("u/chats/updateOneBlueTick",(data)=>{
+  if(activeChat._id!==data.roomId)return;
+    
+    setMessages((prev: any) => ({ ...prev, [data.msgId]:{...prev[data.msgId],tick:3,tickStatus:{...prev[data.msgId]["tickStatus"],read:data.readTime}} }));
+  
+ })
+  return ()=>{socket.off("u/chats/updateOneBlueTick")}
+})
+
+
+
+
+
+
+
   // to send the msg
   const sendMessage = (data: any) => {
-    socket.emit("sendMessage", data)
+    socket.emit("u/chats/sendMessage", data)
   }
 
 const setActiveChatByChatRoomId=(roomId:any)=>{
@@ -58,7 +113,6 @@ let roomId="";
 await api.get("/users/getroomidbyreceiverid",{params:{_id:receiverId}})
           .then((res)=>{
            roomId=res.data.roomId;
-           console.log(roomId)
           })
           .catch((err)=>{
             roomStatus=false;

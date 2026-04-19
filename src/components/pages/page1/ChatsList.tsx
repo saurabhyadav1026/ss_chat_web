@@ -20,7 +20,7 @@ const ChatsList = () => {
 
   const chatItems = Object.values(chatsList || {});
 
-  return (
+  return <>
     <div className="list-panel">
       <div className="list-panel__header">
         <div>
@@ -34,14 +34,16 @@ const ChatsList = () => {
 
       <div className="list-panel__body scrollbar-only-rod">
         {chatItems.length ? (
-          chatItems.map((u: any, i: any) => (
+          chatItems.map((u: any, i: any) => {
+            return<>
             <article key={u._id || i} className="list-card">
               <button
                 type="button"
                 className="list-card__avatar chatlist_dp"
                 onClick={() => navigate(`/user/profile/${u.receiver._id}`)}
+               
                 style={{ backgroundImage: `url(${u.receiver.dp})` }}
-              />
+              >{u.receiver.dp}</button>
 
               <button
                 type="button"
@@ -57,21 +59,22 @@ const ChatsList = () => {
                 </div>
 
                 <p className="list-card__excerpt" title={u.lastMessage ? u.lastMessage.text : ""}>
-                  {u.lastMessage && u.lastMessage.text.length < 70
+                  {u.lastMessage.text && u.lastMessage.text.length < 70
                     ? u.lastMessage.text
-                    : u.lastMessage
+                    : u.lastMessage.text
                       ? `${u.lastMessage.text.slice(0, 70)}...`
                       : "No messages yet. Start the conversation."}
                 </p>
               </button>
             </article>
-          ))
+            </>
+})
         ) : (
           <div className="list-empty-state">Your conversations will appear here once you start messaging.</div>
         )}
       </div>
     </div>
-  );
+ </>
 };
 
 export default ChatsList;

@@ -1,5 +1,5 @@
-﻿// import { createContext,useState,useEffect, useContext} from 'react';
-import { createContext,useState, useContext} from 'react';
+﻿
+import { createContext,useState, useContext, useEffect} from 'react';
 import api from '../api/api';
 import UserContext from './UserContext';
 
@@ -18,9 +18,27 @@ export const ChatsListContextProvider=({children}:any)=>{
         else{ updateChatsList({});}
     }
 
+useEffect(()=>{
+
+const func=async()=>{
+    await setChatsList();
+}
+    func();
+
+},[activeUser])
+
+    const setRoom=(room:any)=>{
+        updateChatsList((prev: any) => ({ ...prev, [room._id]:room }))
+    }
+
+    const setLastMessage=(msg:any)=>{
+         updateChatsList((prev: any) => ({ ...prev, [msg.roomId]:{...prev[msg.roomId],lastMessage:msg }}))
+
+    }
+    
     // to set the chatlist   yani chatroom  by getfriendList or getchatList
 
-    return < ChatsListContext.Provider value={{chatsList,setChatsList,aiChatsList,setAIChatsList}}>{children}</ChatsListContext.Provider>
+    return < ChatsListContext.Provider value={{chatsList,setChatsList,aiChatsList,setAIChatsList,setLastMessage,setRoom}}>{children}</ChatsListContext.Provider>
 }
 
 export default ChatsListContext;

@@ -1,9 +1,8 @@
-﻿// import { createContext, useContext, useState } from 'react';
-import { createContext, useContext, useState } from 'react';
+﻿
+import { createContext, useContext, useEffect, useState } from 'react';
 
 import { socket } from './socketcontext/SocketContext.tsx';
 
-// import { useEffect } from 'react';
 import MessageContext from './MessagesContext.tsx';
 import api from '../api/api.ts';
 
@@ -11,10 +10,13 @@ const UserContext = createContext({});
 
 export const UserContextProvider = ({ children }: any) => {
   const [activeUser, updateActiveUser]: any = useState({});
+  const [isUserLoading,setUserLoading]:any=useState(true)
 
   const { setActiveChatNull }: any = useContext(MessageContext);
 
   const setActiveUser: any = async () => {
+    setUserLoading(true);
+   console.log("we update the user")
     socket.disconnect();
     //setActiveChatNull();
 
@@ -31,7 +33,13 @@ export const UserContextProvider = ({ children }: any) => {
         console.log(err)
         updateActiveUser({ username: 'sbhunk', name: "Loggin here", dp: "https://ik.imagekit.io/sbhtechhub/no_dp.jpg", loggin_token: "" })
       })
+      setUserLoading(false)
+      console.log("user update")
   }
+
+useEffect(()=>{
+  setActiveUser();
+},[])
 
   const setLogout = async() => {
     updateActiveUser({ username: 'sbhunk', name: "Loggin here", dp: "https://ik.imagekit.io/sbhtechhub/no_dp.jpg", loggin_token: "" })
@@ -42,7 +50,7 @@ export const UserContextProvider = ({ children }: any) => {
     return
   }
 
-  return < UserContext.Provider value={{ setLogout, activeUser, setActiveUser }}>{children}</UserContext.Provider>
+  return < UserContext.Provider value={{ setLogout, activeUser, setActiveUser,isUserLoading }}>{children}</UserContext.Provider>
 }
 
 export default UserContext;

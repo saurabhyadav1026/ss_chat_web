@@ -22,18 +22,26 @@ const ResShow = (props: any) => {
     }
   }, [dislikecolor]);
 
-  const deleteMsg = (activeUser: any, activeChat: any, time: any) => {
-    alert(`deletinng msg${activeUser}${activeChat}${time}`);
+  const deleteMsg = (msgId: any) => {
+    alert(`deletinng msg${msgId}`);
   };
 
-  return (
+  const time=(timeStamp:any)=>{
+    return new Date(timeStamp).toLocaleTimeString('en-IN', {
+  hour: '2-digit',
+  minute: '2-digit',
+  hour12: false
+});
+  }
+
+  return <>
     <div className="message-row message-row--incoming receiv_msg">
       <div className="message-stack message-stack--incoming">
         <div className="message-bubble message-bubble--incoming">
           <span className="msg_font_style">
-            <Markdown remarkPlugins={[remarkGfm]}>{props.res_}</Markdown>
+            <Markdown remarkPlugins={[remarkGfm]}>{props.msg.text}</Markdown>
           </span>
-          <span className="message-time">{props.time ? props.time : ""}</span>
+          <span className="message-time">{props.msg.tickStatus.send ? time( props.msg.tickStatus.send) : ""}</span>
         </div>
 
         <div className="receiv_msg_option message-actions">
@@ -42,7 +50,7 @@ const ResShow = (props: any) => {
               <SpeakerIcon
                 func={async () => {
                   setIsSpeaking(true);
-                  await startSpeaking(props.res_);
+                  await startSpeaking(props.msg.text);
                 }}
               />
             ) : (
@@ -56,7 +64,7 @@ const ResShow = (props: any) => {
           </span>
 
           <span className="message-action">
-            <Copy func={() => copyRes(props.res_)} r_no={props.r_no} />
+            <Copy func={() => copyRes(props.msg.text)} r_no={props.msg._id} />
           </span>
 
           <span className="message-action">
@@ -66,7 +74,7 @@ const ResShow = (props: any) => {
                 if (likecolor === "blue") setLikecolor("gray");
                 else setLikecolor("blue");
               }}
-              r_no={props.r_no}
+              r_no={props.msg._id}
             />
           </span>
 
@@ -77,17 +85,17 @@ const ResShow = (props: any) => {
                 if (dislikecolor === "blue") setLikecolor("gray");
                 else setDislikecolor("blue");
               }}
-              r_no={props.r_no}
+              r_no={props.msg._id}
             />
           </span>
 
           <span className="message-action">
-            <Trash_binIcon func={() => deleteMsg(props.activeUser, props.active_chat, props.time)} />
+            <Trash_binIcon func={() => deleteMsg(props.msg._id)} />
           </span>
         </div>
       </div>
     </div>
-  );
+</>
 };
 
 export default ResShow;

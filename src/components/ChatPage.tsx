@@ -32,14 +32,14 @@ const ChatPage = () => {
 
       <div className="chat-screen">
         <div className="chat-thread">
-          <div className="chat-thread__scroll scrollbar-only-rod" ref={chatPageRef}>
+          <div  ref={chatPageRef}>
             {threadMessages.length ? (
               threadMessages.map((u: any, i: any): any => (
                 <React.Fragment key={u._id || i}>
                   {u.senderId === activeUser._id ? (
-                    <ReqShow activeChat={activeChat} chat_c={u} req_={u.text} r_no={i} />
+                    <ReqShow activeChat={activeChat}  msg={u} r_no={i} />
                   ) : (
-                    <ResShow activeChat={activeChat} res_={u.text} r_no={i} />
+                    <ResShow activeChat={activeChat} msg={u} r_no={i} />
                   )}
                 </React.Fragment>
               ))

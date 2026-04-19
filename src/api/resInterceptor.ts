@@ -5,12 +5,9 @@ import api from "./api";
 
 api.interceptors.response.use(
     (response: any) => {
-        console.log("good 1" + response)
-        console.log(response)
         return response;
     },
     async (error: any) => {
-        console.log("token refresh kro")
         let originalRequest: any = error.config;
         if (error.response?.status === 401 && !originalRequest._retry) {
             // session expired 
@@ -28,8 +25,6 @@ api.interceptors.response.use(
       
             
         }catch(err:any){
-                console.log("session over, log in again" + err);
-              alert("we clearing the cookie")
                   localStorage.clear();
             window.location.reload();
             return  Promise.reject(error);

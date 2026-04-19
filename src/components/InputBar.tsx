@@ -3,11 +3,13 @@ import UserContext from "../contexts/UserContext.tsx";
 import ListenerContext from "../voiceassistance/listener/ListenerContext.tsx";
 import { socket } from "../contexts/socketcontext/SocketContext.tsx";
 import { LoadingIcon, SendIcon } from "./icons.tsx";
+import ChatsListContext from "../contexts/ChatsListContext.tsx";
 
 export const keyHepler = new Map();
 
 const InputBar = (props: any) => {
   const { transcript, resetTranscript }: any = useContext(ListenerContext);
+  const {setRoom}:any=useContext(ChatsListContext);
   const { activeUser }: any = useContext(UserContext);
   const { activeChat, setMessages }: any = props;
 
@@ -27,51 +29,86 @@ const InputBar = (props: any) => {
       roomId: activeChat._id,
       senderId: activeUser._id,
       text: inputText,
-      tick: 0,
+      tick:0, 
       tickStatus: { send: new Date() },
     };
 
-    setMessages((prev: any) => ({ ...prev, [newMsgId]: msg }));
+    setMessages((prev: any) => {return{ ...prev, [newMsgId]: msg }});
 
     const newMsg: any = {
       _id: newMsgId,
       roomId: activeChat._id,
-      senderId: activeUser._id,
-      texts: getMemberTextCopy([activeUser._id, activeChat.receiver._id], inputText),
+      text:  inputText               //getMemberTextCopy([activeUser._id, activeChat.receiver._id], inputText),
     };
 
-    socket.emit("sendMessage", newMsg);
+    socket.emit("u/chats/sendMessage", newMsg);
+    
   };
 
-  useEffect(() => {
-    socket.on("receivMsg", (data) => {
-      const { msg } = data;
 
-      if (activeUser._id === msg.senderId && activeChat._id === msg.roomId) {
-        keyHepler.set(msg._id, data.oldMsgId);
-        setMessages((prev: any) => ({ ...prev, [data.oldMsgId]: msg }));
-      } else {
-        socket.emit("doDoubleTick", msg._id);
-        if (activeChat._id === msg.roomId) {
-          setMessages((prev: any) => ({ ...prev, [msg._id]: msg }));
-          socket.emit("doBlueTick", msg._id);
+
+
+  useEffect(() => {
+    socket.on("u/chats/receiveMsg", (data) => {
+    
+      const { room,message } = data;
+      setRoom(room);
+        socket.emit("u/chats/doOneDoubleTick", {msgId:message._id,roomId:message.roomId});
+        if (activeChat._id === message.roomId) {
+          setMessages((prev: any) => ({ ...prev, [message._id]:message }));
+          
+          socket.emit("u/chats/doOneBlueTick",{msgId:message._id,roomId:message.roomId});
+        
         }
-      }
+      
     });
 
     return () => {
-      socket.off("receivMsg");
+      socket.off("u/chats/receiveMsg");
     };
   });
 
-  const getMemberTextCopy = (members: any, inputText: String) => {
+ useEffect(() => {
+    socket.on("u/chats/messageSent", (data) => {
+     
+      const message  = data.message;
+      setRoom(data.room);
+       
+        if (activeChat._id === message.roomId) {
+          setMessages((prev: any) => {
+            const { [data._id]:_,...rest }=prev
+          return { ...rest,[message._id]:message}
+          });
+         
+        }
+      
+    });
+
+    return () => {
+      socket.off("u/chats/messageSent");
+    };
+  });
+
+  useEffect(() => {
+    socket.on("u/chats/messageNOtSent", (data) => {
+ 
+         alert("msg not sent")
+    });
+
+    return () => {
+      socket.off("u/chats/messageNotSent");
+    };
+  });
+
+
+ /*  const getMemberTextCopy = (members: any, inputText: String) => {
     const texts: any = [];
     members.forEach((x: any) => {
       texts.push({ memberId: x, text: inputText });
     });
 
     return texts;
-  };
+  }; */
 
   const createTempMsgId = () => {
     return String(Date.now() + (Math.floor(Math.random() * 999) + 1));
