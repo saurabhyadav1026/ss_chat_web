@@ -48,8 +48,8 @@ const LeftMenu = () => {
             className="left-rail__avatar"
             style={{ backgroundImage: `url(${activeUser && activeUser.dp ? activeUser.dp : "https://i.ibb.co/QvwtKDYz/nodp.jpg"})` }}
             onClick={() => {
-              if (activeUser && activeUser.dp) navigate("/user/myprofile");
-              else navigate("/user");
+              if (activeUser && activeUser.dp) navigate("/u/myprofile");
+             
             }}
           />
 

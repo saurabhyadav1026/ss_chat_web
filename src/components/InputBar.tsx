@@ -92,7 +92,7 @@ const InputBar = (props: any) => {
   useEffect(() => {
     socket.on("u/chats/messageNOtSent", (data) => {
  
-         alert("msg not sent")
+         alert("msg not sent "+data)
     });
 
     return () => {

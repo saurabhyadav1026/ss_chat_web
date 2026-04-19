@@ -35,15 +35,23 @@ const ChatsList = () => {
       <div className="list-panel__body scrollbar-only-rod">
         {chatItems.length ? (
           chatItems.map((u: any, i: any) => {
+            console.log(u)
+            const receiver = u.receiver || {};
+            const avatarUrl = receiver.dp || u.dp || u.roomDP || "";
+            const lastMessageText = u.lastMessage?.text || "";
+
             return<>
             <article key={u._id || i} className="list-card">
               <button
                 type="button"
                 className="list-card__avatar chatlist_dp"
-                onClick={() => navigate(`/user/profile/${u.receiver._id}`)}
-               
-                style={{ backgroundImage: `url(${u.receiver.dp})` }}
-              >{u.receiver.dp}</button>
+                onClick={() => {
+                 navigate(`/u/profile/${receiver.username}`);
+                }}
+                aria-label={receiver.name ? `Open ${receiver.name}'s profile` : "Open profile"}
+              >
+                <div className="chatlist_dp" style={avatarUrl ? { backgroundImage: `url(${avatarUrl})` } : undefined} />
+              </button>
 
               <button
                 type="button"
@@ -54,15 +62,15 @@ const ChatsList = () => {
                 }}
               >
                 <div className="list-card__title-row">
-                  <span className="list-card__title">{u.receiver.name}</span>
+                  <span className="list-card__title">{receiver.name}</span>
                   {u.unreadCount > 0 ? <span className="list-card__badge">{u.unreadCount}</span> : null}
                 </div>
 
-                <p className="list-card__excerpt" title={u.lastMessage ? u.lastMessage.text : ""}>
-                  {u.lastMessage.text && u.lastMessage.text.length < 70
-                    ? u.lastMessage.text
-                    : u.lastMessage.text
-                      ? `${u.lastMessage.text.slice(0, 70)}...`
+                <p className="list-card__excerpt" title={lastMessageText}>
+                  {lastMessageText && lastMessageText.length < 70
+                    ? lastMessageText
+                    : lastMessageText
+                      ? `${lastMessageText.slice(0, 70)}...`
                       : "No messages yet. Start the conversation."}
                 </p>
               </button>

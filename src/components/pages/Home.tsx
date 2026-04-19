@@ -1,4 +1,4 @@
-﻿import { useContext, useEffect, useState } from "react";
+﻿import { useContext, useEffect  } from "react";
 import { useNavigate } from "react-router-dom";
 import ChatContext from "../../contexts/chatscontext/AppVariablesContext";
 import UserContext from "../../contexts/UserContext";
@@ -10,20 +10,14 @@ const Home = () => {
   const { activeUser, setActiveUser }: any = useContext(UserContext);
   const { theme, toggleTheme }: any = useContext(ChatContext);
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(true);
   const nextTheme = theme === "dark" ? "Light" : "Dark";
 
   useEffect(() => {
     const func = async () => await setActiveUser();
-    setLoading(false);
-    func();
+     func();
   }, []);
 
-  useEffect(() => {
-    if (loading) return;
-    if (!activeUser || (activeUser && activeUser.name && activeUser._id)) navigate("u/chats");
-    else if (!activeUser || (activeUser && activeUser.name && !activeUser._id)) navigate("/user");
-  }, [loading]);
+
 
   return (
     <div className="home-shell">
@@ -57,7 +51,7 @@ const Home = () => {
             </p>
 
             <div className="home-actions">
-              <button className="modern-btn" onClick={() => navigate("user")}>
+              <button className="modern-btn" onClick={() => navigate("u/myprofile")}>
                 Open Profile
               </button>
               <button className="modern-btn modern-btn--ghost" onClick={() => navigate("u/chats")}>

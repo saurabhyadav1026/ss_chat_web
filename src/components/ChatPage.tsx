@@ -27,17 +27,17 @@ const ChatPage = () => {
   const threadMessages = Object.values(messages || {});
 
   return (
-    <>
+    <div className="chat-page">
       <TopNav activeChat={activeChat.receiver} toBack="/u/chats" />
 
       <div className="chat-screen">
         <div className="chat-thread">
-          <div  ref={chatPageRef}>
+          <div ref={chatPageRef} className="chat-thread__scroll scrollbar-only-rod">
             {threadMessages.length ? (
               threadMessages.map((u: any, i: any): any => (
                 <React.Fragment key={u._id || i}>
                   {u.senderId === activeUser._id ? (
-                    <ReqShow activeChat={activeChat}  msg={u} r_no={i} />
+                    <ReqShow activeChat={activeChat} msg={u} r_no={i} />
                   ) : (
                     <ResShow activeChat={activeChat} msg={u} r_no={i} />
                   )}
@@ -54,13 +54,13 @@ const ChatPage = () => {
           </div>
 
           {activeChat ? (
-            <div className="container-fluid p-0">
+            <div className="container-fluid p-0 chat-compose-shell">
               <InputBar activeChat={activeChat} setMessages={setMessages} />
             </div>
           ) : null}
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

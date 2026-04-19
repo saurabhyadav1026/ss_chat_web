@@ -48,7 +48,7 @@ const SearchList = () => {
                 <p className="list-card__handle">@{u.username}</p>
 
                 <div className="list-card__actions">
-                  <button type="button" className="list-card__action" onClick={() => navigate(u._id)}>
+                  <button type="button" className="list-card__action" onClick={() => navigate(u.username)}>
                     Profile
                   </button>
                   <button

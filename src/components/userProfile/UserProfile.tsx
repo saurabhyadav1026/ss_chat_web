@@ -4,39 +4,48 @@ import api from "../../api/api";
 import MessageContext from "../../contexts/MessagesContext";
 import ChatContext from "../../contexts/chatscontext/AppVariablesContext";
 import "./user_profile_css.css";
+import UserLoading from "../loading-components/UserLoading";
 
 const UserProfile = () => {
   const { setPicShow }: any = useContext(ChatContext);
   const { getRoomIdByReceiverId }: any = useContext(MessageContext);
   const [user, setUser]: any = useState({});
-  const { userId, page2Id } = useParams();
+  const { username, page2Id } = useParams();
+  const [isLoading,setLoading]:any=useState(false)
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (userId)
-      api
-        .get("users/userprofile", { params: { _id: userId } })
+     setLoading(true)
+    if (username)
+     
+      api.get("users/userprofile", { params: {username: username } })
         .then((res) => {
           if (res.data.status) setUser(res.data.user);
         })
         .catch((err) => {
           console.log(err);
         });
-  }, [userId]);
+        setLoading(false)
+  }, [username]);
 
   useEffect(() => {
+    setLoading(true)
     if (page2Id)
       api
-        .get("users/userprofile", { params: { _id: page2Id } })
+        .get("users/userprofile", { params: { username: page2Id } })
         .then((res) => {
           if (res.data.status) setUser(res.data.user);
         })
         .catch((err) => {
           console.log(err);
         });
+        setLoading(false)
   }, [page2Id]);
 
-  return (
+  if(isLoading)return <UserLoading/>
+
+  
+else if(user._id) return (
     <div className="user-profile-screen">
       <div className="user-profile-card">
         <div className="user-profile-topbar">
@@ -79,6 +88,15 @@ const UserProfile = () => {
       </div>
     </div>
   );
+
+  else return<>
+    <div className="user-profile-screen">
+    <div>
+      <h2 className="text-danger">----  {username||page2Id}----</h2>
+      <h4> User Not found </h4>
+    </div>
+    </div>
+  </>
 };
 
 export default UserProfile;
