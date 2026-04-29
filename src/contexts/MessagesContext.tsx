@@ -1,30 +1,23 @@
 ﻿
 import { createContext,useState} from 'react';
 
-import { useEffect } from 'react';
-import { socket } from './socketcontext/SocketContext';
-import api from '../api/api';
-
 const MessageContext=createContext({});
 // for temp key of messages
 export const keyHepler = new Map();
 
 export const MessageContextProvider=({children}:any)=>{
 
-    const [activeChat,setActiveChat]:any=useState({});
 
-    const [messages ,setMessages ]:any=useState({});
+ 
     const [aiMessages, setAIMessages]:any=useState({})
     const [activeAIChat,setActiveAIChat]:any=useState({});
 
 
 
-    useEffect(() => {
-      keyHepler.clear();
-    }, [activeChat])
+  
 
   // to get Chat  yaani messages
-  useEffect(() => {
+ /*  useEffect(() => {
     if (activeChat &&activeChat._id&& activeChat._id.slice(0,3)!=="new") {
      api.get("/users/getmessages",{params:{ _id: activeChat._id }})
      .then(res=>{setMessages(res.data.messages); socket.emit("u/chats/doBlueTick",{roomId:activeChat._id})})
@@ -36,21 +29,19 @@ export const MessageContextProvider=({children}:any)=>{
 
   }, [activeChat])
 
-
-
 useEffect(()=>{
  socket.on("u/chats/updateDoubleTick",(data)=>{
   if(!data.updateRooms[activeChat._id]){
     return
         }
+
+        
   data.updateRooms[activeChat._id].forEach((msgId:any)=>{
    setMessages((prev: any) => ({ ...prev, [msgId]:{...prev[msgId],tick:2,tickStatus:{...prev[msgId]["tickStatus"],read:data.deliverTime}} }));
   })
   })
   return ()=>{socket.off("u/chats/updateDoubleTick")}
 })
-
-
 
 useEffect(()=>{
  socket.on("u/chats/updateBlueTick",(data)=>{
@@ -127,7 +118,7 @@ const setActiveChatNull=()=>{
   setActiveChat({});
 }
 
-  /* 
+
   
   activeChat={
   
@@ -138,7 +129,7 @@ const setActiveChatNull=()=>{
   
   */
 
-    return < MessageContext.Provider value={{aiMessages, setAIMessages,sendMessage,getRoomIdByReceiverId,setActiveChatByChatRoomId, activeAIChat,setActiveAIChat}}>{children}</MessageContext.Provider>
+    return < MessageContext.Provider value={{aiMessages, setAIMessages, activeAIChat,setActiveAIChat}}>{children}</MessageContext.Provider>
 }
 
 export default MessageContext;

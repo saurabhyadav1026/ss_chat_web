@@ -132,25 +132,6 @@ const setActiveChatByChatRoomId=(roomId:any)=>{
           })
         }
 
-const getRoomIdByReceiverId=async(receiverId:any)=>{
-  let roomStatus=true;
-let roomId="";
-
-await api.get("/users/getroomidbyreceiverid",{params:{_id:receiverId}})
-          .then((res)=>{
-           roomId=res.data.roomId;
-          })
-          .catch((err)=>{
-            roomStatus=false;
-            console.log(err);
-          })
-          if(roomStatus)return {status:true,roomId:roomId};
-          else return {status:false};
-        }
-
-const setActiveChatNull=()=>{
-  setActiveChat({});
-}
 
 
 

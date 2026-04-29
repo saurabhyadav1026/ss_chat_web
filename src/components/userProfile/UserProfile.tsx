@@ -1,14 +1,13 @@
 import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import api from "../../api/api";
-import MessageContext from "../../contexts/MessagesContext";
 import ChatContext from "../../contexts/chatscontext/AppVariablesContext";
 import "./user_profile_css.css";
 import UserLoading from "../loading-components/UserLoading";
 
 const UserProfile = () => {
   const { setPicShow }: any = useContext(ChatContext);
-  const { getRoomIdByReceiverId }: any = useContext(MessageContext);
+  
   const [user, setUser]: any = useState({});
   const { username, page2Id } = useParams();
   const [isLoading,setLoading]:any=useState(false)
@@ -41,6 +40,24 @@ const UserProfile = () => {
         });
         setLoading(false)
   }, [page2Id]);
+
+
+const getRoomIdByReceiverId=async(receiverId:any)=>{
+  let roomStatus=true;
+let roomId="";
+
+await api.get("/users/getroomidbyreceiverid",{params:{_id:receiverId}})
+          .then((res)=>{
+           roomId=res.data.roomId;
+          })
+          .catch((err)=>{
+            roomStatus=false;
+            console.log(err);
+          })
+          if(roomStatus)return {status:true,roomId:roomId};
+          else return {status:false};
+        }
+
 
   if(isLoading)return <UserLoading/>
 

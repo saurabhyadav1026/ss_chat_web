@@ -20,7 +20,7 @@ export const ChatsListContextProvider=({children}:any)=>{
         
         api.get("/ai/textassistance/rooms")
         .then(res=>setAIChatsList(res.data) )
-        .catch(err=>setAIChatsList({}))
+        .catch(err=>{console.log(err);setAIChatsList({})})
         
     }
         else{

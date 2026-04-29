@@ -1,15 +1,17 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../../api/api";
-import MessageContext from "../../../contexts/MessagesContext";
 import SearchBar from "../../left_nav/SearchBar";
 
 const SearchList = () => {
   const navigate = useNavigate();
-  const { getRoomIdByReceiverId }: any = useContext(MessageContext);
   const [searchInput, setSearchInput]: any = useState("");
   const [searchList, setSearchList]: any = useState({});
 
+
+
+
+  
   useEffect(() => {
     if (searchInput !== "") {
     
@@ -26,6 +28,25 @@ const SearchList = () => {
   }, [searchInput]);
 
   const searchItems = Object.values(searchList || {});
+
+
+
+
+const getRoomIdByReceiverId=async(receiverId:any)=>{
+  let roomStatus=true;
+let roomId="";
+
+await api.get("/users/getroomidbyreceiverid",{params:{_id:receiverId}})
+          .then((res)=>{
+           roomId=res.data.roomId;
+          })
+          .catch((err)=>{
+            roomStatus=false;
+            console.log(err);
+          })
+          if(roomStatus)return {status:true,roomId:roomId};
+          else return {status:false};
+        }
 
   return (
     <div className="list-panel">

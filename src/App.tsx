@@ -22,7 +22,6 @@ import AiChatsList from './components/pages/page1/AiChatsList';
 import ForgetPassword from './components/userProfile/ForgetPasswot';
 import ResetPassword from './components/userProfile/ResetPassword';
 import FunChatPage2 from './components/funchat/FunChatPage2';
-import FunChatPage1 from './components/funchat/FunChatPage1';
 import FunPage from './components/funchat/FunPage';
 
 export const App = () => {
