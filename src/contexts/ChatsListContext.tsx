@@ -12,11 +12,26 @@ export const ChatsListContextProvider=({children}:any)=>{
     const {activeUser}:any=useContext(UserContext);
 
     const setChatsList:any=()=>{
-     if(activeUser._id){api.get("/users/getchatslist")
+     if(activeUser._id){
+        
+        api.get("/users/getchatslist")
         .then(res=>{updateChatsList(res.data) })
-        .catch(err=>console.log(err))}
-        else{ updateChatsList({});}
+        .catch(err=>console.log(err))
+        
+        api.get("/ai/textassistance/rooms")
+        .then(res=>setAIChatsList(res.data) )
+        .catch(err=>setAIChatsList({}))
+        
     }
+        else{
+             updateChatsList({});}
+    }
+
+const addAiChatRoom=(room:any)=>{
+    setAIChatsList((prev:any)=>({...prev,[room._id]:room}))
+}
+
+
 
 useEffect(()=>{
 
@@ -38,7 +53,7 @@ const func=async()=>{
     
     // to set the chatlist   yani chatroom  by getfriendList or getchatList
 
-    return < ChatsListContext.Provider value={{chatsList,setChatsList,aiChatsList,setAIChatsList,setLastMessage,setRoom}}>{children}</ChatsListContext.Provider>
+    return < ChatsListContext.Provider value={{chatsList,setChatsList,aiChatsList,setAIChatsList,setLastMessage,setRoom,addAiChatRoom}}>{children}</ChatsListContext.Provider>
 }
 
 export default ChatsListContext;

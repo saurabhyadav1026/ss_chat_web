@@ -10,6 +10,16 @@ const ReqShow = (props: any) => {
   const [likecolor, setLikecolor] = useState("gray");
   const [dislikecolor, setDislikecolor] = useState("gray");
 
+
+const msg={
+text:props.msg.text,
+
+
+
+}
+
+
+
   useEffect(() => {
     if (likecolor === "blue") {
       setDislikecolor("gray");
@@ -45,11 +55,11 @@ const ReqShow = (props: any) => {
           <span className="msg_font_style req_cammand">
             <Markdown remarkPlugins={[remarkGfm]}>{props.msg.text}</Markdown>
           </span>
-          <span className="message-time" >
-            { time(props.msg.tickStatus.send) || ""}
-          </span>
-          {props.msg.tick==3?<BlueTickIcon/>:props.msg.tick==2?<DoubleTickIcon/>:props.msg.tick==1?<SingleTickIcon/>:<UnsendIcon/>}
-        </div>
+       { props.msg.tick? <span className="message-time" >{ time(props.msg.tickStatus.send) || ""}
+          </span>:<></>}
+          {!props.tick?<></>:props.msg.tick==3?<BlueTickIcon/>:props.msg.tick==2?<DoubleTickIcon/>:props.msg.tick==1?<SingleTickIcon/>:<UnsendIcon/>}
+       
+       </div>
 
         <div className="send_msg_option message-actions">
           <span className="message-action">

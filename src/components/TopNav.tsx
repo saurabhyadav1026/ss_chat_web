@@ -18,7 +18,7 @@ const TopNav = (props: any) => {
           />
           <div>
             <p className="chat-topbar__label">Direct conversation</p>
-            <h3 className="chat-topbar__title" onClick={() => navigate(`/user/profile/${props.activeChat._id}`)}>
+            <h3 className="chat-topbar__title" onClick={() => navigate(`/u/profile/${props.activeChat.username}`)}>
               {props.activeChat.name}
             </h3>
           </div>

@@ -41,7 +41,7 @@ const ResShow = (props: any) => {
           <span className="msg_font_style">
             <Markdown remarkPlugins={[remarkGfm]}>{props.msg.text}</Markdown>
           </span>
-          <span className="message-time">{props.msg.tickStatus.send ? time( props.msg.tickStatus.send) : ""}</span>
+       {   props.msg.tickStatus?<span className="message-time">{props.msg.tickStatus.send ? time( props.msg.tickStatus.send) : ""}</span>:<></>}
         </div>
 
         <div className="receiv_msg_option message-actions">

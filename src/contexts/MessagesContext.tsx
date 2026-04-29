@@ -14,7 +14,8 @@ export const MessageContextProvider=({children}:any)=>{
     const [activeChat,setActiveChat]:any=useState({});
 
     const [messages ,setMessages ]:any=useState({});
-    const [aiChat,setAIChat]=useState({})
+    const [aiMessages, setAIMessages]:any=useState({})
+    const [activeAIChat,setActiveAIChat]:any=useState({});
 
 
 
@@ -137,7 +138,7 @@ const setActiveChatNull=()=>{
   
   */
 
-    return < MessageContext.Provider value={{sendMessage,getRoomIdByReceiverId,setActiveChatByChatRoomId, activeChat,setActiveChatNull,messages,setMessages,aiChat,setAIChat}}>{children}</MessageContext.Provider>
+    return < MessageContext.Provider value={{aiMessages, setAIMessages,sendMessage,getRoomIdByReceiverId,setActiveChatByChatRoomId, activeAIChat,setActiveAIChat}}>{children}</MessageContext.Provider>
 }
 
 export default MessageContext;

@@ -57,6 +57,9 @@ const Home = () => {
               <button className="modern-btn modern-btn--ghost" onClick={() => navigate("u/chats")}>
                 Go to Chats
               </button>
+              <button className="modern-btn modern-btn--ghost" onClick={() => navigate("funchats/")}>
+                Fun
+              </button>
             </div>
           </div>
 

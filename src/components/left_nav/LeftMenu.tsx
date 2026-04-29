@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import ChatContext from "../../contexts/chatscontext/AppVariablesContext";
 import UserContext from "../../contexts/UserContext";
-import { AboutIcon, ChatIcon, MicIcon, SearchIcon, SettingIcon } from "../icons";
+import { AboutIcon, AiIcon, ChatIcon, FunIcon, MicIcon, SearchIcon, SettingIcon } from "../icons";
 
 const LeftMenu = () => {
   const { activeUser }: any = useContext(UserContext);
@@ -15,22 +15,22 @@ const LeftMenu = () => {
       <div id="logo_icon" className="left-rail__brand" />
 
       <nav className="left-rail__nav">
-        <div className="left-rail__item left-rail__item--primary" onClick={() => navigate("search")}>
+        <div className="left-rail__item left-rail__item--primary" onClick={() => navigate("/u/search")}>
           <span className="left-rail__glyph">
             <SearchIcon />
           </span>
           <span className="left-rail__label">Search</span>
         </div>
 
-        <div className="left-rail__item" onClick={() => navigate("chats")}>
+        <div className="left-rail__item" onClick={() => navigate("/u/chats")}>
           <span className="left-rail__glyph">
             <ChatIcon />
           </span>
           <span className="left-rail__label">Chats</span>
         </div>
 
-        <div className="left-rail__item" onClick={() => navigate("aichats")}>
-          <span className="left-rail__glyph">AI</span>
+        <div className="left-rail__item" onClick={() => navigate("/u/aichats/new")}>
+          <span className="left-rail__glyph"><AiIcon/></span>
           <span className="left-rail__label">AI</span>
         </div>
 
@@ -40,6 +40,12 @@ const LeftMenu = () => {
           </span>
           <span className="left-rail__label">Voice</span>
         </div>
+
+      <div className="left-rail__item" onClick={() => navigate("/funchats")}>
+          <span className="left-rail__glyph"><FunIcon/></span>
+          <span className="left-rail__label">FunCHat</span>
+        </div>
+
       </nav>
 
       <div className="left-rail__footer">
