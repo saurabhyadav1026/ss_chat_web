@@ -11,12 +11,6 @@ const ReqShow = (props: any) => {
   const [dislikecolor, setDislikecolor] = useState("gray");
 
 
-const msg={
-text:props.msg.text,
-
-
-
-}
 
 
 
