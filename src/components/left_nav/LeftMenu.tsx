@@ -1,35 +1,34 @@
 import { useContext } from "react";
-import { useNavigate } from "react-router-dom";
-import ChatContext from "../../contexts/chatscontext/AppVariablesContext";
+import { useLocation, useNavigate } from "react-router-dom";
 import UserContext from "../../contexts/UserContext";
-import { AboutIcon, AiIcon, ChatIcon, FunIcon, MicIcon, SearchIcon, SettingIcon } from "../icons";
+import {  AiIcon, ChatIcon, FunIcon, MicIcon, SearchIcon, SettingIcon } from "../icons";
 
 const LeftMenu = () => {
   const { activeUser }: any = useContext(UserContext);
-  const { theme, toggleTheme }: any = useContext(ChatContext);
   const navigate = useNavigate();
-  const nextTheme = theme === "dark" ? "Light" : "Dark";
+  const { pathname } = useLocation();
+  const getItemClass = (path: string) => `left-rail__item ${pathname.startsWith(path) ? "left-rail__item--active" : ""}`;
 
   return (
     <aside className="left-rail">
-      <div id="logo_icon" className="left-rail__brand" />
+      <div id="logo_icon" className="left-rail__brand"  onClick={()=>navigate("/")} />
 
       <nav className="left-rail__nav">
-        <div className="left-rail__item left-rail__item--primary" onClick={() => navigate("/u/search")}>
+        <div className={getItemClass("/u/search")} onClick={() => navigate("/u/search")}>
           <span className="left-rail__glyph">
             <SearchIcon />
           </span>
           <span className="left-rail__label">Search</span>
         </div>
 
-        <div className="left-rail__item" onClick={() => navigate("/u/chats")}>
+        <div className={getItemClass("/u/chats")} onClick={() => navigate("/u/chats")}>
           <span className="left-rail__glyph">
             <ChatIcon />
           </span>
           <span className="left-rail__label">Chats</span>
         </div>
 
-        <div className="left-rail__item" onClick={() => navigate("/u/aichats/new")}>
+        <div className={getItemClass("/u/aichats")} onClick={() => navigate("/u/aichats/new")}>
           <span className="left-rail__glyph"><AiIcon/></span>
           <span className="left-rail__label">AI</span>
         </div>
@@ -41,7 +40,7 @@ const LeftMenu = () => {
           <span className="left-rail__label">Voice</span>
         </div>
 
-      <div className="left-rail__item" onClick={() => navigate("/funchats")}>
+      <div className={getItemClass("/funchats")} onClick={() => navigate("/o/funchats")}>
           <span className="left-rail__glyph"><FunIcon/></span>
           <span className="left-rail__label">FunCHat</span>
         </div>
@@ -59,25 +58,22 @@ const LeftMenu = () => {
             }}
           />
 
-          <button type="button" className="left-rail__mobile-theme" onClick={toggleTheme} aria-label={`Switch to ${nextTheme} mode`} title={`Switch to ${nextTheme} mode`}>
-            <SettingIcon />
-            <span>{nextTheme}</span>
-          </button>
+        
 
           <div className="left-rail__subactions">
-            <div className="left-rail__item left-rail__item--toggle" onClick={toggleTheme} aria-label={`Switch to ${nextTheme} mode`} title={`Switch to ${nextTheme} mode`}>
+            <div className="left-rail__item left-rail__item--toggle" onClick={()=>navigate("/u/setting")}>
               <span className="left-rail__glyph">
                 <SettingIcon />
               </span>
-              <span className="left-rail__label">{nextTheme} Mode</span>
+              <span className="left-rail__label">Setting</span>
             </div>
 
-            <div className="left-rail__item left-rail__item--static">
+            {/* <div className="left-rail__item left-rail__item--static">
               <span className="left-rail__glyph">
                 <AboutIcon />
               </span>
               <span className="left-rail__label">About</span>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

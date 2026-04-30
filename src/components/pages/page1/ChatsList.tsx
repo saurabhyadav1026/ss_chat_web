@@ -1,32 +1,45 @@
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ChatsListContext from "../../../contexts/ChatsListContext";
-import MessageContext from "../../../contexts/MessagesContext";
-import UserContext from "../../../contexts/UserContext";
 import SearchBar from "../../left_nav/SearchBar";
 
 const ChatsList = () => {
-  const { setActiveChatByChatRoomId }: any = useContext(MessageContext);
   const [searchInput, setSearchInput]: any = useState("");
-  const { activeUser }: any = useContext(UserContext);
   const { chatsList }: any = useContext(ChatsListContext);
   const navigate = useNavigate();
+const [chatItems,setChatItems]:any=useState(Object.values(chatsList || {}))
 
   
 
-  useEffect(() => {
-    if (!(activeUser && activeUser._id)) navigate("/user/login");
-  }, [activeUser]);
+ 
+ 
 
-  const chatItems = Object.values(chatsList || {});
+
+useEffect(()=>{
+if(searchInput!==""){
+  const rooms:any=[]
+Object.values(chatsList || {}).forEach((room:any)=>{
+  console.log(room)
+if(room.receiver.name.toLowerCase().includes(searchInput.toLowerCase())||room.receiver.username.toLowerCase().includes(searchInput.toLowerCase())||room.lastMessage.text.toLowerCase().includes(searchInput.toLowerCase()))rooms.push(room);
+})
+setChatItems(rooms)
+}else {
+  setChatItems(Object.values(chatsList || {}));
+
+}
+
+},[searchInput])
+
+
+
 
   return <>
     <div className="list-panel">
       <div className="list-panel__header">
         <div>
-          <p className="list-panel__eyebrow">Inbox</p>
+         {/*  <p className="list-panel__eyebrow">Inbox</p> */}
           <h2 className="list-panel__title">Chats</h2>
-          <p className="list-panel__subtitle">Jump back into private conversations and keep the flow moving.</p>
+          <p className="list-panel__subtitle"></p>
         </div>
       </div>
 
@@ -57,7 +70,6 @@ const ChatsList = () => {
                 type="button"
                 className="list-card__body"
                 onClick={() => {
-                  setActiveChatByChatRoomId(u._id);
                   navigate(u._id);
                 }}
               >

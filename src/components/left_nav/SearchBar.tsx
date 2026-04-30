@@ -1,9 +1,18 @@
 import { SearchIcon } from "../icons";
 
 const SearchBar = (props: any) => {
+
+
+
   const updateSearchInput = (e: any) => {
     props.setSearchInput(e.target.value);
   };
+
+
+
+
+
+  
 
   return (
     <div className="search-shell">

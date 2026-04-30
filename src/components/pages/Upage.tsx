@@ -1,12 +1,26 @@
-import { Outlet, useParams } from "react-router-dom";
+import { useContext, useEffect } from "react";
+import { Outlet, useNavigate, useParams } from "react-router-dom";
+import UserLoading from "../loading-components/UserLoading";
+import UserContext from "../../contexts/UserContext";
 
-const Page1 = ({ element }: any) => {
+const Upage= ({ element }: any) => {
    
   const { page2Id }: any = useParams();
   const hasPage2Id = Boolean(page2Id);
+  
+  const {isUserLoading,activeUser}:any=useContext(UserContext)
+  
+const navigate=useNavigate();
+
+   useEffect(() => {
+    if (!isUserLoading&& !(activeUser && activeUser._id)) navigate("/user/login");
+  }, [activeUser]);
 
 
-  return <>   
+  if(isUserLoading)return  <UserLoading/>
+  else return <>   
+
+  
   
     <div className="page-shell">
       <div id="main_page1" className={`page-shell__sidebar ${hasPage2Id ? "page-shell__sidebar--mobile-hidden" : ""}`}>
@@ -27,4 +41,4 @@ const Page1 = ({ element }: any) => {
   </>
 };
 
-export default Page1;
+export default Upage;

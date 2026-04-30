@@ -54,7 +54,7 @@ await api.get("/users/getroomidbyreceiverid",{params:{_id:receiverId}})
         <div>
           <p className="list-panel__eyebrow">Discover</p>
           <h2 className="list-panel__title">People</h2>
-          <p className="list-panel__subtitle">Search for users, open their profile, or jump straight into a direct message.</p>
+          <p className="list-panel__subtitle"></p>
         </div>
       </div>
 

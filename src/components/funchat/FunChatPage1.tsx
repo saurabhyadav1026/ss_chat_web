@@ -12,10 +12,35 @@ import { NewChatIcon } from "../icons";
 
 const FunChatPage1 = () => {
 
-const [rooms,setRooms]:any=useState({})
-const [searchInput,setSearchInput]:any=useState("");
 
+
+  
+
+
+const [roomsList,setRoomsList]:any=useState({})
+const [searchInput,setSearchInput]:any=useState("");
+  const [chatItems,setChatItems]:any=useState(Object.values(roomsList || {}))
   const navigate = useNavigate();
+
+useEffect(()=>{
+setChatItems(roomsList)
+},[roomsList])
+
+useEffect(()=>{
+if(searchInput!==""){
+  const rooms:any=[]
+Object.values(roomsList || {}).forEach((room:any)=>{
+if(room.name.contains(searchInput))rooms.push(room);
+})
+setChatItems(rooms)
+}else {
+  setChatItems(Object.values(roomsList || {}));
+
+}
+
+},[searchInput])
+
+
 
   useEffect(()=>{
 
@@ -27,7 +52,7 @@ const [searchInput,setSearchInput]:any=useState("");
 useEffect(()=>{
 
     socket.on("newroom",(data)=>{
-        setRooms((prev:any)=>({[data.room.id]:data.room,...prev}))
+        setRoomsList((prev:any)=>({[data.room.id]:data.room,...prev}))
     })
 
 return ()=>{socket.off("newroom")}
@@ -35,15 +60,13 @@ return ()=>{socket.off("newroom")}
 
 
 
-  const chatItems = Object.values(rooms|| {});
-
   return <>
     <div className="list-panel">
       <div className="list-panel__header">
         <div>
-          <p className="list-panel__eyebrow">Inbox</p>
-          <h2 className="list-panel__title">Shhhhhh</h2>
-          <p className="list-panel__subtitle">Your identity is hide.</p>
+          <p className="list-panel__eyebrow">Shhhhh</p>
+          <h2 className="list-panel__title">FUN CHAT</h2>
+          <p className="list-panel__subtitle">Your identity is hide here. Be Safe and dont share any confidential information.</p>
         </div>
       </div>
 

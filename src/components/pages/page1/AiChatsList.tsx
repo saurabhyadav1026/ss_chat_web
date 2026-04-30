@@ -11,23 +11,32 @@ const AiChatsList = () => {
     const { activeUser }: any = useContext(UserContext);
     const {aiChatsList}: any = useContext(ChatsListContext);
     const navigate = useNavigate();
+    const [chatItems,setChatItems]:any=useState(Object.values(aiChatsList))
+  
+  
   
 
-
 useEffect(()=>{
+if(searchInput!==""){
+  const rooms:any=[]
+Object.values(aiChatsList || {}).forEach((room:any)=>{
+  console.log(room)
+if(room.name.toLowerCase().includes(searchInput.toLowerCase()))rooms.push(room);
+})
+setChatItems(rooms)
+
+}else setChatItems(Object.values(aiChatsList || {}));
+
+},[searchInput])
 
 
 
-},[])
-
-
-    
   
     useEffect(() => {
       if (!(activeUser && activeUser._id)) navigate("/user/login");
     }, [activeUser]);
   
-    const chatItems = Object.values(aiChatsList || {});
+  
   
     return <>
     
@@ -36,9 +45,9 @@ useEffect(()=>{
         
         <div className="list-panel__header">
           <div>
-            <p className="list-panel__eyebrow">Inbox</p>
-            <h2 className="list-panel__title">Chats</h2>
-            <p className="list-panel__subtitle">Jump back into private conversations and keep the flow moving.</p>
+            <p className="list-panel__eyebrow">SBH AI</p>
+            <h2 className="list-panel__title">SBH AI</h2>
+            <p className="list-panel__subtitle"></p>
           </div>
         </div>
   

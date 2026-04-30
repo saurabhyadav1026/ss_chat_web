@@ -116,5 +116,5 @@ const ReqShow = (props: any) => {
 export default ReqShow;
 
 const copyReq = (r: any) => {
-  navigator.clipboard.writeText(r).then(() => alert(" text coppied."));
+  navigator.clipboard.writeText(r)      //.then(() => alert(" text coppied."));
 };

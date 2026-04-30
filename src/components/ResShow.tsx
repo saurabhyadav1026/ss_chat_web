@@ -101,5 +101,5 @@ const ResShow = (props: any) => {
 export default ResShow;
 
 const copyRes = (r: any) => {
-  navigator.clipboard.writeText(r).then(() => alert(" text coppied."));
+  navigator.clipboard.writeText(r)        //.then(() => alert(" text coppied."));
 };
