@@ -70,7 +70,7 @@ const sendMsg=()=>{
       />
 
       <div id="send_input_btn" className="chat-compose__send">
-        {props.isFetching ? <LoadingIcon /> : <SendIcon func={props.send} />}
+        {props.isFetching ? <LoadingIcon /> : <SendIcon func={sendMsg} />}
       </div>
     </div>
   );

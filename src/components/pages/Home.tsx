@@ -2,7 +2,7 @@
 import { useNavigate } from "react-router-dom";
 import ChatContext from "../../contexts/chatscontext/AppVariablesContext";
 import UserContext from "../../contexts/UserContext";
-import TrendUsers from "../home/TrendUsers";
+//import TrendUsers from "../home/TrendUsers";
 import { SettingIcon } from "../icons";
 import "./home.css";
 
@@ -46,11 +46,12 @@ const Home = () => {
 
             <h1 className="home-title">{activeUser && activeUser.name ? activeUser.name : "Secret Secure"}</h1>
             <p className="home-subtitle">
-              A calmer front door for your chat app. Move between your profile, direct messages, and AI spaces in a cleaner,
-              more welcoming layout.
+            
             </p>
 
             <div className="home-actions">
+              {!(activeUser && activeUser._id) ? <button className="modern-btn modern-btn--ghost" onClick={() => navigate("u/chats")}>             Log in
+              </button>:<></>}
               <button className="modern-btn" onClick={() => navigate("u/myprofile")}>
                 Open Profile
               </button>
@@ -63,7 +64,7 @@ const Home = () => {
             </div>
           </div>
 
-          <div className="home-stat-grid">
+        {/*   <div className="home-stat-grid" >
             <div className="home-stat-card">
               <span>Focus</span>
               <strong>1 place</strong>
@@ -81,12 +82,12 @@ const Home = () => {
               <strong>Fresh</strong>
               <p>The new UI leans into glassy depth, warmer highlights, and softer contrast for everyday use.</p>
             </div>
-          </div>
+          </div> */}
         </section>
 
-        <section className="trend-section glass">
+        {/* <section className="trend-section glass">
           <TrendUsers />
-        </section>
+        </section> */}
       </div>
     </div>
   );
