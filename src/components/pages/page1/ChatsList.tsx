@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext,  useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ChatsListContext from "../../../contexts/ChatsListContext";
 import SearchBar from "../../left_nav/SearchBar";
