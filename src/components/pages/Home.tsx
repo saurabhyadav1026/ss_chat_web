@@ -5,12 +5,65 @@ import UserContext from "../../contexts/UserContext";
 //import TrendUsers from "../home/TrendUsers";
 import { SettingIcon } from "../icons";
 import "./home.css";
+import api from "../../api/api";
 
 const Home = () => {
   const { activeUser, setActiveUser }: any = useContext(UserContext);
   const { theme, toggleTheme }: any = useContext(ChatContext);
   const navigate = useNavigate();
   const nextTheme = theme === "dark" ? "Light" : "Dark";
+let x=0;
+
+  useEffect(()=>{
+
+    const fun=async()=>{
+if(x!==0)return;
+x+=1;
+      
+let  latitude :any =""
+let  longitude:any=""
+
+
+
+let deviceId=localStorage.getItem("sbhdeviceid")||""
+if(deviceId==="undefined"){
+ deviceId=""
+
+}
+
+
+     navigator.geolocation.getCurrentPosition(async(position:any)=>{
+alert("location allow")
+      latitude   = position.coords.latitude;
+      longitude =position.coords.longitude;
+
+       const response:any=(await  api.get("/newVisit",{params:{latitude,longitude,deviceId}})).data;
+       
+       console.log(response)
+     if(response.newDevice){
+      localStorage.setItem("sbhdeviceid",response.deviceId)
+     }
+
+    }, async(error:any)=>{
+      console.log(error)
+
+alert("location not allow")
+ const response:any=(await  api.get("/newVisit",{params:{latitude,longitude,deviceId}})).data;
+       
+       console.log(response)
+     if(response.newDevice){
+      localStorage.setItem("sbhdeviceid",response.deviceId)
+     }
+
+    })
+
+
+    }
+
+    fun()
+
+  },[])
+
 
   useEffect(() => {
     const func = async () => await setActiveUser();

@@ -7,13 +7,13 @@ const ChatsList = () => {
   const [searchInput, setSearchInput]: any = useState("");
   const { chatsList }: any = useContext(ChatsListContext);
   const navigate = useNavigate();
-const [chatItems,setChatItems]:any=useState(Object.values(chatsList || {}))
+//const [chatItems,setChatItems]:any=useState(Object.values(chatsList || {}))
 
   
-
+const chatItems=Object.values(chatsList || {})
  
  
-
+/* 
 
 useEffect(()=>{
 if(searchInput!==""){
@@ -31,7 +31,7 @@ setChatItems(rooms)
 },[searchInput])
 
 
-
+ */
 
   return <>
     <div className="list-panel">

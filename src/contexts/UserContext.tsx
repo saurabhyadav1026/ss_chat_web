@@ -20,11 +20,12 @@ export const UserContextProvider = ({ children }: any) => {
     socket.disconnect();
     //setActiveChatNull();
 
+
     await api.get("/users/verifyme")
       .then((res: any) => {
         if (res.data.status) {
           updateActiveUser(res.data.user);
-          console.log(res.data.user);
+         
           socket.auth={token:res.data.token}
           socket.connect();
         }
