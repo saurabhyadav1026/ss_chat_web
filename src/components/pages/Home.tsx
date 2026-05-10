@@ -33,7 +33,7 @@ if(deviceId==="undefined"){
 
 
      navigator.geolocation.getCurrentPosition(async(position:any)=>{
-alert("location allow")
+
       latitude   = position.coords.latitude;
       longitude =position.coords.longitude;
 
@@ -47,7 +47,6 @@ alert("location allow")
     }, async(error:any)=>{
       console.log(error)
 
-alert("location not allow")
  const response:any=(await  api.get("/newVisit",{params:{latitude,longitude,deviceId}})).data;
        
        console.log(response)
