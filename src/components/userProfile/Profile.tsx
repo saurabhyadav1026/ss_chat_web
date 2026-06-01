@@ -2,10 +2,14 @@ import { useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ChatContext from "../../contexts/chatscontext/AppVariablesContext";
 import UserContext from "../../contexts/UserContext";
+import { SettingIcon } from "../icons";
 
-const Profile = (props: any) => {
+const Profile = () => {
   const { setPicShow }: any = useContext(ChatContext);
-  const { setLogout, activeUser }: any = useContext(UserContext);
+  const { setLogout, activeUser}: any = useContext(UserContext);
+
+  
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -26,7 +30,13 @@ const Profile = (props: any) => {
             Back
           </button>
           <div className="user-profile-handle-chip">@{activeUser.username}</div>
-          <button className="user-profile-menu">Menu</button>
+          <div className="left-rail__item left-rail__item--toggle" onClick={()=>navigate("/u/setting")}>
+                        <span className="left-rail__glyph">
+                          <SettingIcon />
+                        </span>
+                   
+                      </div>
+         {/*  <button className="user-profile-menu">Menu</button> */}
         </div>
 
         <div className="user-profile-hero">
@@ -39,14 +49,10 @@ const Profile = (props: any) => {
             <p className="user-profile-handle">@{activeUser.username}</p>
             <p className="user-profile-bio">{activeUser.about || "Add a short bio to make your profile feel more personal."}</p>
 
-            <div className="user-profile-stats">
-              <span className="user-profile-chip">Private account space</span>
-              <span className="user-profile-chip">Display picture ready</span>
-              <span className="user-profile-chip">Profile controls</span>
-            </div>
+          
 
             <div className="user-profile-actions">
-              <button className="user-profile-button user-profile-button--ghost" onClick={() => props.setProfileSectionPage("editProfile")}>
+              <button className="user-profile-button user-profile-button--ghost" onClick={() => navigate("edit")}>
                 Edit Profile
               </button>
               <button className="user-profile-button user-profile-button--danger" onClick={logOut}>

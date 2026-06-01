@@ -86,7 +86,7 @@ const Register = () => {
     if (User.username.trim() === "") setIsAvailbleUsername(false);
     else {
       api
-        .get("/isuseravailble", { params: { username: User.username } })
+        .get("/logging/isuseravailble", { params: { username: User.username } })
         .then((res) => setIsAvailbleUsername(res.data.status))
         .catch((err: any) => alert(err));
     }

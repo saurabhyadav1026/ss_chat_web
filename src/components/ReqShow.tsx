@@ -31,9 +31,7 @@ const ReqShow = (props: any) => {
     return;
   };
 
-  const deleteMsg = (msgId: any) => {
-    alert(`deletinng msg${msgId}`);
-  };
+
 
   const time=(timeStamp:any)=>{
     return new Date(timeStamp).toLocaleTimeString('en-IN', {
@@ -105,7 +103,7 @@ const ReqShow = (props: any) => {
           </span>
 
           <span className="message-action">
-            <Trash_binIcon func={() => deleteMsg(props.msg._id)} />
+            <Trash_binIcon func={() => props.deleteMsg(props.msg._id)} />
           </span>
         </div>
       </div>

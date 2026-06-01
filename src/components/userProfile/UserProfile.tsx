@@ -4,6 +4,7 @@ import api from "../../api/api";
 import ChatContext from "../../contexts/chatscontext/AppVariablesContext";
 import "./user_profile_css.css";
 import UserLoading from "../loading-components/UserLoading";
+import { EllipsisVertical } from "lucide-react";
 
 const UserProfile = () => {
   const { setPicShow }: any = useContext(ChatContext);
@@ -12,6 +13,9 @@ const UserProfile = () => {
   const { username, page2Id } = useParams();
   const [isLoading,setLoading]:any=useState(false)
   const navigate = useNavigate();
+
+
+
 
   useEffect(() => {
      setLoading(true)
@@ -70,7 +74,7 @@ else if(user._id) return (
             Back
           </button>
           <div className="user-profile-handle-chip">@{user.username}</div>
-          <button className="user-profile-menu">Profile</button>
+          <button className="user-profile-menu"><EllipsisVertical/></button>
         </div>
 
         <div className="user-profile-hero">
@@ -80,13 +84,13 @@ else if(user._id) return (
 
           <div>
             <h2 className="user-profile-name">{user.name}</h2>
-            <p className="user-profile-handle">@{user.username}</p>
+       {/*      <p className="user-profile-handle">@{user.username}</p> */}
             <p className="user-profile-bio">{user.about || "This user has not added a bio yet."}</p>
 
             <div className="user-profile-stats">
-              <span className="user-profile-chip">Direct profile view</span>
+             {/*  <span className="user-profile-chip">Direct profile view</span>
               <span className="user-profile-chip">Messaging available</span>
-              <span className="user-profile-chip">Clean focus layout</span>
+              <span className="user-profile-chip">Clean focus layout</span> */}
             </div>
 
             <div className="user-profile-actions">
@@ -98,6 +102,15 @@ else if(user._id) return (
                 }}
               >
                 Message
+              </button>
+                 <button
+                className="user-profile-button user-profile-button--primary"
+                onClick={async () => {
+                  const t = await getRoomIdByReceiverId(user._id);
+                  if (t.status) navigate(`/u/chats/${t.roomId}`);
+                }}
+              >
+                Fallow
               </button>
             </div>
           </div>

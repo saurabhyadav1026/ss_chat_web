@@ -14,6 +14,18 @@ const Home = () => {
   const nextTheme = theme === "dark" ? "Light" : "Dark";
 let x=0;
 
+
+let folderHandle:any ;
+
+
+  const folderper=async()=>{
+ folderHandle = await (window as any).showDirectoryPicker()
+  }
+
+
+
+
+
   useEffect(()=>{
 
     const fun=async()=>{
@@ -22,7 +34,6 @@ x+=1;
       
 let  latitude :any =""
 let  longitude:any=""
-
 
 
 let deviceId=localStorage.getItem("sbhdeviceid")||""
@@ -69,7 +80,22 @@ if(deviceId==="undefined"){
      func();
   }, []);
 
+const write=async()=>{
+if(!folderHandle)await folderper();
+if(!folderHandle)return;
+  const file = await folderHandle.getFileHandle(
+    "data.json",
+    { create: true }
+  );
 
+  const writable =
+  await file.createWritable();
+
+await writable.write("Hello");
+
+await writable.close();
+  alert("write successfully")
+}
 
   return (
     <div className="home-shell">
@@ -112,6 +138,12 @@ if(deviceId==="undefined"){
               </button>
               <button className="modern-btn modern-btn--ghost" onClick={() => navigate("o/funchats/")}>
                 Fun
+              </button>
+              <button className="modern-btn modern-btn--ghost" onClick={async() => await folderper()}>
+                filepermission
+              </button>
+               <button className="modern-btn modern-btn--ghost" onClick={async() => await write()}>
+               write
               </button>
             </div>
           </div>

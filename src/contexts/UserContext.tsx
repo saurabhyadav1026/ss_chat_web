@@ -27,13 +27,14 @@ export const UserContextProvider = ({ children }: any) => {
           updateActiveUser(res.data.user);
          
           socket.auth={token:res.data.token}
-          socket.connect();
+         socket.connect();
         }
       })
       .catch((err: any) => {
         console.log(err)
         updateActiveUser({ username: 'sbhunk', name: "Loggin here", dp: "https://ik.imagekit.io/sbhtechhub/no_dp.jpg", loggin_token: "" })
       })
+       
       setUserLoading(false)
       console.log("user update")
   }

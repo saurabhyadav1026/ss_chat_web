@@ -1,7 +1,8 @@
-import { useContext,  useState } from "react";
+import { useContext,  useEffect,  useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ChatsListContext from "../../../contexts/ChatsListContext";
 import SearchBar from "../../left_nav/SearchBar";
+//import { getFriendChatFile } from "../../../filehandeling/folder/chats";
 
 const ChatsList = () => {
   const [searchInput, setSearchInput]: any = useState("");
@@ -13,6 +14,15 @@ const ChatsList = () => {
 const chatItems=Object.values(chatsList || {})
  
  
+useEffect(()=>{
+const func=async ()=>{
+  
+//const chatfile=await getFriendChatFile("sbhydv");
+}
+func()
+},[])
+
+
 /* 
 
 useEffect(()=>{

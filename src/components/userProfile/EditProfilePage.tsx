@@ -1,93 +1,130 @@
 
 import { IKUpload } from "imagekitio-react";
-import {setDp} from './users'
 
 
 import { useContext,useState } from "react";
 import UserContext from "../../contexts/UserContext";
+import { useNavigate } from "react-router-dom";
+import api from "../../api/api";
 
 
 
-  const EditProfile=(props:any)=>{
+  const EditProfile=()=>{
 
+
+    const navigate=useNavigate()
 const {activeUser, setActiveUser}:any=useContext(UserContext);
+const [tempUser,setTempUser]:any=useState({dp:activeUser.dp,name:activeUser.name,username:activeUser.username,about:activeUser.about});
 
-
-const changedp:any=async(imgurl:any)=>{
-
-  const res:any=await setDp(imgurl)
-
-if(res.status){
-  const u= activeUser;
-  u.dp=imgurl;
-  setActiveUser(u)
-}
-else alert("Error!  try again later.")
-}
-
-const [tempUser,setTempUser]:any=useState(activeUser);
 
 const saveProfile=()=>{
-setTempUser(activeUser);
-    
+
+
+  api.get("/users/updateme",{params:{ newname:tempUser.name,newabout:tempUser.about }}).
+  then((res:any)=>{
+setActiveUser ((old:any)=>({...old,name:res.data.newname,about:res.data.newAbout}))
+
+
+  }).catch((err:any)=>{
+    alert(err)
+    console.log(err)
+  })
+}
+
+const changedp:any=async()=>{
+
+ if(tempUser.dp.trim()===""||activeUser.dp===tempUser.dp)return;
+  try{
+
+    api.get("/users/updatedp",{params:{newDP:tempUser.dp}}).
+    then((res:any)=>{
+      setActiveUser({...activeUser,["dp"]:res.data.newDP})
+    })
+  }catch(err){
+    console.log(err)
+  }
 }
 
 
-return<>
 
 
 
-
-<div id="profile_page" className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow-sm ">
-    <div className="p-3 d-flex " style={{width:"100%",justifyContent:"space-between"}}>
-      <button className=" btn btn-danger" onClick={()=>props.setProfileSectionPage("profile")}>Back</button>
-    <button className=" btn btn-primary" onClick={()=> {saveProfile();props.setProfileSectionPage("profile")}}>Save</button>
-    </div>
-    <div className="flex flex-col items-center pb-10">
-        <img className="w-24 h-24 mb-3 rounded-full shadow-lg" src={props.activeUser.dp} alt="Bonnie image"/>
-      <IKUpload fileName={props.activeUser._id+"_dp"}
-              onSuccess={(res:any)=>{changedp(res.url)}}
-              onError={(e:any)=>{ console.log(e);alert(e)}}
-   /> 
-</div>
-    <div className="m-4 p-2 container d-flex " style={{flexDirection:"column",justifyContent:"space-between"}}>
-    <table>
-      <tr>
-        <td className="p-1">Name :</td>
-        <td className="p-1">
-          <input  className="input border " onChange={()=>{}} value={tempUser.name}/>
-        </td>
-        
-      </tr>
-      <tr>
-        <td className="p-1 fw-5">Username :</td>
-        <td className="p-1" >
-
-<input  className="input border " value={tempUser.username} />
-        </td>
-      </tr>
-      <tr>
-        <td className="p-1">
-          About :
-        </td>
-        <td className="p-1">
-<input  value={tempUser.about} className="input border "/>    
-        </td>
-      </tr>
-    </table>
-   
-     
-       
-    </div>
-   
- 
+  const updateUser = (e: any) => {
+    
+    let { name, value } = e.target;
+    if(name==="name"&&value.length>30 )value=value.slice(0,30);
+      else if (name==="about"&&value.length>50)value=value.slice(0,50);
+    setTempUser({ ...tempUser, [name]: value });
+  };
 
 
-</div>
+  return (
+    <>
+      <div id="profile_page" className="user-profile-screen">
+        <div className="user-profile-card">
+          <div className="user-profile-topbar">
+            <button className="user-profile-back" onClick={() => navigate(-1)}>
+              Back
+            </button>
+            <div className="user-profile-handle-chip">Edit @{activeUser.username}</div>
+           
+          </div>
 
+          <div className="user-profile-hero">
+            <div className="d-flex flex-column align-items-center gap-3">
+              <img className="user-profile-avatar" src={tempUser.dp} alt="Profile" />
+              <div className="auth-otp edit-profile-upload w-100">
+                <span className="auth-label"></span>
+                <IKUpload
+                  fileName={activeUser._id + "_dp"}
+                  onSuccess={(res: any) => { setTempUser({...tempUser,["dp"]:res.url}); }}
+                  onError={(e: any) => { console.log(e); alert(e); }}
+                />
 
+<button className="user-profile-button user-profile-button--primary" onClick={() => changedp()}>
+                  Save
+                </button>
 
-</>
+              </div>
+              
+            </div>
+
+            <div className="auth-form">
+              <div className="auth-header">
+                <p className="auth-eyebrow">Profile details</p>
+                <h2 className="user-profile-name">{tempUser.name}</h2>
+                <p className="user-profile-bio">{tempUser.about || "Add a short bio to make your profile feel more personal."}</p>
+              </div>
+
+              <label className="auth-field">
+                <span className="auth-label">Name</span>
+                <input className="auth-input"  name="name" onChange={updateUser}value={tempUser.name} />
+              </label>
+
+              <label className="auth-field">
+                <span className="auth-label">Username</span>
+                <input className="auth-input" name="username" readOnly={true} onChange={updateUser} value={tempUser.username} />
+              </label>
+
+              <label className="auth-field">
+                <span className="auth-label">About</span>
+                <input value={tempUser.about} name="about" onChange={updateUser} className="auth-input" />
+              </label>
+
+              <div className="user-profile-actions">
+                <button className="user-profile-button user-profile-button--ghost" onClick={() => navigate(-1)}>
+                  Cancel
+                </button>
+                <button className="user-profile-button user-profile-button--primary" onClick={() => { saveProfile();  }}>
+                  Save Profile
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  )
 
   }
 
@@ -100,7 +137,7 @@ return<>
   
   
   <div id="profile_dp_bar">
-   <div className="card_dp" style={{backgroundImage:`url(${props.activeUser.dp})`}}></div>
+   <div className="card_dp" style={{backgroundImage:`url(${activeUser.dp})`}}></div>
    
 
   </div>

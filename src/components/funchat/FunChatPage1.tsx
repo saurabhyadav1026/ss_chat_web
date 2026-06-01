@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { socket } from "../../contexts/socketcontext/SocketContext";
+import   { funChatSocket } from "../../contexts/socketcontext/SocketContext";
 import SearchBar from "../left_nav/SearchBar";
 import { NewChatIcon } from "../icons";
 
@@ -22,6 +22,13 @@ const [searchInput,setSearchInput]:any=useState("");
   const [chatItems,setChatItems]:any=useState(Object.values(roomsList || {}))
   const navigate = useNavigate();
 
+
+
+
+
+
+
+
 useEffect(()=>{
 setChatItems(roomsList)
 },[roomsList])
@@ -42,20 +49,15 @@ setChatItems(rooms)
 
 
 
-  useEffect(()=>{
-
-//socket.connect();
-
-
-  })
+  
 
 useEffect(()=>{
 
-    socket.on("newroom",(data)=>{
+    funChatSocket.on("newroom",(data)=>{
         setRoomsList((prev:any)=>({[data.room.id]:data.room,...prev}))
     })
 
-return ()=>{socket.off("newroom")}
+return ()=>{funChatSocket.off("newroom")}
 })
 
 
@@ -77,7 +79,7 @@ return ()=>{socket.off("newroom")}
                   type="button"
                   className="list-card__body"
                   onClick={() => {
-                  navigate("/u/aichats/new");
+                  navigate("new");
                   }}
                 >
                   <div className="list-card__title-row">

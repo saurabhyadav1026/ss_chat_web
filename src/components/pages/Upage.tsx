@@ -5,8 +5,9 @@ import UserContext from "../../contexts/UserContext";
 
 const Upage= ({ element }: any) => {
    
-  const { page2Id }: any = useParams();
+  const { page2Id, username }: any = useParams();
   const hasPage2Id = Boolean(page2Id);
+  const hasUsername=Boolean(username);
   
   const {isUserLoading,activeUser}:any=useContext(UserContext)
   
@@ -28,7 +29,7 @@ const navigate=useNavigate();
       </div>
 
       <div id="main_page2" className={`page-shell__content ${!hasPage2Id ? "page-shell__content--empty" : ""}`}>
-        {!hasPage2Id ? (
+        {!hasPage2Id && ! hasUsername? (
           <div className="page-empty-state">
             <span className="placeholder-chip">Ready to chat</span>
             <h2>Select a conversation</h2>

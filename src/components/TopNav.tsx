@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { EllipsisVertical } from "lucide-react";
 
 const TopNav = (props: any) => {
   const navigate = useNavigate();
@@ -13,12 +14,12 @@ const TopNav = (props: any) => {
         <div className="chat-topbar__identity">
           <div
             className="chat-topbar__avatar"
-            onClick={() => navigate(`/user/profile/${props.activeChat._id}`)}
+            onClick={() => navigate(`/u/chats/profile/${props.activeChat.username}`)}
             style={{ backgroundImage: `url(${props.activeChat.dp})` }}
           />
           <div>
-            <p className="chat-topbar__label">Direct conversation</p>
-            <h3 className="chat-topbar__title" onClick={() => navigate(`/u/profile/${props.activeChat.username}`)}>
+         {/*    <p className="chat-topbar__label">Direct conversation</p> */}
+            <h3 className="chat-topbar__title" onClick={() => navigate(`/u/chats/profile/${props.activeChat.username}`)}>
               {props.activeChat.name}
             </h3>
           </div>
@@ -33,7 +34,11 @@ const TopNav = (props: any) => {
         </div>
       )}
 
-      <div className="chat-topbar__meta">Secure thread</div>
+ <button type="button" className="chat-topbar__menu" onClick={() => navigate(`/u/chats/profile/${props.activeChat.username}`)}>
+      <EllipsisVertical/>
+      </button>
+
+    
     </div>
   );
 };

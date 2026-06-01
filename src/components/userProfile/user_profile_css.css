@@ -268,6 +268,13 @@
 .user-profile-button--primary { background: linear-gradient(135deg, var(--accent), #65efd2); color: #032029; }
 .user-profile-button--ghost { background: var(--surface-soft); color: var(--text); border: 1px solid var(--border); }
 .user-profile-button--danger { background: rgba(255, 122, 122, 0.12); color: #ffb7b7; border: 1px solid rgba(255, 122, 122, 0.18); }
+.edit-profile-upload { gap: 0.8rem; }
+.edit-profile-upload input[type="file"] { width: 100%; min-height: 52px; padding: 0; border: 0; border-radius: 18px; background: transparent; color: transparent; cursor: pointer; }
+.edit-profile-upload input[type="file"]::file-selector-button { width: 100%; min-height: 52px; margin: 0; padding: 0.85rem 1rem; border: 1px solid rgba(44, 201, 167, 0.34); border-radius: 18px; background: linear-gradient(135deg, rgba(44, 201, 167, 0.98), rgba(101, 239, 210, 0.92)); color: #032029; font-weight: 900; cursor: pointer; box-shadow: 0 14px 28px rgba(44, 201, 167, 0.16); transition: transform 180ms ease, filter 180ms ease, box-shadow 180ms ease; }
+.edit-profile-upload input[type="file"]::-webkit-file-upload-button { width: 100%; min-height: 52px; margin: 0; padding: 0.85rem 1rem; border: 1px solid rgba(44, 201, 167, 0.34); border-radius: 18px; background: linear-gradient(135deg, rgba(44, 201, 167, 0.98), rgba(101, 239, 210, 0.92)); color: #032029; font-weight: 900; cursor: pointer; box-shadow: 0 14px 28px rgba(44, 201, 167, 0.16); transition: transform 180ms ease, filter 180ms ease, box-shadow 180ms ease; }
+.edit-profile-upload input[type="file"]:hover::file-selector-button { transform: translateY(-1px); filter: brightness(1.04); box-shadow: 0 18px 34px rgba(44, 201, 167, 0.22); }
+.edit-profile-upload input[type="file"]:hover::-webkit-file-upload-button { transform: translateY(-1px); filter: brightness(1.04); box-shadow: 0 18px 34px rgba(44, 201, 167, 0.22); }
+.edit-profile-upload input[type="file"]:focus-visible { outline: none; box-shadow: 0 0 0 4px rgba(44, 201, 167, 0.14); }
 .picture-modal { position: fixed; inset: 0; z-index: 30; display: flex; align-items: center; justify-content: center; padding: 1.25rem; background: rgba(3, 11, 17, 0.8); backdrop-filter: blur(10px); }
 .picture-modal__card { width: min(100%, 1100px); max-height: 88vh; padding: 1rem; border-radius: 32px; background: var(--compose-bg); border: 1px solid var(--border); box-shadow: var(--shadow-lg); }
 .picture-modal__image { width: 100%; max-height: calc(88vh - 2rem); object-fit: contain; border-radius: 24px; }

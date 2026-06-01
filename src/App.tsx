@@ -10,7 +10,7 @@ import { Route, Routes } from 'react-router-dom';
 import Loggin from './components/userProfile/Loggin';
 import Register from './components/userProfile/Register';
 import Profile from './components/userProfile/Profile';
-import ChatPage from './components/ChatPage';
+import ChatPage from './components/pages/page2/ChatPage';
 import ChatsList from './components/pages/page1/ChatsList';
 import SearchList from './components/pages/page1/SearchList';
 import Home from './components/pages/Home';
@@ -24,6 +24,9 @@ import Mpage from './components/pages/Mpage';
 import Opage from './components/pages/Opage';
 import FunChatPage1 from './components/funchat/FunChatPage1';
 import Upage from './components/pages/Upage';
+import EditProfile from './components/userProfile/EditProfilePage';
+import BlanlOutlet from './components/userProfile/BlankOutlet';
+import CallPage from './components/call/CallPage';
 export const App = () => {
   return <>
     <Routes>
@@ -42,11 +45,15 @@ export const App = () => {
 
       
       <Route path="/u" element={<Mpage  />} >
-        <Route path='myprofile' element={<Upage element={<Profile />} />} />
+        <Route path='myprofile' element={<BlanlOutlet />}  >
+         <Route path='' element={<Profile />}  ></Route>
+        <Route path='edit' element={<EditProfile />} />
+        </Route>
         <Route path='profile/:username' element={<Upage element={<UserProfile />} />}></Route>
 
 
         <Route path="chats" element={<Upage element={<ChatsList />} />}>
+          <Route path='profile/:username' element={<UserProfile />} ></Route>
           <Route path=':page2Id' element={<ChatPage />} />
 
         </Route>
@@ -78,7 +85,7 @@ export const App = () => {
   </Route>
 
 </Route>
-
+<Route path='/call' element={<CallPage/>}/>
 
 
 

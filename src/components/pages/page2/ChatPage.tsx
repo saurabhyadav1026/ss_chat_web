@@ -1,13 +1,13 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
-import UserContext from "../contexts/UserContext.tsx";
-import InputBar, { keyHepler } from "./InputBar.tsx";
-import ReqShow from "./ReqShow";
-import ResShow from "./ResShow";
-import TopNav from "./TopNav.tsx";
-import api from "../api/api.ts";
-import { socket } from "../contexts/socketcontext/SocketContext.tsx";
-import ChatsListContext from "../contexts/ChatsListContext.tsx";
+import UserContext from "../../../contexts/UserContext.tsx";
+import InputBar, { keyHepler } from "../../InputBar.tsx";
+import ReqShow from "../../ReqShow.tsx";
+import ResShow from "../../ResShow.tsx";
+import TopNav from "../../TopNav.tsx";
+import api from "../../../api/api.ts";
+import { socket } from "../../../contexts/socketcontext/SocketContext.tsx";
+import ChatsListContext from "../../../contexts/ChatsListContext.tsx";
 
 const ChatPage = () => {
   const [ messages, setMessages ]: any = useState({});
