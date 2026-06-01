@@ -145,6 +145,9 @@ await writable.close();
                <button className="modern-btn modern-btn--ghost" onClick={async() => await write()}>
                write
               </button>
+                <button className="modern-btn modern-btn--ghost" onClick={() => navigate("/call")}>
+                Call
+              </button>
             </div>
           </div>
 
