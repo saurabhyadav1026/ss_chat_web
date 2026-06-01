@@ -3,6 +3,7 @@ import { callSocket  } from "../../contexts/socketcontext/SocketContext"
 
 
 
+
 const servers={
     iceServers:[
         {urls:"stun:stun.l.google.com:19302"}
@@ -12,26 +13,35 @@ const servers={
 
 const CallPage=()=>{
 
-    const [roomId,setRoomId]=useState("");
+    
     const [calling,setCalling]:any=useState({status:false});
+    const [isConnected,setConnected]=useState(false)
+    const [roomId,setRoomId]:any=useState("");
+    const [isCallStart,setCallStart]=useState(false)
 
     const localVideo:any=useRef(null);
     const remoteVideo:any=useRef(null);
     const peerConnection:any=useRef(null)
+    
 
 
 
 
 
-    useEffect(()=>{
-callSocket.emit("joinroom",{roomId:"sbh"})
+    const joinRoom=()=>{
+        if(roomId===""){
+            alert("empty roomId");
+            return;
+        }
+callSocket.emit("joinroom",{roomId});
 
-    },[])
+    }
 
 
 useEffect(()=>{
     callSocket.on("roomjoined",({roomId})=>{
-        setRoomId(roomId)
+        setConnected(true)
+        console.log(roomId)
     })
     
     return ()=>{callSocket.off("roomjoined")}
@@ -76,7 +86,8 @@ useEffect(()=>{
 useEffect(()=>{
     callSocket.on("end-call",()=>{
         peerConnection.current.close()
-        alert("call disconnected")
+        setCallStart(false)
+       
     })
     
     return ()=>{callSocket.off("end-call")}
@@ -85,7 +96,7 @@ useEffect(()=>{
 
 
 const startCall=async()=>{
-
+setCallStart(true)
     const stream=await navigator.mediaDevices.getUserMedia({video:true,audio:true});
 
     localVideo.current.srcObject=stream;
@@ -128,11 +139,13 @@ callSocket.emit("offer",{roomId,offer})
 
 
 const endCall=()=>{
+    setCallStart(false)
     peerConnection.current.close();
     callSocket.emit("end-call",{roomId})
 }
 
 const pickCall= async()=>{
+    setCallStart(true)
       const stream=await navigator.mediaDevices.getUserMedia({video:true,audio:true});
 
     localVideo.current.srcObject=stream;
@@ -176,15 +189,22 @@ await peerConnection.current.setRemoteDescription( new RTCSessionDescription(cal
         console.log(answer)
 }
 
+const updateRoomId=(e:any)=>{
+
+    setRoomId(e.target.value)
+}
+
     return<>
     
     <div className="container-fluid p-3 bg-white">
 {
     calling.status?<div><button onClick={pickCall} className="btn bg-success">call</button></div>:<></>
 }
+<div><input placeholder="roomId" value={roomId} onChange={updateRoomId}/><button  onClick={joinRoom} className="btn bg-primary">join room</button></div>
+{isConnected?<><h1>Video Call with {roomId}</h1><div> connected, now you can call</div></>:<></>}
 
-<h1>Video Call with {roomId}</h1>
 
+{isCallStart?<div>
 <video  className="border"
 ref={localVideo}
 autoPlay
@@ -203,11 +223,13 @@ width="300"
 
 />
 <br/>
-
-<div>
-    <button className="btn bg-success"  onClick={startCall}> call</button>
 <button  className="btn bg-danger" onClick={endCall}> end</button>
-</div>
+</div>:isConnected?<button className="btn bg-success"  onClick={startCall}> call</button>
+:<></>
+
+}
+
+
 
     </div>
     
