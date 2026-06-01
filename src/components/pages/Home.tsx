@@ -148,6 +148,9 @@ await writable.close();
                 <button className="modern-btn modern-btn--ghost" onClick={() => navigate("/call")}>
                 Call
               </button>
+              <button className="modern-btn modern-btn--ghost" onClick={() => console.log(import.meta.env.VITE_API_KEY)}>
+               test
+              </button>
             </div>
           </div>
 
