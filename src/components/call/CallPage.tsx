@@ -155,9 +155,58 @@ console.log("TRACK RECEIVED");
       remoteVideo.current.srcObject
     );
         try{
-await remoteVideo.current.play()
-console.log("video is playing....")
-            }catch(err){
+//await remoteVideo.current.play()
+//console.log("video is playing....")
+         
+console.log(remoteVideo.current);
+
+console.log(
+  "readyState:",
+  remoteVideo.current.readyState
+);
+
+console.log(
+  "networkState:",
+  remoteVideo.current.networkState
+);
+
+console.log(
+  "paused:",
+  remoteVideo.current.paused
+);
+
+console.log(
+  "srcObject:",
+  remoteVideo.current.srcObject
+);
+
+console.log(
+  "videoTracks:",
+  remoteVideo.current.srcObject?.getVideoTracks()
+);
+
+console.log(
+  "audioTracks:",
+  remoteVideo.current.srcObject?.getAudioTracks()
+);
+
+const promise = remoteVideo.current.play();
+
+console.log("play promise:", promise);
+
+promise
+.then(()=>{
+
+   console.log("VIDEO PLAYING");
+
+})
+.catch((err:any)=>{
+
+   console.log("PLAY ERROR:", err);
+
+});
+}catch(err){
+    console.log("erreee hab skkkk")
                 console.log(err)
             }
     }
@@ -234,9 +283,59 @@ console.log("TRACK RECEIVED");
       remoteVideo.current.srcObject
     );
         try{
-await remoteVideo.current.play()
-console.log("video is playing....")
+//await remoteVideo.current.play()
+//console.log("video is playing....")
+
+console.log(remoteVideo.current);
+
+console.log(
+  "readyState:",
+  remoteVideo.current.readyState
+);
+
+console.log(
+  "networkState:",
+  remoteVideo.current.networkState
+);
+
+console.log(
+  "paused:",
+  remoteVideo.current.paused
+);
+
+console.log(
+  "srcObject:",
+  remoteVideo.current.srcObject
+);
+
+console.log(
+  "videoTracks:",
+  remoteVideo.current.srcObject?.getVideoTracks()
+);
+
+console.log(
+  "audioTracks:",
+  remoteVideo.current.srcObject?.getAudioTracks()
+);
+
+const promise = remoteVideo.current.play();
+
+console.log("play promise:", promise);
+
+promise
+.then(()=>{
+
+   console.log("VIDEO PLAYING");
+
+})
+.catch((err:any)=>{
+
+   console.log("PLAY ERROR:", err);
+
+});
+
             }catch(err){
+                console.log("erre hai")
                 console.log(err)
             }
     }
