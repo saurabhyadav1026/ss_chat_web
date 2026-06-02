@@ -4,6 +4,29 @@ import { callSocket } from "../../contexts/socketcontext/SocketContext";
 const stunServers: RTCIceServer[] = [
   { urls: "stun:stun.l.google.com:19302" },
   { urls: "stun:stun1.l.google.com:19302" },
+   {
+        urls: "stun:stun.relay.metered.ca:80",
+      },
+      {
+        urls: "turn:global.relay.metered.ca:80",
+        username: "c8674decd7f66da97efcd993",
+        credential: "GP9yRsjtoZtfjoQA",
+      },
+      {
+        urls: "turn:global.relay.metered.ca:80?transport=tcp",
+        username: "c8674decd7f66da97efcd993",
+        credential: "GP9yRsjtoZtfjoQA",
+      },
+      {
+        urls: "turn:global.relay.metered.ca:443",
+        username: "c8674decd7f66da97efcd993",
+        credential: "GP9yRsjtoZtfjoQA",
+      },
+      {
+        urls: "turns:global.relay.metered.ca:443?transport=tcp",
+        username: "c8674decd7f66da97efcd993",
+        credential: "GP9yRsjtoZtfjoQA",
+      },
 ];
 
 type IncomingCall = {
