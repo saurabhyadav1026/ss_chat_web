@@ -1,21 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { callSocket } from "../../contexts/socketcontext/SocketContext";
 
-const servers: RTCConfiguration = {
-  iceServers: [
-    { urls: "stun:stun.l.google.com:19302" },
-    { urls: "stun:stun1.l.google.com:19302" },
-    {
-      urls: [
-        "turn:openrelay.metered.ca:80",
-        "turn:openrelay.metered.ca:443",
-        "turn:openrelay.metered.ca:443?transport=tcp",
-      ],
-      username: "openrelayproject",
-      credential: "openrelayproject",
-    },
-  ],
-};
+const stunServers: RTCIceServer[] = [
+  { urls: "stun:stun.l.google.com:19302" },
+  { urls: "stun:stun1.l.google.com:19302" },
+];
 
 type IncomingCall = {
   status: boolean;
@@ -32,6 +21,11 @@ const CallPage = () => {
   const [isMuted, setMuted] = useState(false);
   const [isCameraOff, setCameraOff] = useState(false);
   const [isRemoteMuted, setRemoteMuted] = useState(true);
+  const [turnCredentialsUrl, setTurnCredentialsUrl] = useState(
+    import.meta.env.VITE_TURN_CREDENTIALS_URL ?? "",
+  );
+  const [showTurnSetup, setShowTurnSetup] = useState(false);
+  const [hasRelayCandidate, setHasRelayCandidate] = useState(false);
 
   const localVideo = useRef<HTMLVideoElement>(null);
   const remoteVideo = useRef<HTMLVideoElement>(null);
@@ -40,10 +34,15 @@ const CallPage = () => {
   const remoteStream = useRef<MediaStream | null>(null);
   const pendingCandidates = useRef<RTCIceCandidateInit[]>([]);
   const roomIdRef = useRef("");
+  const turnCredentialsUrlRef = useRef(turnCredentialsUrl.trim());
 
   useEffect(() => {
     roomIdRef.current = roomId.trim();
   }, [roomId]);
+
+  useEffect(() => {
+    turnCredentialsUrlRef.current = turnCredentialsUrl.trim();
+  }, [turnCredentialsUrl]);
 
   const showError = (message: string) => {
     setError(message);
@@ -70,6 +69,7 @@ const CallPage = () => {
     setMuted(false);
     setCameraOff(false);
     setRemoteMuted(true);
+    setHasRelayCandidate(false);
     setStatus(message);
   };
 
@@ -107,15 +107,34 @@ const CallPage = () => {
     playRemoteVideo();
   };
 
-  const createPeerConnection = (stream: MediaStream) => {
+  const getIceServers = async () => {
+    const credentialsUrl = turnCredentialsUrlRef.current;
+    if (!credentialsUrl) return stunServers;
+
+    try {
+      const response = await fetch(credentialsUrl);
+      if (!response.ok) throw new Error(`TURN credentials request failed: ${response.status}`);
+      const iceServers = await response.json();
+      if (!Array.isArray(iceServers)) throw new Error("TURN credentials response is not an array");
+      return [...stunServers, ...iceServers] as RTCIceServer[];
+    } catch (turnError) {
+      console.error("Unable to load TURN credentials", turnError);
+      showError("Could not load TURN relay credentials. Check the TURN credentials URL.");
+      throw turnError;
+    }
+  };
+
+  const createPeerConnection = async (stream: MediaStream) => {
     peerConnection.current?.close();
-    const connection = new RTCPeerConnection(servers);
+    setHasRelayCandidate(false);
+    const connection = new RTCPeerConnection({ iceServers: await getIceServers() });
     peerConnection.current = connection;
 
     stream.getTracks().forEach((track) => connection.addTrack(track, stream));
     connection.ontrack = attachRemoteTrack;
     connection.onicecandidate = ({ candidate }) => {
       if (candidate && roomIdRef.current) {
+        if (candidate.type === "relay") setHasRelayCandidate(true);
         callSocket.emit("ice-candidate", { roomId: roomIdRef.current, candidate });
       }
     };
@@ -123,7 +142,12 @@ const CallPage = () => {
       if (connection.connectionState === "connected") {
         setStatus("Connected. Your call is live.");
       } else if (connection.connectionState === "failed") {
-        showError("The call could not connect. End the call and try again.");
+        showError(
+          turnCredentialsUrlRef.current
+            ? "The call could not connect. Check that your TURN credentials are active, then try again."
+            : "Different networks require a TURN relay. Add a TURN credentials URL below, then try again.",
+        );
+        setShowTurnSetup(true);
       } else if (connection.connectionState === "disconnected") {
         setStatus("Connection interrupted. Trying to recover...");
       }
@@ -228,7 +252,7 @@ const CallPage = () => {
 
     try {
       setStatus("Calling the other device...");
-      const connection = createPeerConnection(stream);
+      const connection = await createPeerConnection(stream);
       const offer = await connection.createOffer();
       await connection.setLocalDescription(offer);
       callSocket.emit("offer", { roomId: roomIdRef.current, offer });
@@ -245,7 +269,7 @@ const CallPage = () => {
 
     try {
       setStatus("Connecting...");
-      const connection = createPeerConnection(stream);
+      const connection = await createPeerConnection(stream);
       await connection.setRemoteDescription(new RTCSessionDescription(calling.offer));
       await flushCandidates();
       const answer = await connection.createAnswer();
@@ -316,6 +340,30 @@ const CallPage = () => {
 
         <p style={{ ...styles.status, ...(error ? styles.error : {}) }}>{status}</p>
 
+        <button onClick={() => setShowTurnSetup(!showTurnSetup)} style={styles.setupToggle}>
+          {showTurnSetup ? "Hide TURN setup" : "TURN setup for different networks"}
+        </button>
+
+        {showTurnSetup && (
+          <div style={styles.turnSetup}>
+            <strong>TURN relay credentials</strong>
+            <p style={styles.turnText}>
+              Paste your Metered credentials endpoint. This is required when devices cannot connect directly.
+            </p>
+            <input
+              aria-label="TURN credentials URL"
+              placeholder="https://your-app.metered.live/api/v1/turn/credentials?apiKey=..."
+              value={turnCredentialsUrl}
+              onChange={(event) => setTurnCredentialsUrl(event.target.value)}
+              disabled={isCallStarted}
+              style={styles.input}
+            />
+            <p style={styles.turnText}>
+              Relay candidate: {hasRelayCandidate ? "available" : "not detected yet"}
+            </p>
+          </div>
+        )}
+
         {calling.status && !isCallStarted && (
           <div style={styles.incoming}>
             <div>
@@ -385,6 +433,9 @@ const styles: Record<string, React.CSSProperties> = {
   primaryButton: { padding: "12px 18px", border: 0, borderRadius: 12, background: "#2563eb", color: "#fff", fontWeight: 700, cursor: "pointer" },
   status: { minHeight: 24, margin: "12px 0 18px", color: "#64748b", fontSize: 14 },
   error: { color: "#dc2626" },
+  setupToggle: { padding: 0, margin: "0 0 14px", border: 0, background: "transparent", color: "#2563eb", fontSize: 14, fontWeight: 700, cursor: "pointer" },
+  turnSetup: { padding: 14, marginBottom: 18, borderRadius: 14, background: "#f8fafc", border: "1px solid #cbd5e1" },
+  turnText: { margin: "5px 0 10px", color: "#64748b", fontSize: 13 },
   incoming: { display: "flex", justifyContent: "space-between", gap: 16, alignItems: "center", padding: 16, marginBottom: 18, borderRadius: 16, background: "#eff6ff", border: "1px solid #bfdbfe" },
   incomingText: { margin: "4px 0 0", color: "#64748b", fontSize: 14 },
   acceptButton: { padding: "10px 18px", border: 0, borderRadius: 10, background: "#16a34a", color: "#fff", fontWeight: 700, cursor: "pointer" },
