@@ -1,417 +1,401 @@
-import { useEffect, useRef, useState } from "react"
-import { callSocket  } from "../../contexts/socketcontext/SocketContext"
+import { useEffect, useRef, useState } from "react";
+import { callSocket } from "../../contexts/socketcontext/SocketContext";
 
+const servers: RTCConfiguration = {
+  iceServers: [
+    { urls: "stun:stun.l.google.com:19302" },
+    { urls: "stun:stun1.l.google.com:19302" },
+    {
+      urls: [
+        "turn:openrelay.metered.ca:80",
+        "turn:openrelay.metered.ca:443",
+        "turn:openrelay.metered.ca:443?transport=tcp",
+      ],
+      username: "openrelayproject",
+      credential: "openrelayproject",
+    },
+  ],
+};
 
+type IncomingCall = {
+  status: boolean;
+  offer?: RTCSessionDescriptionInit;
+};
 
+const CallPage = () => {
+  const [calling, setCalling] = useState<IncomingCall>({ status: false });
+  const [isConnected, setConnected] = useState(false);
+  const [roomId, setRoomId] = useState("");
+  const [isCallStarted, setCallStarted] = useState(false);
+  const [status, setStatus] = useState("Enter the same room ID on both devices.");
+  const [error, setError] = useState("");
+  const [isMuted, setMuted] = useState(false);
+  const [isCameraOff, setCameraOff] = useState(false);
+  const [isRemoteMuted, setRemoteMuted] = useState(true);
 
-const servers={
-    iceServers:[
-        // STUN
-        {urls:"stun:stun.l.google.com:19302"},
+  const localVideo = useRef<HTMLVideoElement>(null);
+  const remoteVideo = useRef<HTMLVideoElement>(null);
+  const peerConnection = useRef<RTCPeerConnection | null>(null);
+  const localStream = useRef<MediaStream | null>(null);
+  const remoteStream = useRef<MediaStream | null>(null);
+  const pendingCandidates = useRef<RTCIceCandidateInit[]>([]);
+  const roomIdRef = useRef("");
 
-        // TURN
-        {
-            urls:[
-                "turn:openrelay.metered.ca:80",
-                "turn:openrelay.metered.ca:443"
-            ],
-            username:"openrelayproject",
-            credential:"openrelayproject"
-        }
-    ]
-}
+  useEffect(() => {
+    roomIdRef.current = roomId.trim();
+  }, [roomId]);
 
+  const showError = (message: string) => {
+    setError(message);
+    setStatus(message);
+  };
 
-const CallPage=()=>{
-
-    
-    const [calling,setCalling]:any=useState({status:false});
-    const [isConnected,setConnected]=useState(false)
-    const [roomId,setRoomId]:any=useState("");
-    const [isCallStart,setCallStart]=useState(false)
-
-    const localVideo:any=useRef(null);
-    const remoteVideo:any=useRef(null);
-    const peerConnection:any=useRef(null)
-    
-
-
-
-
-
-    const joinRoom=()=>{
-        if(roomId===""){
-            alert("empty roomId");
-            return;
-        }
-callSocket.emit("joinroom",{roomId});
-
+  const stopCall = (message = "Call ended.", notifyRoom = false) => {
+    if (notifyRoom && roomIdRef.current) {
+      callSocket.emit("end-call", { roomId: roomIdRef.current });
     }
 
+    peerConnection.current?.close();
+    peerConnection.current = null;
+    localStream.current?.getTracks().forEach((track) => track.stop());
+    localStream.current = null;
+    remoteStream.current = null;
+    pendingCandidates.current = [];
 
-useEffect(()=>{
-    callSocket.on("roomjoined",({roomId})=>{
-        setConnected(true)
-        console.log(roomId)
-    })
-    
-    return ()=>{callSocket.off("roomjoined")}
-},[])
+    if (localVideo.current) localVideo.current.srcObject = null;
+    if (remoteVideo.current) remoteVideo.current.srcObject = null;
 
+    setCalling({ status: false });
+    setCallStarted(false);
+    setMuted(false);
+    setCameraOff(false);
+    setRemoteMuted(true);
+    setStatus(message);
+  };
 
+  const flushCandidates = async () => {
+    const connection = peerConnection.current;
+    if (!connection?.remoteDescription) return;
 
+    const candidates = pendingCandidates.current.splice(0);
+    for (const candidate of candidates) {
+      try {
+        await connection.addIceCandidate(new RTCIceCandidate(candidate));
+      } catch (candidateError) {
+        console.error("Unable to add queued ICE candidate", candidateError);
+      }
+    }
+  };
 
-useEffect(()=>{
-    callSocket.on("offer",async({offer})=>{
-    
-        setCalling({status:true,offer:offer})
-
-    })
-    
-    return ()=>{callSocket.off("offer")}
-},[])
-
-useEffect(()=>{
-    callSocket.on("answer",async({answer})=>{
-    
-       await peerConnection.current.setRemoteDescription(new RTCSessionDescription(answer));
-    })
-    
-    return ()=>{callSocket.off("answer")}
-},[])
-
-useEffect(()=>{
-    callSocket.on("ice-candidate",async({candidate})=>{
-    
-        try{console.log(candidate)
-                await peerConnection.current.addIceCandidate(new RTCIceCandidate(candidate))
-        }catch(err){
-            console.log(err)
-        }
-    })
-    
-    return ()=>{callSocket.off("ice-candidate")}
-},[])
-
-
-useEffect(()=>{
-    callSocket.on("end-call",()=>{
-        peerConnection.current.close()
-        setCallStart(false)
-       
-    })
-    
-    return ()=>{callSocket.off("end-call")}
-},[])
-
-
-
-const startCall=async()=>{
-setCallStart(true)
-    const stream=await navigator.mediaDevices.getUserMedia({video:true,audio:true});
-
-    localVideo.current.srcObject=stream;
-
-    const remotestream=new MediaStream();
-    remoteVideo.current.srcObject=remotestream;
-    remoteVideo.current.autoplay=true
-    remoteVideo.current.playsInline=true
-    remoteVideo.current.controls=true
-
-    // to create webRTC connection
-
-    peerConnection.current=new RTCPeerConnection(servers)
-
-
-    stream.getTracks().forEach((track)=>{
-        peerConnection.current.addTrack(track,stream)
-    })
-
-    peerConnection.current.ontrack=async(event:any)=>{
-
-        console.log("receive track sbh2")
-console.log("TRACK RECEIVED");
-
-    console.log("STREAMS:", event.streams);
-
-    console.log(
-      "VIDEO TRACKS:",
-      event.streams[0]?.getVideoTracks()
-    );
-
-    console.log(
-      "AUDIO TRACKS:",
-      event.streams[0]?.getAudioTracks()
-    );
-
-
-        event.streams[0].getTracks().forEach((track:any)=>{
-            remotestream.addTrack(track)
-
-            
-
-        })
-         console.log(
-      remoteVideo.current.srcObject
-    );
-        try{
-//await remoteVideo.current.play()
-//console.log("video is playing....")
-         
-console.log(remoteVideo.current);
-
-console.log(
-  "readyState:",
-  remoteVideo.current.readyState
-);
-
-console.log(
-  "networkState:",
-  remoteVideo.current.networkState
-);
-
-console.log(
-  "paused:",
-  remoteVideo.current.paused
-);
-
-console.log(
-  "srcObject:",
-  remoteVideo.current.srcObject
-);
-
-console.log(
-  "videoTracks:",
-  remoteVideo.current.srcObject?.getVideoTracks()
-);
-
-console.log(
-  "audioTracks:",
-  remoteVideo.current.srcObject?.getAudioTracks()
-);
-
-const promise = remoteVideo.current.play();
-
-console.log("play promise:", promise);
-
-promise
-.then(()=>{
-
-   console.log("VIDEO PLAYING");
-
-})
-.catch((err:any)=>{
-
-   console.log("PLAY ERROR:", err);
-
-});
-}catch(err){
-    console.log("erreee hab skkkk")
-                console.log(err)
-            }
+  const attachRemoteTrack = (event: RTCTrackEvent) => {
+    const stream = remoteStream.current ?? new MediaStream();
+    if (!stream.getTracks().some((track) => track.id === event.track.id)) {
+      stream.addTrack(event.track);
     }
 
+    remoteStream.current = stream;
+    if (!remoteVideo.current) return;
 
-    peerConnection.current.onicecandidate=(event:any)=>{
-        if(event.candidate){
-            callSocket.emit("ice-candidate",{roomId,candidate:event.candidate})
-        }
+    remoteVideo.current.srcObject = stream;
+    const playRemoteVideo = () => {
+      remoteVideo.current?.play().catch(() => {
+        setStatus("Remote video is ready. Tap play on the video if your browser paused it.");
+      });
+    };
+
+    event.track.onunmute = playRemoteVideo;
+    playRemoteVideo();
+  };
+
+  const createPeerConnection = (stream: MediaStream) => {
+    peerConnection.current?.close();
+    const connection = new RTCPeerConnection(servers);
+    peerConnection.current = connection;
+
+    stream.getTracks().forEach((track) => connection.addTrack(track, stream));
+    connection.ontrack = attachRemoteTrack;
+    connection.onicecandidate = ({ candidate }) => {
+      if (candidate && roomIdRef.current) {
+        callSocket.emit("ice-candidate", { roomId: roomIdRef.current, candidate });
+      }
+    };
+    connection.onconnectionstatechange = () => {
+      if (connection.connectionState === "connected") {
+        setStatus("Connected. Your call is live.");
+      } else if (connection.connectionState === "failed") {
+        showError("The call could not connect. End the call and try again.");
+      } else if (connection.connectionState === "disconnected") {
+        setStatus("Connection interrupted. Trying to recover...");
+      }
+    };
+
+    return connection;
+  };
+
+  const prepareLocalMedia = async () => {
+    setError("");
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+      localStream.current = stream;
+      remoteStream.current = new MediaStream();
+      setCallStarted(true);
+      return stream;
+    } catch (mediaError) {
+      console.error("Unable to access camera or microphone", mediaError);
+      showError("Allow camera and microphone access to start a call.");
+      return null;
     }
+  };
 
-
-
-const offer=await peerConnection.current.createOffer();
-await peerConnection.current.setLocalDescription(offer)
-
-callSocket.emit("offer",{roomId,offer})
-}
-
-
-
-const endCall=()=>{
-    setCallStart(false)
-    peerConnection.current.close();
-    callSocket.emit("end-call",{roomId})
-}
-
-const pickCall= async()=>{
-    setCallStart(true)
-      const stream=await navigator.mediaDevices.getUserMedia({video:true,audio:true});
-
-    localVideo.current.srcObject=stream;
-
-
-    
-  peerConnection.current = new RTCPeerConnection(servers)
-
-  stream.getTracks().forEach((track:any)=>{
-    peerConnection.current.addTrack(track,stream)
-})
-
-  const remotestream=new MediaStream();
-    remoteVideo.current.srcObject=remotestream;
-
-    remoteVideo.current.autoplay=true
-    remoteVideo.current.playsInline=true
-    remoteVideo.current.controls=true
-
- peerConnection.current.ontrack=async(event:any)=>{
-
-        console.log("receive track sbh2")
-console.log("TRACK RECEIVED");
-
-    console.log("STREAMS:", event.streams);
-
-    console.log(
-      "VIDEO TRACKS:",
-      event.streams[0]?.getVideoTracks()
-    );
-
-    console.log(
-      "AUDIO TRACKS:",
-      event.streams[0]?.getAudioTracks()
-    );
-
-
-        event.streams[0].getTracks().forEach((track:any)=>{
-            remotestream.addTrack(track)
-
-            
-
-        })
-         console.log(
-      remoteVideo.current.srcObject
-    );
-        try{
-//await remoteVideo.current.play()
-//console.log("video is playing....")
-
-console.log(remoteVideo.current);
-
-console.log(
-  "readyState:",
-  remoteVideo.current.readyState
-);
-
-console.log(
-  "networkState:",
-  remoteVideo.current.networkState
-);
-
-console.log(
-  "paused:",
-  remoteVideo.current.paused
-);
-
-console.log(
-  "srcObject:",
-  remoteVideo.current.srcObject
-);
-
-console.log(
-  "videoTracks:",
-  remoteVideo.current.srcObject?.getVideoTracks()
-);
-
-console.log(
-  "audioTracks:",
-  remoteVideo.current.srcObject?.getAudioTracks()
-);
-
-const promise = remoteVideo.current.play();
-
-console.log("play promise:", promise);
-
-promise
-.then(()=>{
-
-   console.log("VIDEO PLAYING");
-
-})
-.catch((err:any)=>{
-
-   console.log("PLAY ERROR:", err);
-
-});
-
-            }catch(err){
-                console.log("erre hai")
-                console.log(err)
-            }
+  useEffect(() => {
+    if (localVideo.current && localStream.current) {
+      localVideo.current.srcObject = localStream.current;
     }
-
-    peerConnection.current.onicecandidate=(event:any)=>{
-    if(event.candidate){
-        callSocket.emit("ice-candidate",{
-            roomId,
-            candidate:event.candidate
-        })
+    if (remoteVideo.current && remoteStream.current) {
+      remoteVideo.current.srcObject = remoteStream.current;
     }
-}
+  }, [isCallStarted]);
 
-  if(!peerConnection.current)alert("no peer current")
-    console.log(calling.offer)
-await peerConnection.current.setRemoteDescription( new RTCSessionDescription(calling.offer));
+  useEffect(() => {
+    const onRoomJoined = () => {
+      setConnected(true);
+      setError("");
+      setStatus("Room joined. Start a call or wait for the other device.");
+    };
+    const onOffer = ({ offer }: { offer: RTCSessionDescriptionInit }) => {
+      setCalling({ status: true, offer });
+      setStatus("Incoming video call.");
+    };
+    const onAnswer = async ({ answer }: { answer: RTCSessionDescriptionInit }) => {
+      const connection = peerConnection.current;
+      if (!connection) return;
+      try {
+        await connection.setRemoteDescription(new RTCSessionDescription(answer));
+        await flushCandidates();
+      } catch (answerError) {
+        console.error("Unable to use call answer", answerError);
+        showError("The other device could not be connected.");
+      }
+    };
+    const onIceCandidate = async ({ candidate }: { candidate: RTCIceCandidateInit }) => {
+      if (!candidate) return;
+      const connection = peerConnection.current;
+      if (!connection?.remoteDescription) {
+        pendingCandidates.current.push(candidate);
+        return;
+      }
+      try {
+        await connection.addIceCandidate(new RTCIceCandidate(candidate));
+      } catch (candidateError) {
+        console.error("Unable to add ICE candidate", candidateError);
+      }
+    };
+    const onEndCall = () => stopCall("The other device ended the call.");
 
-        const answer=await peerConnection.current.createAnswer();
-        await peerConnection.current.setLocalDescription(answer)
-        callSocket.emit("answer",{answer,roomId})
-       
-        setCalling({status:false})
-        console.log(answer)
-}
+    callSocket.on("roomjoined", onRoomJoined);
+    callSocket.on("offer", onOffer);
+    callSocket.on("answer", onAnswer);
+    callSocket.on("ice-candidate", onIceCandidate);
+    callSocket.on("end-call", onEndCall);
 
-const updateRoomId=(e:any)=>{
+    return () => {
+      callSocket.off("roomjoined", onRoomJoined);
+      callSocket.off("offer", onOffer);
+      callSocket.off("answer", onAnswer);
+      callSocket.off("ice-candidate", onIceCandidate);
+      callSocket.off("end-call", onEndCall);
+      peerConnection.current?.close();
+      localStream.current?.getTracks().forEach((track) => track.stop());
+    };
+  }, []);
 
-    setRoomId(e.target.value)
-}
+  const joinRoom = () => {
+    const cleanRoomId = roomId.trim();
+    if (!cleanRoomId) {
+      showError("Enter a room ID first.");
+      return;
+    }
+    roomIdRef.current = cleanRoomId;
+    setRoomId(cleanRoomId);
+    setError("");
+    setStatus("Joining room...");
+    callSocket.emit("joinroom", { roomId: cleanRoomId });
+  };
 
-    return<>
-    
-    <div className="container-fluid p-3 bg-white">
-{
-    calling.status?<div><button onClick={pickCall} className="btn bg-success">call</button></div>:<></>
-}
-<div><input placeholder="roomId" value={roomId} onChange={updateRoomId}/><button  onClick={joinRoom} className="btn bg-primary">join room</button></div>
-{isConnected?<><h1>Video Call with {roomId}</h1><div> connected, now you can call</div></>:<></>}
+  const startCall = async () => {
+    const stream = await prepareLocalMedia();
+    if (!stream) return;
 
+    try {
+      setStatus("Calling the other device...");
+      const connection = createPeerConnection(stream);
+      const offer = await connection.createOffer();
+      await connection.setLocalDescription(offer);
+      callSocket.emit("offer", { roomId: roomIdRef.current, offer });
+    } catch (callError) {
+      console.error("Unable to start call", callError);
+      stopCall("Could not start the call.");
+    }
+  };
 
-{isCallStart?<div>
-<video  className="border"
-ref={localVideo}
-autoPlay
-muted
-playsInline
+  const pickCall = async () => {
+    if (!calling.offer) return;
+    const stream = await prepareLocalMedia();
+    if (!stream) return;
 
-width="300"
+    try {
+      setStatus("Connecting...");
+      const connection = createPeerConnection(stream);
+      await connection.setRemoteDescription(new RTCSessionDescription(calling.offer));
+      await flushCandidates();
+      const answer = await connection.createAnswer();
+      await connection.setLocalDescription(answer);
+      callSocket.emit("answer", { answer, roomId: roomIdRef.current });
+      setCalling({ status: false });
+    } catch (callError) {
+      console.error("Unable to answer call", callError);
+      stopCall("Could not answer the call.");
+    }
+  };
 
-/>
-<video   className="border"
-ref={remoteVideo}
-autoPlay
-muted
-playsInline
+  const toggleMute = () => {
+    const nextMuted = !isMuted;
+    localStream.current?.getAudioTracks().forEach((track) => {
+      track.enabled = !nextMuted;
+    });
+    setMuted(nextMuted);
+  };
 
-width="300"
+  const toggleCamera = () => {
+    const nextCameraOff = !isCameraOff;
+    localStream.current?.getVideoTracks().forEach((track) => {
+      track.enabled = !nextCameraOff;
+    });
+    setCameraOff(nextCameraOff);
+  };
 
-/>
-<br/>
-<button  className="btn bg-danger" onClick={endCall}> end</button>
-</div>:isConnected?<button className="btn bg-success"  onClick={startCall}> call</button>
-:<></>
+  const toggleRemoteAudio = () => {
+    const nextRemoteMuted = !isRemoteMuted;
+    setRemoteMuted(nextRemoteMuted);
+    if (remoteVideo.current) {
+      remoteVideo.current.muted = nextRemoteMuted;
+      remoteVideo.current.play().catch(() => {
+        setStatus("Tap play on the remote video to allow audio.");
+      });
+    }
+  };
 
-}
+  return (
+    <main style={styles.page}>
+      <section style={styles.panel}>
+        <div style={styles.header}>
+          <div>
+            <p style={styles.eyebrow}>SS Chat</p>
+            <h1 style={styles.title}>Video call</h1>
+            <p style={styles.subtitle}>Join the same room from both devices, then start the call.</p>
+          </div>
+          <span style={{ ...styles.badge, ...(isConnected ? styles.badgeConnected : {}) }}>
+            {isConnected ? "Room joined" : "Not connected"}
+          </span>
+        </div>
 
+        <div style={styles.joinRow}>
+          <input
+            aria-label="Room ID"
+            placeholder="Enter room ID"
+            value={roomId}
+            onChange={(event) => setRoomId(event.target.value)}
+            onKeyDown={(event) => event.key === "Enter" && joinRoom()}
+            disabled={isCallStarted}
+            style={styles.input}
+          />
+          <button onClick={joinRoom} disabled={isCallStarted} style={styles.primaryButton}>
+            Join room
+          </button>
+        </div>
 
+        <p style={{ ...styles.status, ...(error ? styles.error : {}) }}>{status}</p>
 
-    </div>
-    
-    
-    
-    
-    
-    </>
-}
+        {calling.status && !isCallStarted && (
+          <div style={styles.incoming}>
+            <div>
+              <strong>Incoming call</strong>
+              <p style={styles.incomingText}>Another device in this room wants to connect.</p>
+            </div>
+            <button onClick={pickCall} style={styles.acceptButton}>Accept</button>
+          </div>
+        )}
 
+        {isCallStarted ? (
+          <>
+            <div style={styles.videoGrid}>
+              <div style={styles.videoCard}>
+                <span style={styles.videoLabel}>You</span>
+                <video ref={localVideo} autoPlay muted playsInline style={styles.video} />
+              </div>
+              <div style={styles.videoCard}>
+                <span style={styles.videoLabel}>Remote</span>
+                <video
+                  ref={remoteVideo}
+                  autoPlay
+                  muted={isRemoteMuted}
+                  playsInline
+                  controls
+                  onLoadedMetadata={(event) => event.currentTarget.play().catch(() => undefined)}
+                  style={styles.video}
+                />
+              </div>
+            </div>
+            <div style={styles.controls}>
+              <button onClick={toggleMute} style={styles.controlButton}>
+                {isMuted ? "Unmute" : "Mute"}
+              </button>
+              <button onClick={toggleCamera} style={styles.controlButton}>
+                {isCameraOff ? "Camera on" : "Camera off"}
+              </button>
+              <button onClick={toggleRemoteAudio} style={styles.controlButton}>
+                {isRemoteMuted ? "Hear remote audio" : "Mute remote audio"}
+              </button>
+              <button onClick={() => stopCall("Call ended.", true)} style={styles.endButton}>
+                End call
+              </button>
+            </div>
+          </>
+        ) : (
+          <button onClick={startCall} disabled={!isConnected} style={styles.startButton}>
+            Start video call
+          </button>
+        )}
+      </section>
+    </main>
+  );
+};
 
-export default CallPage
+const styles: Record<string, React.CSSProperties> = {
+  page: { minHeight: "100vh", padding: "32px 16px", background: "#eef4ff", color: "#172033" },
+  panel: { maxWidth: 1040, margin: "0 auto", padding: 24, borderRadius: 24, background: "#fff", boxShadow: "0 18px 48px rgba(32, 66, 120, .14)" },
+  header: { display: "flex", justifyContent: "space-between", gap: 16, alignItems: "flex-start", marginBottom: 22 },
+  eyebrow: { margin: "0 0 4px", color: "#2563eb", fontSize: 12, fontWeight: 800, letterSpacing: 1.5, textTransform: "uppercase" },
+  title: { margin: 0, fontSize: 32, lineHeight: 1.1 },
+  subtitle: { margin: "8px 0 0", color: "#64748b" },
+  badge: { padding: "7px 11px", borderRadius: 999, background: "#e2e8f0", color: "#475569", fontSize: 12, fontWeight: 700, whiteSpace: "nowrap" },
+  badgeConnected: { background: "#dcfce7", color: "#15803d" },
+  joinRow: { display: "flex", gap: 10, flexWrap: "wrap" },
+  input: { flex: "1 1 230px", minWidth: 0, padding: "12px 14px", border: "1px solid #cbd5e1", borderRadius: 12, outlineColor: "#2563eb" },
+  primaryButton: { padding: "12px 18px", border: 0, borderRadius: 12, background: "#2563eb", color: "#fff", fontWeight: 700, cursor: "pointer" },
+  status: { minHeight: 24, margin: "12px 0 18px", color: "#64748b", fontSize: 14 },
+  error: { color: "#dc2626" },
+  incoming: { display: "flex", justifyContent: "space-between", gap: 16, alignItems: "center", padding: 16, marginBottom: 18, borderRadius: 16, background: "#eff6ff", border: "1px solid #bfdbfe" },
+  incomingText: { margin: "4px 0 0", color: "#64748b", fontSize: 14 },
+  acceptButton: { padding: "10px 18px", border: 0, borderRadius: 10, background: "#16a34a", color: "#fff", fontWeight: 700, cursor: "pointer" },
+  videoGrid: { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: 14 },
+  videoCard: { position: "relative", overflow: "hidden", minHeight: 240, borderRadius: 18, background: "#111827" },
+  videoLabel: { position: "absolute", zIndex: 1, top: 12, left: 12, padding: "5px 9px", borderRadius: 999, background: "rgba(15, 23, 42, .75)", color: "#fff", fontSize: 12, fontWeight: 700 },
+  video: { display: "block", width: "100%", height: "100%", minHeight: 240, objectFit: "cover", background: "#111827" },
+  controls: { display: "flex", justifyContent: "center", gap: 10, flexWrap: "wrap", marginTop: 18 },
+  controlButton: { padding: "10px 16px", border: "1px solid #cbd5e1", borderRadius: 999, background: "#fff", color: "#334155", fontWeight: 700, cursor: "pointer" },
+  endButton: { padding: "10px 18px", border: 0, borderRadius: 999, background: "#dc2626", color: "#fff", fontWeight: 700, cursor: "pointer" },
+  startButton: { width: "100%", padding: "13px 18px", border: 0, borderRadius: 12, background: "#16a34a", color: "#fff", fontWeight: 800, cursor: "pointer" },
+};
+
+export default CallPage;
