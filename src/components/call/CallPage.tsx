@@ -6,7 +6,18 @@ import { callSocket  } from "../../contexts/socketcontext/SocketContext"
 
 const servers={
     iceServers:[
-        {urls:"stun:stun.l.google.com:19302"}
+        // STUN
+        {urls:"stun:stun.l.google.com:19302"},
+
+        // TURN
+        {
+            urls:[
+                "turn:opnenrelay.metered.ca:80",
+                "turn:opnenrelay.metered.ca:443"
+            ],
+            username:"openrelayproject",
+            credential:"openrelayproject"
+        }
     ]
 }
 
