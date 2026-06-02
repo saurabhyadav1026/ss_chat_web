@@ -290,6 +290,7 @@ width="300"
 <video   className="border"
 ref={remoteVideo}
 autoPlay
+muted
 playsInline
 
 width="300"
