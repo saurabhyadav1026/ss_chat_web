@@ -12,8 +12,8 @@ const servers={
         // TURN
         {
             urls:[
-                "turn:opnenrelay.metered.ca:80",
-                "turn:opnenrelay.metered.ca:443"
+                "turn:openrelay.metered.ca:80",
+                "turn:openrelay.metered.ca:443"
             ],
             username:"openrelayproject",
             credential:"openrelayproject"
