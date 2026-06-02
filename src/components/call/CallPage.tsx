@@ -114,6 +114,9 @@ setCallStart(true)
 
     const remotestream=new MediaStream();
     remoteVideo.current.srcObject=remotestream;
+    remoteVideo.current.autoplay=true
+    remoteVideo.current.playsInline=true
+    remoteVideo.current.controls=true
 
     // to create webRTC connection
 
@@ -124,12 +127,19 @@ setCallStart(true)
         peerConnection.current.addTrack(track,stream)
     })
 
-    peerConnection.current.ontrack=(event:any)=>{
-        console.log("receive track")
+    peerConnection.current.ontrack=async(event:any)=>{
+        console.log("receive track sbh2")
         event.streams[0].getTracks().forEach((track:any)=>{
             remotestream.addTrack(track)
 
+            
+
         })
+        try{
+await remoteVideo.current.play()
+            }catch(err){
+                console.log(err)
+            }
     }
 
 
@@ -171,12 +181,22 @@ const pickCall= async()=>{
 
   const remotestream=new MediaStream();
     remoteVideo.current.srcObject=remotestream;
- peerConnection.current.ontrack=(event:any)=>{
-        console.log("receive track")
+
+    remoteVideo.current.autoplay=true
+    remoteVideo.current.playsInline=true
+    remoteVideo.current.controls=true
+
+ peerConnection.current.ontrack=async(event:any)=>{
+        console.log("receive track sbh1")
         event.streams[0].getTracks().forEach((track:any)=>{
             remotestream.addTrack(track)
 
         })
+        try{
+await remoteVideo.current.play()
+            }catch(err){
+                console.log(err)
+            }
     }
 
     peerConnection.current.onicecandidate=(event:any)=>{
