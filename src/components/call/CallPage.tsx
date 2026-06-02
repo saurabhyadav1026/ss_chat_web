@@ -128,15 +128,35 @@ setCallStart(true)
     })
 
     peerConnection.current.ontrack=async(event:any)=>{
+
         console.log("receive track sbh2")
+console.log("TRACK RECEIVED");
+
+    console.log("STREAMS:", event.streams);
+
+    console.log(
+      "VIDEO TRACKS:",
+      event.streams[0]?.getVideoTracks()
+    );
+
+    console.log(
+      "AUDIO TRACKS:",
+      event.streams[0]?.getAudioTracks()
+    );
+
+
         event.streams[0].getTracks().forEach((track:any)=>{
             remotestream.addTrack(track)
 
             
 
         })
+         console.log(
+      remoteVideo.current.srcObject
+    );
         try{
 await remoteVideo.current.play()
+console.log("video is playing....")
             }catch(err){
                 console.log(err)
             }
@@ -187,13 +207,35 @@ const pickCall= async()=>{
     remoteVideo.current.controls=true
 
  peerConnection.current.ontrack=async(event:any)=>{
-        console.log("receive track sbh1")
+
+        console.log("receive track sbh2")
+console.log("TRACK RECEIVED");
+
+    console.log("STREAMS:", event.streams);
+
+    console.log(
+      "VIDEO TRACKS:",
+      event.streams[0]?.getVideoTracks()
+    );
+
+    console.log(
+      "AUDIO TRACKS:",
+      event.streams[0]?.getAudioTracks()
+    );
+
+
         event.streams[0].getTracks().forEach((track:any)=>{
             remotestream.addTrack(track)
 
+            
+
         })
+         console.log(
+      remoteVideo.current.srcObject
+    );
         try{
 await remoteVideo.current.play()
+console.log("video is playing....")
             }catch(err){
                 console.log(err)
             }
