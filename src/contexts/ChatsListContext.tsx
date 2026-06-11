@@ -7,7 +7,8 @@ const ChatsListContext =createContext({});
 
 export const ChatsListContextProvider=({children}:any)=>{
 
-    const [chatsList,updateChatsList] =useState({});
+    const [chatsList,updateChatsList]:any =useState({});
+
     const [aiChatsList,setAIChatsList]=useState({});
     const {activeUser}:any=useContext(UserContext);
 
@@ -15,11 +16,15 @@ export const ChatsListContextProvider=({children}:any)=>{
      if(activeUser._id){
         
         api.get("/users/getchatslist")
-        .then(res=>{updateChatsList(res.data) })
+        .then(res=>{updateChatsList(res.data);
+          
+         })
         .catch(err=>console.log(err))
         
         api.get("/ai/textassistance/rooms")
-        .then(res=>setAIChatsList(res.data) )
+        .then(res=>{setAIChatsList(res.data);
+            
+         })
         .catch(err=>{console.log(err);setAIChatsList({})})
         
     }
@@ -43,7 +48,10 @@ const func=async()=>{
 },[activeUser])
 
     const setRoom=(room:any)=>{
-        updateChatsList((prev: any) => ({ ...prev, [room._id]:room }))
+       
+       if(chatsList[room._id]) updateChatsList({ ...chatsList,[room._id]:{...chatsList[room._id],lastMessage:room.lastMessage} })
+       else updateChatsList({...chatsList,[room._id]:room})
+
     }
 
     const setLastMessage=(msg:any)=>{

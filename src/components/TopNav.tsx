@@ -1,6 +1,8 @@
 import { useNavigate } from "react-router-dom";
-import { EllipsisVertical } from "lucide-react";
 
+
+import './style.css'
+import PopUPmenu from "./assets/menu-option/PopUPmenu";
 const TopNav = (props: any) => {
   const navigate = useNavigate();
 
@@ -33,10 +35,7 @@ const TopNav = (props: any) => {
           </div>
         </div>
       )}
-
- <button type="button" className="chat-topbar__menu" onClick={() => navigate(`/u/chats/profile/${props.activeChat.username}`)}>
-      <EllipsisVertical/>
-      </button>
+ <PopUPmenu options={props.topNavOptions}/>
 
     
     </div>

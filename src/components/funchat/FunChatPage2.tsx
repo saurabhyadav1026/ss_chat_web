@@ -6,6 +6,8 @@ import ResShow from "../ResShow";
 import InputBar from "../InputBar";
 import { funChatSocket } from "../../contexts/socketcontext/SocketContext";
 import CreateFunRoom from "./CreateFunRoom";
+import TopNav from "../TopNav";
+import PopUPmenu from "../assets/menu-option/PopUPmenu";
 
 
 
@@ -87,7 +89,7 @@ setMessages((prev:any)=>{
 
   else return <>
     <div className="chat-page">
-     {/*  <TopNav activeChat={activeChat.receiver||{}} toBack="/u/chats" /> */}
+      <TopNav activeChat={{}} toBack="/u/chats" />
 
       <div className="chat-screen">
         <div className="chat-thread">

@@ -10,7 +10,6 @@ import { ChatContextProvider } from './contexts/chatscontext/AppVariablesContext
 import { SocketContextProvider } from './contexts/socketcontext/SocketContext'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { GoogleOAuthProvider } from '@react-oauth/google'
-import {MessageContextProvider} from './contexts/MessagesContext'
 import { ChatsListContextProvider } from './contexts/ChatsListContext'
 import { UserContextProvider } from './contexts/UserContext'
 import { IKContext } from 'imagekitio-react';
@@ -27,7 +26,7 @@ root.render(
 >
     <UserContextProvider>
       <ChatsListContextProvider>
-        <MessageContextProvider>
+      
           <SocketContextProvider>
             
               <ChatContextProvider>
@@ -45,7 +44,7 @@ root.render(
               </ChatContextProvider>
        
           </SocketContextProvider>
-        </MessageContextProvider>
+        
       </ChatsListContextProvider>
     </UserContextProvider>
     </IKContext>

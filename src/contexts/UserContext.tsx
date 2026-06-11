@@ -1,9 +1,9 @@
 ﻿
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext,  useEffect, useState } from 'react';
 
 import { socket } from './socketcontext/SocketContext.tsx';
 
-import MessageContext from './MessagesContext.tsx';
+
 import api from '../api/api.ts';
 
 const UserContext = createContext({});
@@ -12,13 +12,12 @@ export const UserContextProvider = ({ children }: any) => {
   const [activeUser, updateActiveUser]: any = useState({});
   const [isUserLoading,setUserLoading]:any=useState(true)
 
-  const { setActiveChatNull }: any = useContext(MessageContext);
+
 
   const setActiveUser: any = async () => {
     setUserLoading(true);
    console.log("we update the user")
     socket.disconnect();
-    //setActiveChatNull();
 
 
     await api.get("/users/verifyme")
@@ -47,7 +46,6 @@ useEffect(()=>{
     updateActiveUser({ username: 'sbhunk', name: "Loggin here", dp: "https://ik.imagekit.io/sbhtechhub/no_dp.jpg", loggin_token: "" })
     await api.post("users/logoutme");
 
-    setActiveChatNull();
 
     return
   }

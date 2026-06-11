@@ -3,12 +3,12 @@ import { useNavigate } from "react-router-dom";
 import ChatContext from "../../contexts/chatscontext/AppVariablesContext";
 import UserContext from "../../contexts/UserContext";
 //import TrendUsers from "../home/TrendUsers";
-import { SettingIcon } from "../icons";
+import { LoadingIcon, SettingIcon } from "../icons";
 import "./home.css";
 import api from "../../api/api";
 
 const Home = () => {
-  const { activeUser, setActiveUser }: any = useContext(UserContext);
+  const { activeUser, setActiveUser ,isUserLoading}: any = useContext(UserContext);
   const { theme, toggleTheme }: any = useContext(ChatContext);
   const navigate = useNavigate();
   const nextTheme = theme === "dark" ? "Light" : "Dark";
@@ -122,7 +122,7 @@ await writable.close();
               </button>
             </div>
 
-            <h1 className="home-title">{activeUser && activeUser.name ? activeUser.name : "Secret Secure"}</h1>
+            <h1 className="home-title">{isUserLoading?<LoadingIcon/>:activeUser && activeUser.name ? activeUser.name :"Loggin YOurself "}</h1>
             <p className="home-subtitle">
             
             </p>

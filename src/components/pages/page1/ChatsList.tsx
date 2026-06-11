@@ -2,22 +2,24 @@ import { useContext,  useEffect,  useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ChatsListContext from "../../../contexts/ChatsListContext";
 import SearchBar from "../../left_nav/SearchBar";
+import { socket } from "../../../contexts/socketcontext/SocketContext";
 //import { getFriendChatFile } from "../../../filehandeling/folder/chats";
 
 const ChatsList = () => {
   const [searchInput, setSearchInput]: any = useState("");
-  const { chatsList }: any = useContext(ChatsListContext);
+  const { chatsList ,setRoom}: any = useContext(ChatsListContext);
+  
   const navigate = useNavigate();
 //const [chatItems,setChatItems]:any=useState(Object.values(chatsList || {}))
 
   
-const chatItems=Object.values(chatsList || {})
+const chatItems=Object.values(chatsList || {}).sort((r1:any,r2:any)=>r2.lastMessage._id.localeCompare(r1.lastMessage._id));
  
  
 useEffect(()=>{
 const func=async ()=>{
   
-//const chatfile=await getFriendChatFile("sbhydv");
+//const chatfile=await getFriendChatFile("sbhydv");,
 }
 func()
 },[])
@@ -42,6 +44,29 @@ setChatItems(rooms)
 
 
  */
+
+
+
+
+  useEffect(() => {
+    const receive = (data:any) => {
+    
+            const { room, message } = data;
+
+        setRoom(room);
+            socket.emit("u/chats/doOneDoubleTick", { msgId: message._id, roomId: message.roomId });
+
+
+    
+    }
+
+      socket.on("u/chats/receiveMsg", receive)
+    return () => {
+      socket.off("u/chats/receiveMsg",receive);
+    };
+  });
+ 
+
 
   return <>
     <div className="list-panel">
