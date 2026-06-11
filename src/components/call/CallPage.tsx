@@ -89,7 +89,7 @@ roomIdRef.current = param.page2Id;
 
 
   useEffect(()=>{
-if(callStartedRef.current)return;
+if(callStartedRef.current && peerConnection.current)return;
 if(param.callStatus==="start"){
   callStartedRef.current = true;
   startCall();
@@ -316,7 +316,12 @@ else if(param.callStatus==="pick"){
       socket.off("ice-candidate", onIceCandidate);
       socket.off("end-call", onEndCall);
       peerConnection.current?.close();
+      peerConnection.current = null;
       localStream.current?.getTracks().forEach((track) => track.stop());
+      localStream.current = null;
+      remoteStream.current = null;
+      setRemoteMediaStream(null);
+      callStartedRef.current = false;
     };
   }, []);
 
