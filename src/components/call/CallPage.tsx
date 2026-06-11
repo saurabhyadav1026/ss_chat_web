@@ -32,6 +32,22 @@ const stunServers: RTCIceServer[] = [
       },
 ];
 
+const getTurnServersFromEnv = (): RTCIceServer[] => {
+  const urls = import.meta.env.VITE_TURN_URLS;
+  const username = import.meta.env.VITE_TURN_USERNAME;
+  const credential = import.meta.env.VITE_TURN_CREDENTIAL;
+
+  if (!urls || !username || !credential) return [];
+
+  return [
+    {
+      urls: urls.split(",").map((url: string) => url.trim()).filter(Boolean),
+      username,
+      credential,
+    },
+  ];
+};
+
 
 
 const CallPage = () => {
@@ -152,15 +168,17 @@ else if(param.callStatus==="pick"){
   };
 
   const getIceServers = async () => {
-    
- return stunServers;
-
-    
+    const turnServers = getTurnServersFromEnv();
+    return turnServers.length ? [...stunServers, ...turnServers] : stunServers;
   };
 
   const createPeerConnection = async (stream: MediaStream) => {
     peerConnection.current?.close();
-    const connection = new RTCPeerConnection({ iceServers: await getIceServers() });
+    const iceServers = await getIceServers();
+    const connection = new RTCPeerConnection({
+      iceServers,
+      iceCandidatePoolSize: 10,
+    });
     peerConnection.current = connection;
 
     stream.getTracks().forEach((track) => connection.addTrack(track, stream));
@@ -172,12 +190,29 @@ else if(param.callStatus==="pick"){
         socket.emit("ice-candidate", { roomId: activeRoomId, candidate });
       }
     };
+    connection.onicecandidateerror = (event) => {
+      console.error("ICE candidate error", event);
+      if (event.errorCode === 401 || event.errorCode === 438) {
+        showError("TURN authentication failed. Update the TURN username and credential.");
+      } else if (event.url?.startsWith("turn")) {
+        showError("TURN server is not reachable. Check your TURN URL, port, and firewall.");
+      }
+    };
+    connection.oniceconnectionstatechange = () => {
+      if (connection.iceConnectionState === "checking") {
+        setStatus("Connecting through ICE...");
+      } else if (connection.iceConnectionState === "connected" || connection.iceConnectionState === "completed") {
+        setStatus("Connected. Your call is live.");
+      } else if (connection.iceConnectionState === "failed") {
+        showError("The call could not connect across networks. Use valid TURN credentials in VITE_TURN_URLS, VITE_TURN_USERNAME, and VITE_TURN_CREDENTIAL.");
+      }
+    };
     connection.onconnectionstatechange = () => {
       if (connection.connectionState === "connected") {
         setStatus("Connected. Your call is live.");
       } else if (connection.connectionState === "failed") {
         showError(
-        "The call could not connect. Check that your TURN credentials are active, then try again. or Different networks require a TURN relay. Add a TURN credentials URL below, then try again.",
+        "The call could not connect across networks. Use valid TURN credentials in VITE_TURN_URLS, VITE_TURN_USERNAME, and VITE_TURN_CREDENTIAL.",
         );
   
       } else if (connection.connectionState === "disconnected") {
