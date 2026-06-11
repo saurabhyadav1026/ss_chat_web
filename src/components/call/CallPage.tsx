@@ -223,6 +223,26 @@ else if(param.callStatus==="pick"){
     return connection;
   };
 
+  const waitForIceGatheringComplete = (connection: RTCPeerConnection) => {
+    if (connection.iceGatheringState === "complete") return Promise.resolve();
+
+    return new Promise<void>((resolve) => {
+      const timeout = window.setTimeout(() => {
+        connection.removeEventListener("icegatheringstatechange", onStateChange);
+        resolve();
+      }, 5000);
+
+      const onStateChange = () => {
+        if (connection.iceGatheringState !== "complete") return;
+        window.clearTimeout(timeout);
+        connection.removeEventListener("icegatheringstatechange", onStateChange);
+        resolve();
+      };
+
+      connection.addEventListener("icegatheringstatechange", onStateChange);
+    });
+  };
+
   const prepareLocalMedia = async () => {
     setError("");
     try {
@@ -312,7 +332,8 @@ else if(param.callStatus==="pick"){
       const connection = await createPeerConnection(stream);
       const offer = await connection.createOffer();
       await connection.setLocalDescription(offer);
-      socket.emit("startcall", { roomId: roomIdRef.current, offer });
+      await waitForIceGatheringComplete(connection);
+      socket.emit("startcall", { roomId: roomIdRef.current, offer: connection.localDescription });
     } catch (callError) {
       console.error("Unable to start call", callError);
       stopCall("Could not start the call.");
@@ -331,7 +352,8 @@ else if(param.callStatus==="pick"){
       await flushCandidates();
       const answer = await connection.createAnswer();
       await connection.setLocalDescription(answer);
-      socket.emit("answer", { answer, roomId: roomIdRef.current });
+      await waitForIceGatheringComplete(connection);
+      socket.emit("answer", { answer: connection.localDescription, roomId: roomIdRef.current });
     } catch (callError) {
       console.error("Unable to answer call", callError);
       stopCall("Could not answer the call.");
