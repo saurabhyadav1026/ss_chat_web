@@ -27,8 +27,10 @@ import Upage from './components/pages/Upage';
 import EditProfile from './components/userProfile/EditProfilePage';
 import BlanlOutlet from './components/userProfile/BlankOutlet';
 import CallPage from './components/call/CallPage';
+import MainNotificationPage from './components/pages/notification-pages/MainNotificationPage';
 export const App = () => {
   return <>
+  <MainNotificationPage/>
     <Routes>
 
       <Route path="/" element={<Home />} />
@@ -58,6 +60,13 @@ export const App = () => {
 
         </Route>
 
+        <Route path="calls" element={<Upage element={<ChatsList />} />}>
+        <Route path=':page2Id/:callStatus' element={<CallPage />} />
+
+        </Route>
+
+
+
 {/* AI route */}
 
         <Route path="aichats" element={<Upage element={<AiChatsList />} />}>
@@ -85,7 +94,7 @@ export const App = () => {
   </Route>
 
 </Route>
-<Route path='/call' element={<CallPage/>}/>
+
 
 
 

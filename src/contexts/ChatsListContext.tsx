@@ -9,8 +9,19 @@ export const ChatsListContextProvider=({children}:any)=>{
 
     const [chatsList,updateChatsList]:any =useState({});
 
-    const [aiChatsList,setAIChatsList]=useState({});
+
+
+     const [aiChatsList,setAIChatsList]=useState({});
     const {activeUser}:any=useContext(UserContext);
+
+
+
+
+
+
+
+
+    
 
     const setChatsList:any=()=>{
      if(activeUser._id){

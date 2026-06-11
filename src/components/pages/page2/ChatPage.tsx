@@ -8,13 +8,15 @@ import TopNav from "../../TopNav.tsx";
 import api from "../../../api/api.ts";
 import { socket } from "../../../contexts/socketcontext/SocketContext.tsx";
 import ChatsListContext from "../../../contexts/ChatsListContext.tsx";
+import CallContext from "../../../contexts/CallContext.tsx";
 
 const ChatPage = () => {
   const [messages, setMessages]: any = useState({});
   const [activeChat, setActiveChat]: any = useState({});
   const { page2Id } = useParams();
   const { activeUser }: any = useContext(UserContext);
-  const { setRoom }: any = useContext(ChatsListContext)
+  const { setRoom }: any = useContext(ChatsListContext);
+  const {startCall}:any=useContext(CallContext)
   const chatPageRef = useRef<HTMLDivElement | null>(null);
 
 const navigate=useNavigate()
@@ -84,9 +86,12 @@ if(confirm("Are you sure want to  the chat?")){
 }
 }
 
-
+const call=()=>{
+  startCall(activeChat._id);
+}
 
 const topNavOptions={
+  "call":call,
 "Profile":openProfile,
 "Clear Chat":clearChat,
 "Lock Chat":lockChat,

@@ -98,6 +98,9 @@ await writable.close();
 }
 
   return (
+
+<>
+  
     <div className="home-shell">
       <div className="home-orb home-orb--one" />
       <div className="home-orb home-orb--two" />
@@ -180,6 +183,7 @@ await writable.close();
         </section> */}
       </div>
     </div>
+    </>
   );
 };
 

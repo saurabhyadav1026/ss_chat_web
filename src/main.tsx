@@ -15,6 +15,7 @@ import { UserContextProvider } from './contexts/UserContext'
 import { IKContext } from 'imagekitio-react';
 import {getMediaAuthinticator} from './components/userProfile/users';
 import {BrowserRouter} from 'react-router-dom';
+import { CallContextProvider } from './contexts/CallContext'
 
 const root = createRoot(document.getElementById('root')!);
 root.render(
@@ -24,6 +25,7 @@ root.render(
             urlEndpoint={import.meta.env.VITE_MEDIA_ENDPOINTURL}
             authenticator={getMediaAuthinticator}
 >
+  <CallContextProvider>
     <UserContextProvider>
       <ChatsListContextProvider>
       
@@ -47,6 +49,7 @@ root.render(
         
       </ChatsListContextProvider>
     </UserContextProvider>
+    </CallContextProvider>
     </IKContext>
     </BrowserRouter>
   </StrictMode>
