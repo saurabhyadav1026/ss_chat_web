@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../api/api";
+import { toast } from "react-toastify";
 
 const Register = () => {
   const [isUsernameAvailble, setIsAvailbleUsername] = useState(false);
@@ -17,11 +18,11 @@ const Register = () => {
 
   const sendOtp = async () => {
     if (!isUsernameAvailble) {
-      alert("Username is not availble. Try other username.");
+      toast.error("Username is not availble. Try other username.");
       return;
     }
     if (User.userpassword !== User.confirm_password) {
-      alert("password missmatch");
+      toast.warn("password missmatch");
       return;
     }
 
@@ -29,21 +30,21 @@ const Register = () => {
 
     if (newOtp.status === "ok") {
       setIsReadOnly(true);
-      alert(`We have send the otp on your register contact. otp code is : ${newOtp.otp_code}`);
+      toast.info(`We have send the otp on your register contact. otp code is : ${newOtp.otp_code}`);
       setotp(newOtp);
       setOtpDivVisibility(true);
     } else {
-      alert(newOtp.status);
+      toast.warn(newOtp.status);
     }
   };
 
   const resendOtp = async () => {
     const newOtp: any = (await api.get("/getotp", { params: { email: User.email } })).data || { status: "nt" };
     if (newOtp.status === "ok") {
-      alert(`We have resend the otp on your register contact. otp code is : ${newOtp.otp_code}`);
+      toast.info(`We have resend the otp on your register contact. otp code is : ${newOtp.otp_code}`);
       setotp(newOtp);
     } else {
-      alert(newOtp.status);
+      toast.warn(newOtp.status);
     }
   };
 
@@ -61,9 +62,9 @@ const Register = () => {
         password: User.userpassword,
         email: User.email,
       };
-      await api.post("/newuser", user);
+      return await api.post("/newuser", user).then((res)=> res.data.status).catch(()=>false);
     } catch (error) {
-      console.log(`eror  ${error}`);
+      return false;
     }
   };
 
@@ -73,13 +74,13 @@ const Register = () => {
     otpInput.value = "";
 
     if (OTP.otp.toString() !== otp) {
-      alert("Enter correct OTP  ");
+      toast.warn("Enter correct OTP  ");
       return;
     }
 
-    await addUser();
-    alert("register successfully");
-    navigate("/user/login");
+    
+   if((await addUser())) {toast.success("register successfully");
+    navigate("/user/login");}
   };
 
   const checkUsername = () => {
@@ -88,7 +89,7 @@ const Register = () => {
       api
         .get("/logging/isuseravailble", { params: { username: User.username } })
         .then((res) => setIsAvailbleUsername(res.data.status))
-        .catch((err: any) => alert(err));
+        .catch(() => toast.error("Failed to connect with server. Try again later."));
     }
   };
 

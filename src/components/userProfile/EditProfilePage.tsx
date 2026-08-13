@@ -6,6 +6,7 @@ import { useContext,useState } from "react";
 import UserContext from "../../contexts/UserContext";
 import { useNavigate } from "react-router-dom";
 import api from "../../api/api";
+import { toast } from "react-toastify";
 
 
 
@@ -26,7 +27,7 @@ setActiveUser ((old:any)=>({...old,name:res.data.newname,about:res.data.newAbout
 
 
   }).catch((err:any)=>{
-    alert(err)
+  toast.error("Failed to upfdate profile.")
     console.log(err)
   })
 }
@@ -78,7 +79,7 @@ const changedp:any=async()=>{
                 <IKUpload
                   fileName={activeUser._id + "_dp"}
                   onSuccess={(res: any) => { setTempUser({...tempUser,["dp"]:res.url}); }}
-                  onError={(e: any) => { console.log(e); alert(e); }}
+                  onError={(e: any) => { console.log(e); toast.error(e.message); }}
                 />
 
 <button className="user-profile-button user-profile-button--primary" onClick={() => changedp()}>

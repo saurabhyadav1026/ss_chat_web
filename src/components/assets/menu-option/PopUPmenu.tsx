@@ -22,7 +22,7 @@ const PopUPmenu=({options}:any)=>{
   </div>
   <section className="menu-container border ">
     {
-        Object.keys(options).map((key:string,i:number)=><div id={i+""} onClick={options[key]} className="menu-list text-center">{key}</div>)
+       options&& Object.keys(options).map((key:string,i:number)=><div id={i+""} onClick={options[key]} className="menu-list text-center">{key}</div>)
     }
     
     

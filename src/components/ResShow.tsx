@@ -3,6 +3,7 @@ import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import SpeakerContext from "../voiceassistance/speaker/SpeakerContext.tsx";
 import { Copy, Dislike, LikeRes, SpeakerIcon, StopspeakIcon, Trash_binIcon } from "./icons";
+import { toast } from "react-toastify";
 
 const ResShow = (props: any) => {
   const [isSpeaking, setIsSpeaking] = useState(false);
@@ -99,5 +100,5 @@ const ResShow = (props: any) => {
 export default ResShow;
 
 const copyRes = (r: any) => {
-  navigator.clipboard.writeText(r)        //.then(() => alert(" text coppied."));
+  navigator.clipboard.writeText(r).then(() => toast.success(" text coppied."));
 };

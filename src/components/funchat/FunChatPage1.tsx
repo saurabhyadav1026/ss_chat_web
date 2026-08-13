@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import   { funChatSocket } from "../../contexts/socketcontext/SocketContext";
 import SearchBar from "../left_nav/SearchBar";
 import { NewChatIcon } from "../icons";
+import { MessageSquareShare } from "lucide-react";
 
 
 
@@ -73,7 +74,8 @@ return ()=>{funChatSocket.off("newroom")}
       </div>
 
      <SearchBar searchInput={searchInput} _placeholder="Search chats..." setSearchInput={setSearchInput} />
-      <div className="list-empty-state">
+    <div className="container-fluid d-flex">
+        <div className="list-empty-state col-6 mr-2">
 
                <button
                   type="button"
@@ -90,6 +92,24 @@ return ()=>{funChatSocket.off("newroom")}
                   
                 </button>
             </div>
+<div className="list-empty-state col-6 ml-2">
+
+               <button
+                  type="button"
+                  className="list-card__body"
+                  onClick={() => {
+                  navigate("join");
+                  }}
+                >
+                  <div className="list-card__title-row">
+                    <span className="list-card__title"><MessageSquareShare />Join Room</span>
+                  
+                  </div>
+  
+                  
+                </button>
+            </div>
+    </div>
 
       <div className="list-panel__body scrollbar-only-rod">
         {chatItems.length ? (

@@ -10,7 +10,7 @@ friend chat:   usn:[{t:"",by:1|2,text:" "}]
 
 */
 
-import { GoogleGenerativeAI } from '@google/generative-ai';
+// import { GoogleGenerativeAI } from '@google/generative-ai';
 
 import getRes from '../../getRes';
 
@@ -188,24 +188,8 @@ return data;
 
 
 
-const genapi=import.meta.env.VITE_GEN_api
-const genAI = new GoogleGenerativeAI(genapi)
-
-export const  askAi=async(req:string)=>{
 
 
-    let text="Somthing error try again after sometime.";
- try {
-     
-      const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
-  
-      const result = await model.generateContent(req+"  give response in plain text without using any formatting.");
-       text =  result.response.text();
-      
-    } catch{ }
-    
-     return text;
-}
 
 
 

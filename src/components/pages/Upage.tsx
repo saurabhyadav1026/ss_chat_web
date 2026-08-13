@@ -14,7 +14,9 @@ const Upage= ({ element }: any) => {
 const navigate=useNavigate();
 
    useEffect(() => {
-    if (!isUserLoading&& !(activeUser && activeUser._id)) navigate("/user/login");
+    if (!isUserLoading&& !(activeUser && activeUser._id)){ 
+      navigate("/user/login")
+     };
   }, [activeUser]);
 
 

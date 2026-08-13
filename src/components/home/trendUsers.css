@@ -1,7 +1,11 @@
-.trend-container {
-  width: 100%;
-}
+/* ============================================================
+   TRENDING USERS  —  Discover section
+   ============================================================ */
 
+/* ─── Container ──────────────────────────────────────────── */
+.trend-container { width: 100%; }
+
+/* ─── Section header ─────────────────────────────────────── */
 .trend-header {
   display: flex;
   justify-content: space-between;
@@ -12,40 +16,40 @@
 
 .trend-title {
   margin: 0;
-  font-family: "Space Grotesk", "Segoe UI", sans-serif;
-  font-size: clamp(1.4rem, 3vw, 2rem);
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: clamp(1.3rem, 2.5vw, 1.8rem);
+  font-weight: 700;
+  letter-spacing: -.025em;
   color: var(--headline);
 }
 
 .trend-copy {
-  margin: 0.45rem 0 0;
-  color: var(--muted);
-  line-height: 1.6;
+  margin: .4rem 0 0;
+  color: var(--text-secondary);
+  line-height: 1.65;
+  font-size: .88rem;
 }
 
 .trend-pill {
-  padding: 0.45rem 0.85rem;
-  border-radius: 999px;
-  border: 1px solid rgba(125, 211, 252, 0.2);
-  background: rgba(125, 211, 252, 0.08);
+  padding: .38rem .8rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid rgba(34,211,238,.2);
+  background: rgba(34,211,238,.07);
   color: var(--accent-cool);
-  font-size: 0.8rem;
+  font-size: .76rem;
   font-weight: 700;
+  white-space: nowrap;
 }
 
+/* ─── Grid ───────────────────────────────────────────────── */
 .trend-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(240px,1fr));
+  gap: .85rem;
 }
 
+/* ─── Responsive ─────────────────────────────────────────── */
 @media (max-width: 640px) {
-  .trend-header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .trend-grid {
-    grid-template-columns: 1fr;
-  }
+  .trend-header     { flex-direction: column; align-items: flex-start; }
+  .trend-grid       { grid-template-columns: 1fr; }
 }

@@ -1,10 +1,38 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { GoogleLogin } from "@react-oauth/google";
 import { useNavigate } from "react-router-dom";
 import api from "../../api/api.ts";
 import UserContext from "../../contexts/UserContext.tsx";
+import { toast } from "react-toastify";
+import { LucideLoaderPinwheel } from "lucide-react";
 const Loggin = () => {
   const navigate = useNavigate();
+const [isloading,setIsLoading]= useState(true);
+const {activeUser}:any=useContext(UserContext)
+
+useEffect(()=>{
+  if(activeUser && activeUser._id){
+     navigate("/u/chats");
+     return;
+  }
+  api.get("/users/verifyme")
+        .then((res: any) => {
+          if (res.data.status) {
+           navigate("/u/chats")
+          }
+          else{
+            setIsLoading(false)
+          }
+
+        }).catch((err:Error)=>{
+          console.log("Error: "+err.message);
+          toast.error("Something Error: try again later.");
+          navigate("/")
+        })
+},[])
+
+
+
   const { setActiveUser }: any = useContext(UserContext);
 
   const verifyLoggin = async () => {
@@ -22,10 +50,10 @@ const Loggin = () => {
 
     if (status) {
       await setActiveUser();
-      alert("logging successfully");
+      toast.success("logging successfully");
       navigate("/");
     } else {
-      alert("invalid username or password");
+      toast.error("invalid username or password");
     }
   };
 
@@ -39,7 +67,7 @@ const Loggin = () => {
       
     }
 else{
-  alert("username or password is incorrect. 1");
+  toast.warn("username or password is incorrect. 1");
 }
 });
 
@@ -49,10 +77,14 @@ if(status){
 }
 }
 catch(e){
-   alert("username or password is incorrect");
+   toast.error("username or password is incorrect");
 }
-  };
+  }
 
+
+
+
+if(isloading)return <LucideLoaderPinwheel/>
   return (
     <div className="auth-card">
       <div className="app_logo auth-logo" />

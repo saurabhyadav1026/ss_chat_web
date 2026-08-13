@@ -90,7 +90,7 @@ class File {
     }
 
     write = async (text: String) => {
-        alert(this.#fileHandler)
+      
         const writable = await this.#fileHandler.createWritable();
 
         writable.write(text);

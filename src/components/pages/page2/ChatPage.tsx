@@ -9,113 +9,254 @@ import api from "../../../api/api.ts";
 import { socket } from "../../../contexts/socketcontext/SocketContext.tsx";
 import ChatsListContext from "../../../contexts/ChatsListContext.tsx";
 import CallContext from "../../../contexts/CallContext.tsx";
+import { toast } from "react-toastify";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import queryClient from "@/lib/queryClient.ts";
 
 const ChatPage = () => {
-  const [messages, setMessages]: any = useState({});
-  const [activeChat, setActiveChat]: any = useState({});
-  const { page2Id } = useParams();
-  const { activeUser }: any = useContext(UserContext);
-  const { setRoom }: any = useContext(ChatsListContext);
-  const {startCall}:any=useContext(CallContext)
+
+  const { page2Id:activeRoomId } = useParams();
+  const { activeUser ,isInternetConnection}: any = useContext(UserContext);
+  const { updateChatRoom }: any = useContext(ChatsListContext);
+  const { startCall }: any = useContext(CallContext)
   const chatPageRef = useRef<HTMLDivElement | null>(null);
 
-const navigate=useNavigate()
+  const messageLoaderRef = useRef(null)
+
+  const navigate = useNavigate()
 
 
+  // to get Chat  yaani messages
+  const fetchMessages = async (roomId: string, cursor: any) => {
+    console.log(activeChat)
+    if (roomId && roomId.slice(0, 3) !== "new") {
 
-
-
-const openProfile=()=>{
-  
-navigate("/u/chats/profile/"+activeChat.receiver.username)
-}
-const clearChat=()=>{
-if(confirm("Are you sure to clear the chat?")){
-  api.get("/users/clearchat",{params:{roomId:activeChat._id}}).
-  then((res)=>{
-    if(res.data.status)setMessages({});
-  }).catch((err)=>console.log(err))
-}
-
-}
-const blockUser=()=>{
-
-if(confirm("Are you sure want to block user?")){
-  api.get("/users/blockuser",{params:{_id:activeChat.receiver._id}}).
-  then((res)=>{
-    if(res.data.status){
-      alert("user blocked")
-    };
-  }).catch((err)=>console.log(err))
-}
-}
-
-const reportUser=()=>{
-
-
-if(confirm("Are you sure want to report user?")){
-  api.get("/users/reportuser",{params:{_id:activeChat.receiver._id}}).
-  then((res)=>{
-    if(res.data.status){
-      alert("user blocked")
-    };
-  }).catch((err)=>console.log(err))
-}
-
-}
-const lockChat=()=>{
-
-if(confirm("Are you sure want to lock chat?")){
-  api.get("/users/lockchat",{params:{roomId:activeChat._id}}).
-  then((res)=>{
-    if(res.data.status){
-      alert("user blocked")
-    };
-  }).catch((err)=>console.log(err))
-}
-}
-const hideChat=()=>{
-
-if(confirm("Are you sure want to  the chat?")){
-  api.get("/users/hidechat",{params:{roomId:activeChat._id}}).
-  then((res)=>{
-    if(res.data.status){
-      alert("user blocked")
-    };
-  }).catch((err)=>console.log(err))
-}
-}
-
-const call=()=>{
-  startCall(activeChat._id);
-}
-
-const topNavOptions={
-  "call":call,
-"Profile":openProfile,
-"Clear Chat":clearChat,
-"Lock Chat":lockChat,
-"Hide Chat":hideChat,
-"Block":blockUser,
-"Report":reportUser
-
-
-
-}
-
-
-
-
-
-
-  useEffect(() => {
-    if (page2Id) {
-
-
-      setActiveChatByChatRoomId(page2Id);
-
+      return await api.get("/users/getmessages", { params: { _id: roomId, cursor } })
+        .then(res => res.data.messages)
+        .catch(err => { throw new Error(err) })
     }
-  }, [page2Id]);
+    else {
+    
+      throw new Error("no messages")
+    }
+
+  }
+
+
+
+const fetchActiveChat=async(roomId:any)=>{
+  //if(!isInternetConnection)return;
+  return await api.get("users/getroombyroomid", { params: { _id: roomId ,socketId:socket.id} })
+      .then((res) =>{ 
+        if(res.data.status) return res.data.room
+        else {
+          navigate("/u/chats");
+          return;
+        }
+      }
+      )
+      .catch((err) =>{console.log(err);
+         navigate("/u/chats");
+          return;
+      })
+}
+
+
+
+
+const {data:activeChat,...activeChatProperties}:any =useQuery({
+  queryKey:["activeChat",activeRoomId],
+  queryFn:()=>fetchActiveChat(activeRoomId)
+})
+
+
+
+
+const setActiveChat=()=>{
+  if(isInternetConnection)queryClient.invalidateQueries({queryKey:["activeChat",activeRoomId]})
+}
+
+
+
+
+  const { data: messages, ...messageProperty }: any = useInfiniteQuery({
+    queryKey: ["messages", activeRoomId],
+    queryFn: ({ pageParam }) => fetchMessages(activeChat._id, pageParam),
+    initialPageParam: undefined,
+    getNextPageParam: (lastPage) => lastPage.hasMore ? lastPage.cursor : undefined
+  })
+
+
+
+  const addMessage = (message: any) => {
+    queryClient.setQueryData(["messages", activeChat._id], (oldData: any) => {
+      if (!oldData) return oldData;
+
+      return {
+        ...oldData,
+        pages: oldData.pages.map((page: any, index: number) => {
+          if (index != 0) return page;
+          return {
+            messagesIdList: [...page.messagesIdList, message._id],
+            messages: { ...page.messages, [message._id]: message }
+          }
+        })
+      }
+    })
+  }
+
+  const updateNewMessage = (message: any) => {
+    queryClient.setQueryData(["messages", activeChat._id], (oldData: any) => {
+      if (!oldData) return oldData;
+
+
+      return {
+        ...oldData,
+        pages: oldData.pages.map((page: any, index: number) => {
+          if (!page.rooms[message._id]) return page;
+          return {
+            ...page,
+            messagesIdList: oldData[index].messagesIdList.map((id: string) => id == message._id ? message._id : id)
+          }
+        })
+      }
+
+
+    })
+  }
+
+  const updateMessage = (message: any) => {
+    queryClient.setQueryData([message, activeChat._id], (oldData: any) => {
+      if (!oldData) return oldData;
+
+
+      return {
+        ...oldData,
+        pages: oldData.pages.map((page: any) => {
+          if (!page.rooms[message._id]) return page;
+          return {
+            ...page,
+            messages: { ...page.messages, [message._id]: message }
+          }
+        })
+      }
+
+
+    })
+
+  }
+
+
+
+  useEffect(() => {
+   if(isInternetConnection ) queryClient.invalidateQueries({ queryKey: ["messages",activeRoomId] })
+  }, [activeChat])
+
+
+
+  /*  observer for lazy fetching  */
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      if (
+        entries[0].isIntersecting &&
+        messageProperty.hasNextPage &&
+        !messageProperty.isFetchingNextPage
+      ) {
+        messageProperty.fetchNextPage();
+      }
+    });
+
+    const loader = messageLoaderRef.current;
+    if (loader) observer.observe(loader);
+
+    return () => observer.disconnect();
+  }, [messageProperty.fetchNextPage, messageProperty.hasNextPage, messageProperty.isFetchingNextPage]);
+
+
+
+
+
+
+
+
+  const openProfile = () => {
+
+    navigate("/u/chats/profile/" + activeChat.receiver.username)
+  }
+  const clearChat = () => {
+    if (confirm("Are you sure to clear the chat?")) {
+      api.get("/users/clearchat", { params: { roomId: activeChat._id } }).
+        then((res) => {
+          if (res.data.status) { };
+        }).catch((err) => console.log(err))
+    }
+
+  }
+  const blockUser = () => {
+
+    if (confirm("Are you sure want to block user?")) {
+      api.get("/users/blockuser", { params: { _id: activeChat.receiver._id } }).
+        then((res) => {
+          if (res.data.status) {
+            toast.success("user blocked")
+          };
+        }).catch(() => toast.error("failed to block"))
+    }
+  }
+
+  const reportUser = () => {
+
+
+    if (confirm("Are you sure want to report user?")) {
+      api.get("/users/reportuser", { params: { _id: activeChat.receiver._id } }).
+        then((res) => {
+          if (res.data.status) {
+            toast.success("user reported")
+          };
+        }).catch(() => { toast.error("Failed to report") })
+    }
+
+  }
+  const lockChat = () => {
+
+    if (confirm("Are you sure want to lock chat?")) {
+      api.get("/users/lockchat", { params: { roomId: activeChat._id } }).
+        then((res) => {
+          if (res.data.status) {
+            toast.success("chat locked")
+          };
+        }).catch(() => toast.error("Failed to lock the chat"))
+    }
+  }
+  const hideChat = () => {
+
+    if (confirm("Are you sure want to  the chat?")) {
+
+      api.get("/users/hidechat", { params: { roomId: activeChat._id } }).
+        then((res) => {
+          if (res.data.status) {
+            toast.success("chat hide")
+          };
+        }).catch(() => toast.error("failed to hide chat"))
+    }
+  }
+
+  const call = () => {
+    startCall(activeChat._id);
+  }
+
+  const topNavOptions = {
+    "call": call,
+    "Profile": openProfile,
+    "Clear Chat": clearChat,
+    "Lock Chat": lockChat,
+    "Hide Chat": hideChat,
+    "Block": blockUser,
+    "Report": reportUser
+
+
+
+  }
 
 
 
@@ -123,7 +264,16 @@ const topNavOptions={
 
 
   useEffect(() => {
-  }, [activeChat])
+    if (activeRoomId && isInternetConnection )  queryClient.invalidateQueries({queryKey:["activeChat",activeRoomId]})
+    
+  }, [activeRoomId]);
+
+
+
+
+
+
+
   useEffect(() => {
     const divRef = chatPageRef.current;
     if (divRef) {
@@ -133,104 +283,23 @@ const topNavOptions={
 
 
 
-  /* rtgjrtmgtkljmkltmybkl */
+
 
 
   useEffect(() => {
     keyHepler.clear();
   }, [activeChat])
 
-  // to get Chat  yaani messages
-  useEffect(() => {
-    if (activeChat && activeChat._id && activeChat._id.slice(0, 3) !== "new") {
-      api.get("/users/getmessages", { params: { _id: activeChat._id } })
-        .then(res => { setMessages(res.data.messages); socket.emit("u/chats/doBlueTick", { roomId: activeChat._id }) })
-        .catch(err => console.log(err))
-    }
-    else if (activeChat) {
-      setMessages({});
-    }
-
-  }, [activeChat])
 
 
 
-  useEffect(() => {
-    socket.on("u/chats/updateDoubleTick", (data) => {
-      if (!data.updateRooms[activeChat._id]) {
-        return
-      }
-      data.updateRooms[activeChat._id].forEach((msgId: any) => {
-        setMessages((prev: any) => ({ ...prev, [msgId]: { ...prev[msgId], tick: 2, tickStatus: { ...prev[msgId]["tickStatus"], read: data.deliverTime } } }));
-      })
-    })
-    return () => { socket.off("u/chats/updateDoubleTick") }
-  })
-
-
-
-  useEffect(() => {
-    socket.on("u/chats/updateBlueTick", (data) => {
-      if (activeChat._id !== data.roomId) {
-        return;
-      }
-
-      data.updateMsgsId.forEach((msgId: any) => {
-        setMessages((prev: any) => ({ ...prev, [msgId]: { ...prev[msgId], tick: 3, tickStatus: { ...prev[msgId]["tickStatus"], read: data.readTime } } }));
-      })
-
-
-    })
-    return () => { socket.off("u/chats/updateBlueTick") }
-  })
-
-  useEffect(() => {
-    socket.on("u/chats/updateOneDoubleTick", (data) => {
-
-      if (activeChat._id !== data.roomId) return;
-
-      setMessages((prev: any) => ({ ...prev, [data.msgId]: { ...prev[data.msgId], tick: 2, tickStatus: { ...prev[data.msgId]["tickStatus"], deliver: data.deliverTime } } }));
-    })
-    return () => { socket.off("u/chats/updateOneDoubleTick") }
-  })
-  useEffect(() => {
-    socket.on("u/chats/updateOneBlueTick", (data) => {
-      if (activeChat._id !== data.roomId) return;
-
-      setMessages((prev: any) => ({ ...prev, [data.msgId]: { ...prev[data.msgId], tick: 3, tickStatus: { ...prev[data.msgId]["tickStatus"], read: data.readTime } } }));
-
-    })
-    return () => { socket.off("u/chats/updateOneBlueTick") }
-  })
-
-
-
-
-
-
-
-  const setActiveChatByChatRoomId = (roomId: any) => {
-    api.get("users/getroombyroomid", { params: { _id: roomId } })
-      .then((res) => {
-        setActiveChat(res.data.room);
-      })
-      .catch((err) => {
-        setActiveChat({});
-        console.log(err);
-      })
-  }
-
-
-
-
-  /*  input bar     rjtgrltjgmtkljmyhkltm */
 
 
 
 
   const send = async (inputText: string) => {
-
-    if (inputText.trim() === "") return;
+    if (!activeChat)
+      if (inputText.trim() === "") return;
 
     const newMsgId = createTempMsgId();
     const msg: any = {
@@ -242,7 +311,8 @@ const topNavOptions={
       tickStatus: { send: new Date() },
     };
 
-    setMessages((prev: any) => { return { ...prev, [newMsgId]: msg } });
+    addMessage(msg);
+    updateChatRoom({...activeChat,["lastMessage"]:msg})
 
     const newMsg: any = {
       _id: newMsgId,
@@ -251,62 +321,27 @@ const topNavOptions={
     };
 
     socket.emit("u/chats/sendMessage", newMsg);
-
   };
 
 
 
 
   useEffect(() => {
-    const receive = (data:any) => {
-    
+    const receive = (data: any) => {
+      const { message } = data;
+      if (activeChat._id === message.roomId) {
+        addMessage(message);
 
-        const { message } = data;
+      }
 
-    
-
-        if (activeChat._id === message.roomId) {
-          setMessages((prev: any) => ({ ...prev, [message._id]: message }));
-
-          socket.emit("u/chats/doOneBlueTick", { msgId: message._id, roomId: message.roomId });
-
-        }
-
-    
     }
-
-      socket.on("u/chats/receiveMsg", receive)
+  
+    socket.on("u/chats/receiveMsg", receive)
     return () => {
-      socket.off("u/chats/receiveMsg",receive);
+      socket.off("u/chats/receiveMsg", receive);
     };
-  });
- 
+  },[]);
 
-
-
-useEffect(() => {
-    const receive = (data:any) => {
-    
-
-        const { message } = data;
-
-    
-
-        if (activeChat._id === message.roomId) {
-          setMessages((prev: any) => ({ ...prev, [message._id]: message }));
-
-          socket.emit("u/chats/doOneBlueTick", { msgId: message._id, roomId: message.roomId });
-
-        }
-
-    
-    }
-
-      socket.on("u/chats/receiveMsg", receive)
-    return () => {
-      socket.off("u/chats/receiveMsg",receive);
-    };
-  });
 
 
 
@@ -314,15 +349,11 @@ useEffect(() => {
 
   useEffect(() => {
     socket.on("u/chats/messageSent", (data) => {
-
       const message = data.message;
-      setRoom(data.room);
+      updateChatRoom(data.room);
 
       if (activeChat._id === message.roomId) {
-        setMessages((prev: any) => {
-          const { [data._id]: _, ...rest } = prev
-          return { ...rest, [message._id]: message }
-        });
+        updateNewMessage(message);
 
       }
 
@@ -336,7 +367,7 @@ useEffect(() => {
   useEffect(() => {
     socket.on("u/chats/messageNOtSent", (data) => {
 
-      alert("msg not sent " + data)
+      toast.error("msg not sent " + data)
     });
 
     return () => {
@@ -357,41 +388,60 @@ useEffect(() => {
 
 
 
+
+
   /* ======== */
 
 
-  const threadMessages = Object.values(messages || {});
+
 
   return <>
     <div className="chat-page">
-      <TopNav activeChat={activeChat.receiver || {}}  topNavOptions={topNavOptions}  toBack="/u/chats" />
+      <TopNav activeChat={activeChat && activeChat.receiver?activeChat.receiver: {}} topNavOptions={topNavOptions} toBack="/u/chats" />
 
       <div className="chat-screen">
         <div className="chat-thread">
           <div ref={chatPageRef} className="chat-thread__scroll scrollbar-only-rod">
-            {threadMessages.length ? (
-              threadMessages.map((u: any, i: any): any => (
-                <React.Fragment key={u._id || i}>
-                  {u.senderId === activeUser._id ? (
-                    <ReqShow msg={u} r_no={i} />
-                  ) : (
-                    <ResShow msg={u} r_no={i} />
-                  )}
-                </React.Fragment>
-              ))
-            ) : (
-              <div className="chat-thread__empty">
-                <div className="chat-thread__empty-card">
-                  <h3>Your thread is ready</h3>
-                  <p>Send the first message to break the silence. Replies will stack here in a cleaner, calmer layout.</p>
+
+            <div ref={messageLoaderRef}>
+              {messageProperty.isFetchingNextPage
+                ? "Loading..."
+                : messageProperty.hasNextPage
+                  ? "Scroll for more"
+                  : "No more posts"}
+            </div>
+            {
+              console.log(messages)}
+
+            {messages && messages.pages ? messages.pages.map((msg: any) => msg.messagesIdList.map((id: string, i: any): any => {
+             
+             const u = msg.messages[id]
+             
+              return (<React.Fragment key={u._id || i}>
+                {u.senderId === activeUser._id ? (
+                  <ReqShow msg={u} r_no={i} />
+                ) : (
+                  <ResShow msg={u} r_no={i} />
+                )}
+              </React.Fragment>
+
+              )
+            }
+            )
+            )
+              : (
+                <div className="chat-thread__empty">
+                  <div className="chat-thread__empty-card">
+                    <h3>Your thread is ready</h3>
+                    <p>Send the first message to break the silence. Replies will stack here in a cleaner, calmer layout.</p>
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
           </div>
 
           {activeChat ? (
             <div className="container-fluid p-0 chat-compose-shell">
-              <InputBar page2Id={page2Id} send={send} />
+              <InputBar page2Id={activeRoomId} send={send} />
             </div>
           ) : null}
         </div>

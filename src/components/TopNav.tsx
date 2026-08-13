@@ -16,7 +16,7 @@ const TopNav = (props: any) => {
         <div className="chat-topbar__identity">
           <div
             className="chat-topbar__avatar"
-            onClick={() => navigate(`/u/chats/profile/${props.activeChat.username}`)}
+            onClick={() => navigate(`/u/chats/profile/${props.activeChat.username}`)} 
             style={{ backgroundImage: `url(${props.activeChat.dp})` }}
           />
           <div>

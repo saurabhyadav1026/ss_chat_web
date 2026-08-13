@@ -1,25 +1,18 @@
-import { useEffect, useState } from "react";
+import { useEffect} from "react";
 import ListenerContext from "../../voiceassistance/listener/ListenerContext";
-import {askAi} from '../userProfile/users'
+
 import { useContext } from "react";
-import SpeakerContext from "../../voiceassistance/speaker/SpeakerContext";
+import { MicOff } from "lucide-react";
+import { MicIcon } from "../icons";
 
 
-const Listener=()=>{
-    const {transcript,resetTranscript,startListening,stopListening}:any=useContext(ListenerContext);
-
-    const {startSpeaking,stopSpeaking} :any=useContext(SpeakerContext)
-    
-    const [isListening,setIsListening]=useState(false);
-     const [isSpeaking,setIsSpeaking]=useState(false);
-const [text,setText]=useState("");
+const Listener=({id,active,setActive,action}:any)=>{
+    const {stopSpeaking,text,setText, isListening,setIsListening,isSpeaking,setIsSpeaking  ,transcript,resetTranscript,startListening,stopListening}:any=useContext(ListenerContext);
+  
 
 
 
-   
-
-
-useEffect(()=>{
+    useEffect(()=>{
     if(!isListening)return;
 const check=setInterval(()=>{
 if(transcript &&transcript===text){getResponseAI()}
@@ -27,10 +20,6 @@ else { if(transcript&&isSpeaking){
     console.log("stop saying and start listening");
 
    stopSpeaking();
-
-
-
-   
     setIsSpeaking(false);
 }         // if there is interupt
 
@@ -41,19 +30,43 @@ return ()=>clearInterval(check);
 
 })
 
+
+
 const getResponseAI=async()=>{
-    resetTranscript();
-   let res:any= await askAi(text);
-   
-setIsSpeaking(true);
-startListening();
-startSpeaking(res);
 
-    
+  resetTranscript();
+  switch (text.trim().toLowerCase()) {
 
+ case "stop speaking":
+    stopSpeaking();
+    setIsSpeaking(false);
+       return;
 
+  case "stop listening":
+    stopListening();
+    setIsListening(false);
+       return;
 
-    }
+case "switch page" :  
+    if(id==="page" && !active)setActive(true);
+    else if(id==="app" && active) setActive(false);
+     setText(""); 
+     return;
+
+case "switch app": 
+    if(id==="app" && !active)setActive(true);
+    else if(id==="page" && active) setActive(false); 
+    setText("");
+    return;
+  }                                                                                                                                                                                
+
+     
+if(!active)return;
+
+  action(text);
+  setText("");
+}
+
 
 
 
@@ -64,13 +77,12 @@ startSpeaking(res);
 
 
     return<>
-  
+    {active && text ? <div className="listener-text-bubble">{text}</div> : <></>}
 {   // 1. for start listening , 2.  showing listening onclick stop listening and saying,  3. for showing speaking and onclick stop listening and saying
-!isListening?<button   className="btn btn-info text-bg-color" id="mic_btn"  onClick={async()=>{   await navigator.mediaDevices.getUserMedia({ audio: true });setIsListening(true);startListening()}}>start asking</button>
-:!isSpeaking?<button className="btn btn-primary text-bg-color" id="mic_btn" onClick={()=>{stopListening();setIsListening(false)}}>listenig</button>
-:<button className="btn btn-danger text-bg-color" id="mic_btn" onClick={()=>{stopListening();setIsListening(false)}}>stop listening</button>
+!isListening?<span   className="btn btn-info text-bg-color" id="mic_btn"  onClick={async()=>{   await navigator.mediaDevices.getUserMedia({ audio: true });setIsListening(true);startListening()}}><MicOff /></span>
+:<button className="btn btn-primary text-bg-color" id="mic_btn" onClick={()=>{stopListening();setIsListening(false)}}><MicIcon/></button>
 }
-{isListening?<div id="mic_x_btn" onClick={resetTranscript}>X</div>:<></>}
+
  
     
     </>
@@ -78,3 +90,6 @@ startSpeaking(res);
 
 
 export default Listener;
+
+
+

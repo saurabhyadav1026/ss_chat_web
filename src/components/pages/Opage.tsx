@@ -24,7 +24,7 @@ return<>
           <div className="page-empty-state">
             <span className="placeholder-chip">Ready to chat</span>
             <h2>Select a conversation</h2>
-            <p>Choose a chat from the left panel to open the thread, or search for sofghrtgkj;kot5g;[rllmeone new to start talking.</p>
+           
           </div>
         ) : null}
         <Outlet />

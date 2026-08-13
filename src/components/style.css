@@ -1,68 +1,76 @@
-/* From Uiverse.io by pathikcomp */ 
-.main > .inp {
-  display: none;
-}
+/* ============================================================
+   SHARED COMPONENT STYLES  (duplicates menu but kept for
+   components that import this file directly)
+   ============================================================ */
+
+/* Hidden checkbox toggle */
+.main > .inp { display: none; }
+
+/* ─── Trigger ────────────────────────────────────────────── */
 .main {
-  font-weight: 800;
-
-  padding: 3px 15px;
-  border-radius: 10px;
-
+  font-weight: 700;
+  font-size: .88rem;
+  padding: .3rem 1rem;
+  border-radius: var(--radius-lg);
   display: flex;
   align-items: center;
-  height: 2.5rem;
+  height: 2.4rem;
   width: 12rem;
   position: relative;
   z-index: 30;
   cursor: pointer;
   justify-content: space-between;
+  color: var(--text-primary);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-medium);
+  transition: background var(--dur-fast) ease, border-color var(--dur-fast) ease;
 }
-.main > .inp:checked {
-  transform: rotateX(180deg);
+.main:hover {
+  background: var(--bg-surface-2);
+  border-color: var(--border-strong);
 }
+.main > .inp:checked { transform: rotateX(180deg); }
 
+/* ─── Dropdown ───────────────────────────────────────────── */
 .menu-container {
-  background-color: white;
-
-  border-radius: 10px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-4);
   position: absolute;
   z-index: 31;
   width: 100%;
   left: 0;
-  top: 130%;
+  top: calc(100% + 8px);
   overflow: hidden;
-  clip-path: inset(0% 0% 0% 0% round 10px);
-  transition: all 0.4s;
+  clip-path: inset(0% 0% 0% 0% round var(--radius-xl));
+  transition: clip-path 350ms var(--ease-out);
 }
 
 .menu-list {
-  --delay: 0.4s;
-  --trdelay: 0.15s;
-  padding: 8px 10px;
-  border-radius: inherit;
-  transition: background-color 0.2s 0s;
+  --delay: 0.35s;
+  --trdelay: 0.12s;
+  display: flex;
+  align-items: center;
+  padding: .65rem .9rem;
+  border-bottom: 1px solid var(--border);
   position: relative;
-  transform: translateY(30px);
+  transform: translateY(20px);
   opacity: 0;
+  color: var(--text-secondary);
+  font-size: .88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--dur-fast) ease, color var(--dur-fast) ease;
 }
-
-.menu-list::after {
-  content: "";
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  height: 1px;
-  background-color: rgba(0, 0, 0, 0.3);
-  width: 95%;
-}
-
-.menu-list:hover {
-  background-color: rgb(223, 223, 223);
-}
+.menu-list:last-child { border-bottom: 0; }
+.menu-list::after     { display: none; }
+.menu-list:hover      { background: var(--bg-surface-2); color: var(--text-primary); }
 
 .inp:checked ~ .menu-container {
-  clip-path: inset(10% 50% 90% 50% round 10px);
+  clip-path: inset(10% 50% 90% 50% round var(--radius-xl));
 }
 
 .inp:not(:checked) ~ .menu-container .menu-list {
@@ -71,40 +79,32 @@
 }
 
 .inp:not(:checked) ~ .menu-container .menu-list:nth-child(1) {
-  transition:
-    transform 0.4s var(--delay),
-    opacity 0.4s var(--delay);
+  transition: transform .35s var(--delay), opacity .35s var(--delay);
 }
-
 .inp:not(:checked) ~ .menu-container .menu-list:nth-child(2) {
   transition:
-    transform 0.4s calc(var(--delay) + (var(--trdelay) * 1)),
-    opacity 0.4s calc(var(--delay) + (var(--trdelay) * 1));
+    transform .35s calc(var(--delay) + var(--trdelay)),
+    opacity   .35s calc(var(--delay) + var(--trdelay));
 }
-
 .inp:not(:checked) ~ .menu-container .menu-list:nth-child(3) {
   transition:
-    transform 0.4s calc(var(--delay) + (var(--trdelay) * 2)),
-    opacity 0.4s calc(var(--delay) + (var(--trdelay) * 2));
+    transform .35s calc(var(--delay) + var(--trdelay) * 2),
+    opacity   .35s calc(var(--delay) + var(--trdelay) * 2);
 }
-
 .inp:not(:checked) ~ .menu-container .menu-list:nth-child(4) {
   transition:
-    transform 0.4s calc(var(--delay) + (var(--trdelay) * 3)),
-    opacity 0.4s calc(var(--delay) + (var(--trdelay) * 3));
+    transform .35s calc(var(--delay) + var(--trdelay) * 3),
+    opacity   .35s calc(var(--delay) + var(--trdelay) * 3);
 }
 
-.bar-inp {
-  -webkit-appearance: none;
-  display: none;
-  visibility: hidden;
-}
+/* ─── Hamburger icon ─────────────────────────────────────── */
+.bar-inp { -webkit-appearance: none; display: none; visibility: hidden; }
 
 .bar {
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
   height: 50%;
-  width: 20px;
+  width: 18px;
   flex-direction: column;
   gap: 3px;
 }
@@ -113,10 +113,10 @@
   --transform: -25%;
   display: block;
   width: 100%;
-  height: 3px;
-  border-radius: 50px;
-  background-color: rgb(35, 34, 34);
-  transition: all 0.4s;
+  height: 2.5px;
+  border-radius: var(--radius-pill);
+  background: var(--text-secondary);
+  transition: all 350ms var(--ease-out);
   position: relative;
 }
 
@@ -124,12 +124,10 @@
   transform-origin: top right;
   transform: translateY(var(--transform)) rotate(-45deg);
 }
-
 .inp:not(:checked) ~ .bar > .middle {
   transform: translateX(-50%);
   opacity: 0;
 }
-
 .inp:not(:checked) ~ .bar > .bottom {
   transform-origin: bottom right;
   transform: translateY(calc(var(--transform) * -1)) rotate(45deg);

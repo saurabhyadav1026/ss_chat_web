@@ -17,9 +17,7 @@ const Profile = () => {
   }, []);
 
   const logOut = () => {
-    setLogout();
-    alert("logout successfully");
-    navigate("/user/login");
+    if(setLogout())navigate("/user/login");
   };
 
   return (

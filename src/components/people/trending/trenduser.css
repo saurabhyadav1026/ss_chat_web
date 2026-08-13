@@ -1,26 +1,39 @@
-﻿.trend-user-card {
+/* ============================================================
+   TRENDING USER CARD
+   ============================================================ */
+
+.trend-user-card {
   display: flex;
   gap: 1rem;
   padding: 1rem;
-  border-radius: 28px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), transparent), var(--card-gradient), var(--card-underlay);
-  border: 1px solid var(--border);
-  transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease, background-color 180ms ease;
+  border-radius: var(--radius-xl);
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  box-shadow: var(--shadow-1);
+  transition:
+    transform var(--dur-base) var(--ease-spring),
+    border-color var(--dur-base) ease,
+    box-shadow var(--dur-base) ease,
+    background-color var(--dur-base) ease;
 }
 
 .trend-user-card:hover {
   transform: translateY(-4px);
-  border-color: rgba(44, 201, 167, 0.26);
-  box-shadow: 0 20px 34px rgba(0, 0, 0, 0.14);
+  border-color: var(--border-medium);
+  box-shadow: var(--shadow-3);
+  background: var(--bg-surface-2);
 }
 
 .trend-user-card__media {
-  width: 88px;
-  height: 88px;
-  border-radius: 26px;
+  width: 80px;
+  height: 80px;
+  border-radius: var(--radius-xl);
   flex-shrink: 0;
-  border: 1px solid var(--border);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  border: 1px solid var(--border-medium);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  box-shadow: var(--shadow-1);
 }
 
 .trend-user-card__body {
@@ -30,74 +43,98 @@
 
 .trend-user-card__name {
   color: var(--headline);
-  font-family: "Space Grotesk", "Segoe UI", sans-serif;
-  font-size: 1.1rem;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 1.05rem;
   font-weight: 700;
-  line-height: 1.2;
+  line-height: 1.25;
 }
 
 .trend-user-card__handle {
-  color: var(--muted);
-  margin: 0.28rem 0 0.85rem;
-  font-size: 0.92rem;
-  letter-spacing: 0.02em;
-  word-break: break-word;
+  color: var(--text-secondary);
+  margin: 0.25rem 0 0.8rem;
+  font-size: 0.86rem;
+  letter-spacing: 0.01em;
+  word-break: break-all;
 }
 
 .trend-user-card__meta {
   display: flex;
-  gap: 0.45rem;
+  gap: 0.4rem;
   flex-wrap: wrap;
-  margin-bottom: 0.95rem;
+  margin-bottom: 0.8rem;
 }
 
 .trend-user-card__badge {
-  padding: 0.34rem 0.62rem;
-  border-radius: 999px;
-  background: var(--surface-soft);
+  padding: 0.3rem 0.6rem;
+  border-radius: var(--radius-pill);
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
   color: var(--accent-warm);
-  font-size: 0.74rem;
-  font-weight: 800;
+  font-size: 0.72rem;
+  font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
 }
 
 .trend-user-card__actions {
   display: flex;
-  gap: 0.65rem;
+  gap: 0.5rem;
 }
 
 .trend-user-card__button {
   flex: 1;
   border: 0;
-  border-radius: 15px;
-  padding: 0.78rem 0.9rem;
+  border-radius: var(--radius-lg);
+  padding: 0.65rem 0.85rem;
   cursor: pointer;
-  transition: transform 160ms ease, box-shadow 160ms ease, opacity 160ms ease;
-  font-size: 0.9rem;
-  font-weight: 800;
+  font-size: 0.86rem;
+  font-weight: 700;
+  text-align: center;
+  transition:
+    transform var(--dur-fast) ease,
+    box-shadow var(--dur-fast) ease,
+    background var(--dur-fast) ease,
+    color var(--dur-fast) ease;
 }
 
 .trend-user-card__button:hover {
   transform: translateY(-1px);
 }
 
+.trend-user-card__button:active {
+  transform: translateY(0);
+}
+
 .trend-user-card__button--follow {
-  background: rgba(44, 201, 167, 0.18);
-  color: var(--text);
+  background: rgba(99, 102, 241, 0.12);
+  border: 1px solid rgba(99, 102, 241, 0.22);
+  color: var(--accent-alt);
+}
+.trend-user-card__button--follow:hover {
+  background: rgba(99, 102, 241, 0.18);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.15);
 }
 
 .trend-user-card__button--message {
-  background: rgba(125, 211, 252, 0.14);
-  color: var(--text);
+  background: rgba(34, 211, 238, 0.10);
+  border: 1px solid rgba(34, 211, 238, 0.2);
+  color: var(--accent-cool);
+}
+.trend-user-card__button--message:hover {
+  background: rgba(34, 211, 238, 0.16);
+  box-shadow: 0 4px 12px rgba(34, 211, 238, 0.15);
 }
 
 .trend-user-card__button--profile {
   width: 100%;
-  margin-top: 0.7rem;
-  background: linear-gradient(135deg, rgba(240, 182, 101, 0.95), rgba(255, 214, 153, 0.92));
-  color: #2d1a02;
-  box-shadow: 0 14px 24px rgba(240, 182, 101, 0.2);
+  margin-top: 0.6rem;
+  background: var(--accent);
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(99, 102, 241, 0.25);
+}
+.trend-user-card__button--profile:hover {
+  box-shadow: 0 8px 20px rgba(99, 102, 241, 0.35);
+  filter: brightness(1.05);
 }
 
 @media (max-width: 680px) {
@@ -106,8 +143,8 @@
   }
 
   .trend-user-card__media {
-    width: 74px;
-    height: 74px;
+    width: 64px;
+    height: 64px;
   }
 
   .trend-user-card__actions {

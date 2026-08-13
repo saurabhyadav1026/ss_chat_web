@@ -1,5 +1,6 @@
 import { useState } from "react";
 import api from "../../api/api";
+import { toast } from "react-toastify";
 
 const ForgetPassword = () => {
   const [emailId, setEamailId] = useState("");
@@ -9,12 +10,12 @@ const ForgetPassword = () => {
       api
         .get("/logging/forgetpassword", { params: { email: emailId } })
         .then((res) => {
-          if (res.data.status) alert("The password reset link had send to you . Check your mail");
-          else alert("invalid email or not registered, try again with valid mail.");
+          if (res.data.status) toast.info("The password reset link had send to you . Check your mail");
+          else toast.warn("invalid email or not registered, try again with valid mail.");
         })
         .catch((err: any) => {
           console.log(err);
-          alert("invalid email or not registered, try again with valid mail.");
+          toast.error("invalid email or not registered, try again with valid mail.");
         });
   };
 

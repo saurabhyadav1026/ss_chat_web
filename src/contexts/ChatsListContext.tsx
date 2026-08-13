@@ -1,78 +1,132 @@
 ﻿
-import { createContext,useState, useContext, useEffect} from 'react';
+import { createContext, useContext, useEffect } from 'react';
 import api from '../api/api';
 import UserContext from './UserContext';
+import queryClient from '@/lib/queryClient';
+import { useInfiniteQuery } from '@tanstack/react-query';
 
-const ChatsListContext =createContext({});
+const ChatsListContext = createContext({});
 
-export const ChatsListContextProvider=({children}:any)=>{
-
-    const [chatsList,updateChatsList]:any =useState({});
-
-
-
-     const [aiChatsList,setAIChatsList]=useState({});
-    const {activeUser}:any=useContext(UserContext);
+export const ChatsListContextProvider = ({ children }: any) => {
 
 
 
 
 
+    const { activeUser ,isInternetConnection}: any = useContext(UserContext);
 
 
 
-    
 
-    const setChatsList:any=()=>{
-     if(activeUser._id){
-        
-        api.get("/users/getchatslist")
-        .then(res=>{updateChatsList(res.data);
-          
-         })
-        .catch(err=>console.log(err))
-        
-        api.get("/ai/textassistance/rooms")
-        .then(res=>{setAIChatsList(res.data);
-            
-         })
-        .catch(err=>{console.log(err);setAIChatsList({})})
-        
+
+
+
+
+
+
+    const fetchChatsList = async (page: number) => {
+        return await api.get("/users/getchatslist?page=" + page)
+            .then(res => {return res.data})
+            .catch(() => [])
     }
-        else{
-             updateChatsList({});}
+    const fetchAiChatsList = async (page: number) => {
+        return await api.get("/ai/textassistance/rooms?page=" + page)
+            .then(res => res.data)
+            .catch(() => [])
     }
 
-const addAiChatRoom=(room:any)=>{
-    setAIChatsList((prev:any)=>({...prev,[room._id]:room}))
+
+    const { data: chatsList,
+        fetchNextPage: fetchNextChatPage,
+        hasNextPage: hasNextChatPage,
+        isFetchingNextPage: isChatListLoading, }: any = useInfiniteQuery({
+            queryKey: ["chatsList"],
+            queryFn: ({ pageParam }) => fetchChatsList(pageParam),
+            initialPageParam: 1,
+            getNextPageParam: (lastPage) => lastPage.hasMore?lastPage.nextPage+1:undefined
+        })
+
+    const updateChatsList = () => {
+       if(isInternetConnection) queryClient.invalidateQueries({ queryKey: ["chatsList"] })
+    }
+
+    const { data: aiChatsList,
+        fetchNextPage: fetchNextAiChatPage,
+        hasNextPage: hasNextAiChatPage,
+        isFetchingNextPage: isAiChatListLoading, }: any = useInfiniteQuery({
+            queryKey: ["aiChatsList"],
+            queryFn: ({ pageParam }) => fetchAiChatsList(pageParam),
+            initialPageParam: 1,
+            getNextPageParam: (lastPage) =>lastPage.hasMore?lastPage.nextPage+1:undefined
+        })
+
+    const updateAiChatsList = () => {
+        if(isInternetConnection) queryClient.invalidateQueries({ queryKey: ["chatsList"] })
+    }
+
+
+
+    const addRoom = (oldData: any, room: any) => {
+        if (!oldData) return oldData;
+
+        return {
+            ...oldData,
+            pages: oldData.pages.map((page: any, index: number) => {
+                if (index != 0) return page;
+                return {
+                    roomsIdList: [room._id, ...page.roomsIdList],
+                    rooms: { ...page.rooms, room }
+                }
+            })
+        }
+    }
+
+ const updateRoom = (oldData: any, room: any) => {
+        if (!oldData) return oldData;
+
+        
+           const pages= oldData.pages.map((page: any) => {
+                if (!page.rooms[room._id]) return page;
+                const {[room._id]:_ ,...restRoom}=page.rooms;
+                return {
+                    roomsIdList:page.roomsIdList.filter((id:string)=>id!==room._id),
+                    rooms:  restRoom 
+                }
+            })
+pages[0]={
+    roomsIdList:[room._id , ...pages[0].roomsIdList],
+    rooms:{...pages[0].rooms , [room._id]:room}
+
 }
-
-
-
-useEffect(()=>{
-
-const func=async()=>{
-    await setChatsList();
-}
-    func();
-
-},[activeUser])
-
-    const setRoom=(room:any)=>{
-       
-       if(chatsList[room._id]) updateChatsList({ ...chatsList,[room._id]:{...chatsList[room._id],lastMessage:room.lastMessage} })
-       else updateChatsList({...chatsList,[room._id]:room})
-
+            return {
+               ...oldData,
+               pages
+            }
+        
     }
 
-    const setLastMessage=(msg:any)=>{
-         updateChatsList((prev: any) => ({ ...prev, [msg.roomId]:{...prev[msg.roomId],lastMessage:msg }}))
 
+
+    const updateChatRoom=async(room:any)=>{
+
+    await     queryClient.setQueryData(["chatsList"],(oldData:any)=>updateRoom(oldData,room));
     }
-    
+
+
+
+
+    useEffect(() => {
+        updateChatsList();
+        updateAiChatsList();
+    }, [activeUser])
+
+   
+
+  
+
     // to set the chatlist   yani chatroom  by getfriendList or getchatList
 
-    return < ChatsListContext.Provider value={{chatsList,setChatsList,aiChatsList,setAIChatsList,setLastMessage,setRoom,addAiChatRoom}}>{children}</ChatsListContext.Provider>
+    return < ChatsListContext.Provider value={{ chatsList, updateChatRoom, aiChatsList,  }}>{children}</ChatsListContext.Provider>
 }
 
 export default ChatsListContext;

@@ -1,23 +1,12 @@
-import { useEffect, useState } from "react";
-import { funChatSocket } from "../../contexts/socketcontext/SocketContext";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import { Globe2, LockKeyhole, Sparkles } from "lucide-react";
-import CreatePrivateRoom from "./CreatePrivateRoom";
-import CreatePublicRoom from "./CreatePublicRoom";
 import "./create-room.css";
+import CreateRoom from "./CreateRoom";
 
 const CreateFunRoom=()=>{
 
- const [roomType,setRoomType]:any=useState("public")
+ const [roomType,setRoomType]:any=useState("public");
 
- const navigate=useNavigate()
-
-useEffect(()=>{
-    funChatSocket.on("roomJoined",(data_)=>{
-navigate("/o/funchats/"+data_.roomCode)
-    })
-    return ()=>{funChatSocket.off("roomCreated")}
-})
 
 return<>
 <div className="create-room-page">
@@ -46,7 +35,7 @@ return<>
         </div>
 
         <div className="create-room-card__body">
-            {roomType==="public"?<CreatePublicRoom/>:<CreatePrivateRoom/>}
+           <CreateRoom roomType={roomType}/>
         </div>
     </div>
 </div>

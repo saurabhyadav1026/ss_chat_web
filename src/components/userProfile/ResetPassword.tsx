@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import api from "../../api/api";
 import useBinaryState from "../../hook/states/useBinaryState";
 import { CloseEyeIcon, OpenEyeIcon } from "../icons";
+import { toast } from "react-toastify";
 
 const ResetPassword = () => {
   const [resetPasswordInput, setResetPasswordInput]: any = useState("");
@@ -26,20 +27,23 @@ const ResetPassword = () => {
 
   const setPassword = async () => {
     if (resetPasswordInput !== resetConfirmPasswordInput) {
-      alert("password not match.");
+      toast.warn("password not match.");
       return;
     }
-    api
+ const res = await   api
       .get("logging/setpassword", { params: { password: resetPasswordInput }, headers: { Authorization: `bearer ${token}` } })
-      .then(() => {
-        alert("Password change successfully.");
-        navigate("/user");
-      })
-      .catch((err: any) => {
-        console.log(err);
-        alert("Error");
+      .then((res) => res.data.status)
+      .catch(() => {false;
         navigate("/user");
       });
+      if(res){
+         toast.success("Password change successfully.");
+     
+      }
+      else{
+        toast.error("failed to reset password try again")
+           navigate("/user");
+      }
   };
 
   const [p_eye, set_p_eye] = useBinaryState("password", "text");

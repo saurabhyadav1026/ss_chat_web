@@ -1,6 +1,7 @@
 
 import SpeechRecognition, { useSpeechRecognition } from "react-speech-recognition";
-import { createContext,useEffect } from "react";
+import { createContext,useContext,useEffect, useState } from "react";
+import SpeakerContext from "../speaker/SpeakerContext";
 
 
 
@@ -21,6 +22,16 @@ setText
 export const ListenerProvider=({children}:any)=>{
 
 const {transcript,resetTranscript,listening}:any=useSpeechRecognition();
+
+
+    const {startSpeaking,stopSpeaking} :any=useContext(SpeakerContext)
+    
+    const [isListening,setIsListening]=useState(false);
+     const [isSpeaking,setIsSpeaking]=useState(false);
+const [text,setText]=useState("");
+
+
+
 
   
 // for continuous listening
@@ -75,7 +86,7 @@ const stopListening=()=>{
 }
 
 
-    return <ListenerContext.Provider value={{startListening,stopListening,transcript,resetTranscript}}>{children}</ListenerContext.Provider>
+    return <ListenerContext.Provider value={{startSpeaking,stopSpeaking,text,setText, isListening,setIsListening,isSpeaking,setIsSpeaking  ,startListening,stopListening,transcript,resetTranscript}}>{children}</ListenerContext.Provider>
 
 
 

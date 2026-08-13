@@ -3,8 +3,8 @@ import './api/reqInterceptor'
 import ProfileSection from './components/userProfile/ProfileSection'
 
 import PicShow from './components/userProfile/PicShow';
-
-
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import UserProfile from './components/userProfile/UserProfile';
 import { Route, Routes } from 'react-router-dom';
 import Loggin from './components/userProfile/Loggin';
@@ -28,6 +28,8 @@ import EditProfile from './components/userProfile/EditProfilePage';
 import BlanlOutlet from './components/userProfile/BlankOutlet';
 import CallPage from './components/call/CallPage';
 import MainNotificationPage from './components/pages/notification-pages/MainNotificationPage';
+import VoiceAssistancepage from './components/pages/voic-assistance-page/VoiceAssistancepage';
+import FullPage from './components/pages/FullPage';
 export const App = () => {
   return <>
   <MainNotificationPage/>
@@ -83,9 +85,11 @@ export const App = () => {
          <Route path=':page2Id' element={<ChatPage />} />
 
         </Route>
-
+ 
         <Route />
       </Route>
+
+      <Route path='/voice' element={<FullPage element={<VoiceAssistancepage/>}/>}></Route>
 
 <Route path='/o' element={<Mpage />}>
   <Route  path='funchats' element={<Opage   element={<FunChatPage1/>} />} >
@@ -102,6 +106,17 @@ export const App = () => {
     </Routes>
 
     <PicShow />
+
+    <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        pauseOnHover
+        draggable
+        theme="light"
+      />
   </>
 }
 export default App;

@@ -3,6 +3,7 @@ import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import SpeakerContext from "../voiceassistance/speaker/SpeakerContext";
 import { BlueTickIcon, Copy, Dislike, DoubleTickIcon, Edit, LikeRes, SingleTickIcon, SpeakerIcon, StopspeakIcon, Trash_binIcon, UnsendIcon } from "./icons";
+import { toast } from "react-toastify";
 
 const ReqShow = (props: any) => {
   const [isSpeaking, setIsSpeaking] = useState(false);
@@ -114,5 +115,5 @@ const ReqShow = (props: any) => {
 export default ReqShow;
 
 const copyReq = (r: any) => {
-  navigator.clipboard.writeText(r)      //.then(() => alert(" text coppied."));
+  navigator.clipboard.writeText(r).then(() => toast.info(" text coppied."));
 };

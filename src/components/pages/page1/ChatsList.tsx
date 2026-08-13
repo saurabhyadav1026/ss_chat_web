@@ -1,29 +1,18 @@
 import { useContext,  useEffect,  useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import ChatsListContext from "../../../contexts/ChatsListContext";
 import SearchBar from "../../left_nav/SearchBar";
 import { socket } from "../../../contexts/socketcontext/SocketContext";
+import { toast } from "react-toastify";
 //import { getFriendChatFile } from "../../../filehandeling/folder/chats";
 
 const ChatsList = () => {
   const [searchInput, setSearchInput]: any = useState("");
-  const { chatsList ,setRoom}: any = useContext(ChatsListContext);
+  const { chatsList, updateChatRoom}: any = useContext(ChatsListContext);
   
   const navigate = useNavigate();
-//const [chatItems,setChatItems]:any=useState(Object.values(chatsList || {}))
 
-  
-const chatItems=Object.values(chatsList || {}).sort((r1:any,r2:any)=>r2.lastMessage._id.localeCompare(r1.lastMessage._id));
- 
- 
-useEffect(()=>{
-const func=async ()=>{
-  
-//const chatfile=await getFriendChatFile("sbhydv");,
-}
-func()
-},[])
-
+  const { page2Id:activeRoomId } = useParams();
 
 /* 
 
@@ -50,21 +39,19 @@ setChatItems(rooms)
 
   useEffect(() => {
     const receive = (data:any) => {
-    
-            const { room, message } = data;
-
-        setRoom(room);
-            socket.emit("u/chats/doOneDoubleTick", { msgId: message._id, roomId: message.roomId });
-
-
-    
+            const { room ,message} = data;       
+          updateChatRoom(room);   
+          if(activeRoomId !==room._id ) {
+            toast.info(room.receiver.name +": "+ message.text)
+          }
+          
     }
 
-      socket.on("u/chats/receiveMsg", receive)
+      socket.on("u/chats/receiveMsgNotify", receive)
     return () => {
-      socket.off("u/chats/receiveMsg",receive);
+      socket.off("u/chats/receiveMsgNotify",receive);
     };
-  });
+  },[]);
  
 
 
@@ -81,12 +68,15 @@ setChatItems(rooms)
       <SearchBar searchInput={searchInput} _placeholder="Search chats..." setSearchInput={setSearchInput} />
 
       <div className="list-panel__body scrollbar-only-rod">
-        {chatItems.length ? (
-          chatItems.map((u: any, i: any) => {
+       {console.log(chatsList)}
+    { chatsList &&chatsList.pages && chatsList.pages[0].roomsIdList.length ? (
+          chatsList?.pages.map((page:any) => page.roomsIdList.map((id:any, i:number)=>{
+            const u=page.rooms[id];
             console.log(u)
+            if(!u)return<></>
             const receiver = u.receiver || {};
             const avatarUrl = receiver.dp || u.dp || u.roomDP || "";
-            const lastMessageText = u.lastMessage?.text || "";
+            const lastMessageText:any =  u.lastMessage.text ||  "";
 
             return<>
             <article key={u._id || i} className="list-card">
@@ -123,7 +113,9 @@ setChatItems(rooms)
               </button>
             </article>
             </>
-})
+} )
+          
+)
         ) : (
           <div className="list-empty-state">Your conversations will appear here once you start messaging.</div>
         )}

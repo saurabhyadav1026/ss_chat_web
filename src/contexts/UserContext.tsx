@@ -1,56 +1,101 @@
 ﻿
-import { createContext,  useEffect, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 
-import { socket } from './socketcontext/SocketContext.tsx';
+
 
 
 import api from '../api/api.ts';
+import { useQuery } from '@tanstack/react-query';
+import queryClient from '@/lib/queryClient.ts';
+import { toast } from 'react-toastify';
+import { socket } from './socketcontext/SocketContext.tsx';
 
 const UserContext = createContext({});
 
 export const UserContextProvider = ({ children }: any) => {
-  const [activeUser, updateActiveUser]: any = useState({});
-  const [isUserLoading,setUserLoading]:any=useState(true)
+  const [isInternetConnection, setInternetConnection]: any = useState(false);
+
+
+
+  useEffect(() => {
+    const checkInternetConnection = async () => {
+      await api.get("/checkhealth").then((res) => {
+        if (res.data && res.data.status) setInternetConnection(true);
+      }
+      ).catch((err: Error) => {
+        setInternetConnection(false);
+        console.log(err)
+        
+      })
+
+    }
+
+    checkInternetConnection();
+  }, [])
+
+  const fetchActiveUser = async () => {
+    if (!isInternetConnection) return;
+    return await api.get("/users/verifyme")
+      .then((res: any) => {
+        if (res.data.status) {
+          return res.data.user;
+        }
+        else return { username: 'sbhunk', name: "Loggin here", dp: "https://ik.imagekit.io/sbhtechhub/no_dp.jpg", loggin_token: "" }
+
+      })
+      .catch((err: any) => {
+        console.log(err)
+        return { username: 'sbhunk', name: "Loggin here", dp: "https://ik.imagekit.io/sbhtechhub/no_dp.jpg", loggin_token: "" }
+      })
+  }
+  const { data: activeUser, isFetching, isPending }: any = useQuery({ queryKey: ["activeUser"], queryFn: fetchActiveUser })
 
 
 
   const setActiveUser: any = async () => {
-    setUserLoading(true);
-   console.log("we update the user")
-    socket.disconnect();
+    if (isInternetConnection) queryClient.invalidateQueries({ queryKey: ["activeUser"] });
+  }
+
+  useEffect(() => {
+    const setActiveUser: any = async () => {
+      if (isInternetConnection) await queryClient.invalidateQueries({ queryKey: ["activeUser"] });
+    }
 
 
-    await api.get("/users/verifyme")
+    setActiveUser();
+    if (isInternetConnection) api.get("/users/verifyme")
       .then((res: any) => {
         if (res.data.status) {
-          updateActiveUser(res.data.user);
-         
-          socket.auth={token:res.data.token}
-         socket.connect();
+          socket.auth = { token: res.data.token }
+          socket.connect();
+          console.log(res.data.user);
+          return res.data.user;
         }
       })
-      .catch((err: any) => {
-        console.log(err)
-        updateActiveUser({ username: 'sbhunk', name: "Loggin here", dp: "https://ik.imagekit.io/sbhtechhub/no_dp.jpg", loggin_token: "" })
-      })
-       
-      setUserLoading(false)
-      console.log("user update")
+  }, [isInternetConnection])
+
+
+  const setLogout = async () => {
+    await api.post("users/logoutme").then(async (res) => {
+      if (res.data.status) { await setActiveUser(); }
+      else {
+
+        toast.success("Logout Successfully.")
+      }
+    }
+    ).catch((err: any) => {
+      console.log(err)
+      queryClient.removeQueries({ queryKey: ["activeuser"] });
+      toast.info("No internet connection .so, Failed to logout completely , you should have to clear browser cookies for it.")
+
+    })
+
+
+
+    return true;
   }
 
-useEffect(()=>{
-  setActiveUser();
-},[])
-
-  const setLogout = async() => {
-    updateActiveUser({ username: 'sbhunk', name: "Loggin here", dp: "https://ik.imagekit.io/sbhtechhub/no_dp.jpg", loggin_token: "" })
-    await api.post("users/logoutme");
-
-
-    return
-  }
-
-  return < UserContext.Provider value={{ setLogout, activeUser, setActiveUser,isUserLoading }}>{children}</UserContext.Provider>
+  return < UserContext.Provider value={{ setLogout, activeUser, setActiveUser, isUserLoading: (isFetching || isPending), isInternetConnection }}>{children}</UserContext.Provider>
 }
 
 export default UserContext;
