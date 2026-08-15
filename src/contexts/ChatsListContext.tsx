@@ -13,7 +13,7 @@ export const ChatsListContextProvider = ({ children }: any) => {
 
 
 
-    const { activeUser ,isInternetConnection}: any = useContext(UserContext);
+    const { activeUser, isInternetConnection }: any = useContext(UserContext);
 
 
 
@@ -26,7 +26,7 @@ export const ChatsListContextProvider = ({ children }: any) => {
 
     const fetchChatsList = async (page: number) => {
         return await api.get("/users/getchatslist?page=" + page)
-            .then(res => {return res.data})
+            .then(res => { return res.data })
             .catch(() => [])
     }
     const fetchAiChatsList = async (page: number) => {
@@ -43,25 +43,27 @@ export const ChatsListContextProvider = ({ children }: any) => {
             queryKey: ["chatsList"],
             queryFn: ({ pageParam }) => fetchChatsList(pageParam),
             initialPageParam: 1,
-            getNextPageParam: (lastPage) => lastPage.hasMore?lastPage.nextPage+1:undefined
+            getNextPageParam: (lastPage) => lastPage.hasMore ? lastPage.nextPage + 1 : undefined
         })
 
-    const updateChatsList = () => {
-       if(isInternetConnection) queryClient.invalidateQueries({ queryKey: ["chatsList"] })
+    const updateChatsList = async() => {
+        if (isInternetConnection) { await queryClient.invalidateQueries({ queryKey: ["chatsList"] })
+        alert("We updting chats list")
+        }
     }
 
     const { data: aiChatsList,
         fetchNextPage: fetchNextAiChatPage,
         hasNextPage: hasNextAiChatPage,
-        isFetchingNextPage: isAiChatListLoading, }: any = useInfiniteQuery({
+        isFetchingNextPage: isAiChatListLoading }: any = useInfiniteQuery({
             queryKey: ["aiChatsList"],
             queryFn: ({ pageParam }) => fetchAiChatsList(pageParam),
             initialPageParam: 1,
-            getNextPageParam: (lastPage) =>lastPage.hasMore?lastPage.nextPage+1:undefined
+            getNextPageParam: (lastPage) => lastPage.hasMore ? lastPage.nextPage + 1 : undefined
         })
 
     const updateAiChatsList = () => {
-        if(isInternetConnection) queryClient.invalidateQueries({ queryKey: ["chatsList"] })
+        if (isInternetConnection) queryClient.invalidateQueries({ queryKey: ["chatsList"] })
     }
 
 
@@ -81,35 +83,51 @@ export const ChatsListContextProvider = ({ children }: any) => {
         }
     }
 
- const updateRoom = (oldData: any, room: any) => {
+    const updateRoom = (oldData: any, room: any) => {
         if (!oldData) return oldData;
 
-        
-           const pages= oldData.pages.map((page: any) => {
-                if (!page.rooms[room._id]) return page;
-                const {[room._id]:_ ,...restRoom}=page.rooms;
-                return {
-                    roomsIdList:page.roomsIdList.filter((id:string)=>id!==room._id),
-                    rooms:  restRoom 
-                }
-            })
-pages[0]={
-    roomsIdList:[room._id , ...pages[0].roomsIdList],
-    rooms:{...pages[0].rooms , [room._id]:room}
+        let isfirst = false;
+        const pages = oldData.pages.map((page: any, index: number) => {
 
-}
-            return {
-               ...oldData,
-               pages
+
+            if (index == 0) {
+
+                if (page.rooms[room._id]) {
+                    isfirst = true;
+                return {
+                    roomsIdList: [room._id, ...page.roomsIdList.filter((id: string) => id !== room._id)],
+                    rooms: { ...page.rooms, [room._id]: room }
+
+                }
+                }
+                return {
+                    roomsIdList: [room._id, ...page.roomsIdList],
+                    rooms: { ...page.rooms, [room._id]: room }
+
+                }
             }
-        
+
+
+            if (!isfirst && !page.rooms[room._id]) return page;
+            const { [room._id]: _, ...restRoom } = page.rooms;
+            return {
+                roomsIdList: page.roomsIdList.filter((id: string) => id !== room._id),
+                rooms: restRoom
+            }
+        })
+       
+        return {
+            ...oldData,
+            pages
+        }
+
     }
 
 
 
-    const updateChatRoom=async(room:any)=>{
+    const updateChatRoom = async (room: any) => {
 
-    await     queryClient.setQueryData(["chatsList"],(oldData:any)=>updateRoom(oldData,room));
+        await queryClient.setQueryData(["chatsList"], (oldData: any) => updateRoom(oldData, room));
     }
 
 
@@ -120,13 +138,17 @@ pages[0]={
         updateAiChatsList();
     }, [activeUser])
 
-   
 
-  
+  useEffect(() => {
+        updateChatsList();
+        updateAiChatsList();
+    }, [])
+
+
 
     // to set the chatlist   yani chatroom  by getfriendList or getchatList
 
-    return < ChatsListContext.Provider value={{ chatsList, updateChatRoom, aiChatsList,  }}>{children}</ChatsListContext.Provider>
+    return < ChatsListContext.Provider value={{ chatsList, updateChatRoom, aiChatsList, }}>{children}</ChatsListContext.Provider>
 }
 
 export default ChatsListContext;

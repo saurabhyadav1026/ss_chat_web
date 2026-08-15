@@ -109,11 +109,11 @@ const setActiveChat=()=>{
     queryClient.setQueryData(["messages", activeChat._id], (oldData: any) => {
       if (!oldData) return oldData;
 
-
+console.log(message)
       return {
         ...oldData,
         pages: oldData.pages.map((page: any, index: number) => {
-          if (!page.rooms[message._id]) return page;
+          if (!page.rooms || !page.rooms[message._id]) return page;
           return {
             ...page,
             messagesIdList: oldData[index].messagesIdList.map((id: string) => id == message._id ? message._id : id)
@@ -312,7 +312,7 @@ const setActiveChat=()=>{
     };
 
     addMessage(msg);
-    updateChatRoom({...activeChat,["lastMessage"]:msg})
+    if(activeChat._id.slice(0,3)!=="new")updateChatRoom({...activeChat,["lastMessage"]:msg})
 
     const newMsg: any = {
       _id: newMsgId,
@@ -410,8 +410,7 @@ const setActiveChat=()=>{
                   ? "Scroll for more"
                   : "No more posts"}
             </div>
-            {
-              console.log(messages)}
+           
 
             {messages && messages.pages ? messages.pages.map((msg: any) => msg.messagesIdList.map((id: string, i: any): any => {
              

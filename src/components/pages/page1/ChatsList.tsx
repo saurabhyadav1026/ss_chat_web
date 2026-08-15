@@ -39,7 +39,8 @@ setChatItems(rooms)
 
   useEffect(() => {
     const receive = (data:any) => {
-            const { room ,message} = data;       
+            const { room ,message} = data;    
+            console.log(room)   
           updateChatRoom(room);   
           if(activeRoomId !==room._id ) {
             toast.info(room.receiver.name +": "+ message.text)
@@ -69,7 +70,7 @@ setChatItems(rooms)
 
       <div className="list-panel__body scrollbar-only-rod">
        {console.log(chatsList)}
-    { chatsList &&chatsList.pages && chatsList.pages[0].roomsIdList.length ? (
+    { chatsList &&chatsList.pages && chatsList.pages[0].roomsIdList && chatsList.pages[0].roomsIdList.length ? (
           chatsList?.pages.map((page:any) => page.roomsIdList.map((id:any, i:number)=>{
             const u=page.rooms[id];
             console.log(u)
