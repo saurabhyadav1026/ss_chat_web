@@ -19,7 +19,7 @@ const VoiceAssistancepage = () => {
       const response = await api.post("/ai/voiceassistance/ask", { text });
       if (response.data && response.data.message) {
         setIsSpeaking(true)
-        alert("I will speak "+ response.data.message)
+      
         await startSpeaking(response.data.message).then(setIsSpeaking(false));
       }
     } catch (error) {

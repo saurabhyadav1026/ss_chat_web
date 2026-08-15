@@ -49,7 +49,7 @@ const ChatPage = () => {
 
 
  useEffect(()=>{
-    alert("pp")
+
 setActiveFriendChatRoomId(page2Id)
   },[page2Id])
 

@@ -9,7 +9,7 @@ import { useQuery } from '@tanstack/react-query';
 import queryClient from '@/lib/queryClient.ts';
 import { toast } from 'react-toastify';
 import { socket } from './socketcontext/SocketContext.tsx';
-import newVisit from '@/securety/tracking/newVisit.ts';
+import newVisit from '@/analysis/tracking/newVisit.ts';
 
 const UserContext = createContext({});
 let x = 0;
