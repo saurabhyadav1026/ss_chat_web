@@ -67,7 +67,10 @@ return<>
       <span>Password</span>
       <input type="password" name="password" value={room.password||""} onChange={updateRoom} placeholder="Enter a secure password"/>
    </label>}
-  <button className="create-room-submit" onClick={create} >Create {roomType} room</button>
+      <div className=" btn-2-c-s col-12 ">
+     <button className="col-5 create-room-cancel" onClick={()=>navigate("/o/funchats")} >Cancel</button>
+  <button className=" col-5 create-room-submit" onClick={create} >Create {roomType} room</button>
+  </div>
 </div>
 </>
 }

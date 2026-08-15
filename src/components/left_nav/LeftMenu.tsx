@@ -4,16 +4,18 @@ import UserContext from "../../contexts/UserContext";
 import {  AiIcon, ChatIcon, FunIcon, SearchIcon, SettingIcon } from "../icons";
 import Listener from "../voiceassistence/Listener";
 import SpeakerContext from "@/voiceassistance/speaker/SpeakerContext";
+import ListenerContext from "@/voiceassistance/listener/ListenerContext";
 
 const LeftMenu = () => {
   const { activeUser,isInternetConnection }: any = useContext(UserContext);
+  const  {setIsSpeaking}:any= useContext(ListenerContext)
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const getItemClass = (path: string) => `left-rail__item ${pathname.startsWith(path) ? "left-rail__item--active" : ""}`;
 const [active,setActive]=useState(true);
-const {startSpeak}:any =useContext(SpeakerContext);
+const {startSpeaking}:any =useContext(SpeakerContext);
 
-const action =(text:string)=>{
+const action =async(text:string)=>{
 
   switch (text.trim().toLowerCase()) {
  
@@ -23,7 +25,7 @@ const action =(text:string)=>{
   case "open ai":
     navigate("/u/aichats/new");
        return;
-  case "open fun chat":
+  case "open fun":
     navigate("/o/funchats");
        return;
   case "open setting":
@@ -35,9 +37,13 @@ const action =(text:string)=>{
     case "open search":
     navigate("/u/search");
        return;
+    case "open voice":
+      navigate("/voice")
+      return;;
    
     default:
-            startSpeak("Sorry! , I am not understand.spaek again clearly.")
+         setIsSpeaking(true);
+          startSpeaking("Sorry! , I am not understand.speak again clearly.").then( setIsSpeaking(false))
    
     }
 }
@@ -54,18 +60,21 @@ border:"5px solid gray"
       <div id="logo_icon"  style={isInternetConnection?onlineSign:offlineSign} className="left-rail__brand"  onClick={()=>navigate("/")} />
 
       <nav className="left-rail__nav">
-        <div className={getItemClass("/u/search")} onClick={() => navigate("/u/search")}>
-          <span className="left-rail__glyph">
-            <SearchIcon />
-          </span>
-          <span className="left-rail__label">Search</span>
-        </div>
+       
 
         <div className={getItemClass("/u/chats")} onClick={() => navigate("/u/chats")}>
           <span className="left-rail__glyph">
             <ChatIcon />
           </span>
           <span className="left-rail__label">Chats</span>
+        </div>
+
+
+         <div className={getItemClass("/u/search")} onClick={() => navigate("/u/search")}>
+          <span className="left-rail__glyph">
+            <SearchIcon />
+          </span>
+          <span className="left-rail__label">Search</span>
         </div>
 
         <div className={getItemClass("/u/aichats")} onClick={() => navigate("/u/aichats/new")}>

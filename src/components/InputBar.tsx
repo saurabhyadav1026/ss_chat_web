@@ -51,7 +51,7 @@ const sendMsg=()=>{
     }
   }, [transcript, isListening]);
 
-  if (props.page2Id === null) return <></>;
+ 
 
   return (
     <div id="text_input_bar" className="chat-compose p-3">

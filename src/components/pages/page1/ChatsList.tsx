@@ -2,58 +2,16 @@ import { useContext,  useEffect,  useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import ChatsListContext from "../../../contexts/ChatsListContext";
 import SearchBar from "../../left_nav/SearchBar";
-import { socket } from "../../../contexts/socketcontext/SocketContext";
-import { toast } from "react-toastify";
-//import { getFriendChatFile } from "../../../filehandeling/folder/chats";
-
 const ChatsList = () => {
   const [searchInput, setSearchInput]: any = useState("");
   const { chatsList, updateChatRoom}: any = useContext(ChatsListContext);
   
   const navigate = useNavigate();
 
-  const { page2Id:activeRoomId } = useParams();
-
-/* 
-
-useEffect(()=>{
-if(searchInput!==""){
-  const rooms:any=[]
-Object.values(chatsList || {}).forEach((room:any)=>{
-  console.log(room)
-if(room.receiver.name.toLowerCase().includes(searchInput.toLowerCase())||room.receiver.username.toLowerCase().includes(searchInput.toLowerCase())||room.lastMessage.text.toLowerCase().includes(searchInput.toLowerCase()))rooms.push(room);
-})
-setChatItems(rooms)
-}else {
-  setChatItems(Object.values(chatsList || {}));
-
-}
-
-},[searchInput])
-
-
- */
 
 
 
 
-  useEffect(() => {
-    const receive = (data:any) => {
-            const { room ,message} = data;    
-            console.log(room)   
-          updateChatRoom(room);   
-          if(activeRoomId !==room._id ) {
-            toast.info(room.receiver.name +": "+ message.text)
-          }
-          
-    }
-
-      socket.on("u/chats/receiveMsgNotify", receive)
-    return () => {
-      socket.off("u/chats/receiveMsgNotify",receive);
-    };
-  },[]);
- 
 
 
   return <>

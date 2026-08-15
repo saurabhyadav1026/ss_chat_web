@@ -13,22 +13,11 @@ import { toast } from "react-toastify";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import queryClient from "@/lib/queryClient.ts";
 
-const ChatPage = () => {
-
-  const { page2Id:activeRoomId } = useParams();
-  const { activeUser ,isInternetConnection}: any = useContext(UserContext);
-  const { updateChatRoom }: any = useContext(ChatsListContext);
-  const { startCall }: any = useContext(CallContext)
-  const chatPageRef = useRef<HTMLDivElement | null>(null);
-
-  const messageLoaderRef = useRef(null)
-
-  const navigate = useNavigate()
 
 
   // to get Chat  yaani messages
   const fetchMessages = async (roomId: string, cursor: any) => {
-    console.log(activeChat)
+  
     if (roomId && roomId.slice(0, 3) !== "new") {
 
       return await api.get("/users/getmessages", { params: { _id: roomId, cursor } })
@@ -44,46 +33,32 @@ const ChatPage = () => {
 
 
 
-const fetchActiveChat=async(roomId:any)=>{
-  //if(!isInternetConnection)return;
-  return await api.get("users/getroombyroomid", { params: { _id: roomId ,socketId:socket.id} })
-      .then((res) =>{ 
-        if(res.data.status) return res.data.room
-        else {
-          navigate("/u/chats");
-          return;
-        }
-      }
-      )
-      .catch((err) =>{console.log(err);
-         navigate("/u/chats");
-          return;
-      })
-}
+const ChatPage = () => {
+
+  const { page2Id } = useParams();
+  const { activeUser ,isInternetConnection}: any = useContext(UserContext);
+  const { updateChatRoom ,activeChat , setActiveFriendChatRoomId}: any = useContext(ChatsListContext);
+  const { startCall }: any = useContext(CallContext)
+  const chatPageRef = useRef<HTMLDivElement | null>(null);
+
+  const messageLoaderRef = useRef(null)
+
+  const navigate = useNavigate()
 
 
 
 
-const {data:activeChat,...activeChatProperties}:any =useQuery({
-  queryKey:["activeChat",activeRoomId],
-  queryFn:()=>fetchActiveChat(activeRoomId)
-})
-
-
-
-
-const setActiveChat=()=>{
-  if(isInternetConnection)queryClient.invalidateQueries({queryKey:["activeChat",activeRoomId]})
-}
-
-
-
+ useEffect(()=>{
+    alert("pp")
+setActiveFriendChatRoomId(page2Id)
+  },[page2Id])
 
   const { data: messages, ...messageProperty }: any = useInfiniteQuery({
-    queryKey: ["messages", activeRoomId],
-    queryFn: ({ pageParam }) => fetchMessages(activeChat._id, pageParam),
+    queryKey: ["messages", activeChat?._id],
+    queryFn: ({ pageParam }) => fetchMessages(activeChat!._id, pageParam),
     initialPageParam: undefined,
-    getNextPageParam: (lastPage) => lastPage.hasMore ? lastPage.cursor : undefined
+    getNextPageParam: (lastPage) => lastPage.hasMore ? lastPage.cursor : undefined,
+    enabled:!!(activeChat && activeChat._id)
   })
 
 
@@ -147,10 +122,6 @@ console.log(message)
   }
 
 
-
-  useEffect(() => {
-   if(isInternetConnection ) queryClient.invalidateQueries({ queryKey: ["messages",activeRoomId] })
-  }, [activeChat])
 
 
 
@@ -260,20 +231,6 @@ console.log(message)
 
 
 
-
-
-
-  useEffect(() => {
-    if (activeRoomId && isInternetConnection )  queryClient.invalidateQueries({queryKey:["activeChat",activeRoomId]})
-    
-  }, [activeRoomId]);
-
-
-
-
-
-
-
   useEffect(() => {
     const divRef = chatPageRef.current;
     if (divRef) {
@@ -349,6 +306,14 @@ console.log(message)
 
   useEffect(() => {
     socket.on("u/chats/messageSent", (data) => {
+ 
+      if(activeChat._id?.slice(0,3)==="new" && activeChat._id.slice(3)===data.room.receiver._id){
+  
+        updateChatRoom(data.room)
+        navigate("/u/chats/"+data.room._id);
+        return;
+      }
+      
       const message = data.message;
       updateChatRoom(data.room);
 
@@ -440,7 +405,7 @@ console.log(message)
 
           {activeChat ? (
             <div className="container-fluid p-0 chat-compose-shell">
-              <InputBar page2Id={activeRoomId} send={send} />
+          {   page2Id && <InputBar  send={send} />}
             </div>
           ) : null}
         </div>

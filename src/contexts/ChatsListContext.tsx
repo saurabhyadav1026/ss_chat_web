@@ -1,26 +1,32 @@
 ﻿
-import { createContext, useContext, useEffect } from 'react';
+import { createContext, useContext, useEffect,useState } from 'react';
 import api from '../api/api';
 import UserContext from './UserContext';
 import queryClient from '@/lib/queryClient';
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
+import { socket } from './socketcontext/SocketContext';
+import { toast } from 'react-toastify';
 
 const ChatsListContext = createContext({});
 
-export const ChatsListContextProvider = ({ children }: any) => {
 
 
-
-
-
-    const { activeUser, isInternetConnection }: any = useContext(UserContext);
-
-
-
-
-
-
-
+const fetchActiveChat=async(roomId:any)=>{
+  //if(!isInternetConnection)return;
+  return await api.get("users/getroombyroomid", { params: { _id: roomId ,socketId:socket.id} })
+      .then((res) =>{ 
+        if(res.data.status) return res.data.room
+        else {
+      
+          return null;
+        }
+      }
+      )
+      .catch((err) =>{console.log(err);
+      
+          return null;
+      })
+}
 
 
 
@@ -36,6 +42,39 @@ export const ChatsListContextProvider = ({ children }: any) => {
     }
 
 
+
+export const ChatsListContextProvider = ({ children }: any) => {
+
+
+
+
+
+    const { activeUser, isInternetConnection }: any = useContext(UserContext);
+
+const [activeFriendChatRoomId, setActiveFriendChatRoomId]=useState<string|undefined>(undefined)
+
+
+
+
+
+
+const {data:activeChat,...activeChatProperties}:any =useQuery({
+  queryKey:["activeChat",activeFriendChatRoomId],
+  queryFn:()=>fetchActiveChat(activeFriendChatRoomId),
+  enabled:!!activeFriendChatRoomId
+})
+
+
+
+
+
+  useEffect(() => {
+   if(isInternetConnection && activeChat && activeChat._id?.slice(0,3)!=="new") queryClient.invalidateQueries({ queryKey: ["messages",activeChat._id] })
+  }, [activeChat])
+
+
+
+
     const { data: chatsList,
         fetchNextPage: fetchNextChatPage,
         hasNextPage: hasNextChatPage,
@@ -48,7 +87,7 @@ export const ChatsListContextProvider = ({ children }: any) => {
 
     const updateChatsList = async() => {
         if (isInternetConnection) { await queryClient.invalidateQueries({ queryKey: ["chatsList"] })
-        alert("We updting chats list")
+       
         }
     }
 
@@ -100,6 +139,7 @@ export const ChatsListContextProvider = ({ children }: any) => {
 
                 }
                 }
+            
                 return {
                     roomsIdList: [room._id, ...page.roomsIdList],
                     rooms: { ...page.rooms, [room._id]: room }
@@ -146,9 +186,31 @@ export const ChatsListContextProvider = ({ children }: any) => {
 
 
 
+    
+  useEffect(() => {
+    const receive = (data:any) => {
+    
+            const { room ,message} = data;    
+      
+         updateChatRoom(room);   
+          if(!activeChat || activeChat._id !==room._id ) {
+            toast.info(room.receiver.name +": "+ message.text)
+          }
+          
+    }
+
+      socket.on("u/chats/receiveMsgNotify", receive)
+    return () => {
+      socket.off("u/chats/receiveMsgNotify",receive);
+    };
+  },[]);
+ 
+
+
+
     // to set the chatlist   yani chatroom  by getfriendList or getchatList
 
-    return < ChatsListContext.Provider value={{ chatsList, updateChatRoom, aiChatsList, }}>{children}</ChatsListContext.Provider>
+    return < ChatsListContext.Provider value={{ chatsList, updateChatRoom, aiChatsList,activeChat , setActiveFriendChatRoomId}}>{children}</ChatsListContext.Provider>
 }
 
 export default ChatsListContext;

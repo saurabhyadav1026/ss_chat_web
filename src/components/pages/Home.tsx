@@ -4,84 +4,17 @@ import ChatContext from "../../contexts/chatscontext/AppVariablesContext";
 import UserContext from "../../contexts/UserContext";
 import { LoadingIcon, SettingIcon, ChatIcon, SearchIcon, AiIcon, FunIcon, ProfileIcon } from "../icons";
 import "./home.css";
-import api from "../../api/api";
-import { toast } from "react-toastify";
-
 const Home = () => {
   const { activeUser, setActiveUser, isUserLoading }: any = useContext(UserContext);
   const { theme, toggleTheme }: any = useContext(ChatContext);
   const navigate = useNavigate();
   const nextTheme = theme === "dark" ? "Light" : "Dark";
-  let x = 0;
 
-  let folderHandle: any;
-
-  const folderper = async () => {
-    folderHandle = await (window as any).showDirectoryPicker();
-  };
-
-  useEffect(() => {
-    const fun = async () => {
-      if (x !== 0) return;
-      x += 1;
-
-      let latitude: any = "";
-      let longitude: any = "";
-
-      let deviceId = localStorage.getItem("sbhdeviceid") || "";
-      if (deviceId === "undefined") {
-        deviceId = "";
-      }
-
-      navigator.geolocation.getCurrentPosition(
-        async (position: any) => {
-          latitude = position.coords.latitude;
-          longitude = position.coords.longitude;
-
-          const response: any = (
-            await api.get("/newVisit", { params: { latitude, longitude, deviceId } })
-          ).data;
-
-          console.log(response);
-          if (response.newDevice) {
-            localStorage.setItem("sbhdeviceid", response.deviceId);
-          }
-        },
-        async (error: any) => {
-          console.log(error);
-
-          const response: any = (
-            await api.get("/newVisit", { params: { latitude, longitude, deviceId } })
-          ).data;
-
-          console.log(response);
-          if (response.newDevice) {
-            localStorage.setItem("sbhdeviceid", response.deviceId);
-          }
-        }
-      );
-    };
-
-    fun();
-  }, []);
 
   useEffect(() => {
     const func = async () => await setActiveUser();
     func();
   }, []);
-
-  const write = async () => {
-    if (!folderHandle) await folderper();
-    if (!folderHandle) return;
-    const file = await folderHandle.getFileHandle("data.json", { create: true });
-
-    const writable = await file.createWritable();
-
-    await writable.write("Hello");
-
-    await writable.close();
-toast.success("write successfully");
-  };
 
   return (
     <>
@@ -125,7 +58,7 @@ toast.success("write successfully");
                   />
                   <div>
                     <h1 className="welcome-title">Welcome back, {activeUser.name}</h1>
-                    <p className="welcome-subtitle">Manage your conversations, connect with friends, or chat with AI assistants.</p>
+            
                   </div>
                 </div>
               ) : (
@@ -133,7 +66,7 @@ toast.success("write successfully");
                   <div className="welcome-avatar guest-avatar" />
                   <div>
                     <h1 className="welcome-title">Sign In Required</h1>
-                    <p className="welcome-subtitle">Authenticate to start secure chats and save your preferences.</p>
+                
                   </div>
                 </div>
               )}
@@ -156,7 +89,7 @@ toast.success("write successfully");
               </div>
               <div className="app-shortcut-card__body">
                 <h3>Inbox & Chats</h3>
-                <p>Access your end-to-end encrypted direct conversations and group chats.</p>
+              
               </div>
             </div>
 
@@ -166,7 +99,7 @@ toast.success("write successfully");
               </div>
               <div className="app-shortcut-card__body">
                 <h3>Discover Friends</h3>
-                <p>Find new contacts across the platform by their names or usernames.</p>
+              
               </div>
             </div>
 
@@ -176,7 +109,7 @@ toast.success("write successfully");
               </div>
               <div className="app-shortcut-card__body">
                 <h3>SBH AI Companion</h3>
-                <p>Converse with our intelligent chatbot to answer questions and get assistance.</p>
+             
               </div>
             </div>
 
@@ -186,19 +119,11 @@ toast.success("write successfully");
               </div>
               <div className="app-shortcut-card__body">
                 <h3>Fun Chat Rooms</h3>
-                <p>Create, explore, and join public channels or private group rooms.</p>
+         
               </div>
             </div>
 
-            <div className="app-shortcut-card glass clickable" onClick={() => navigate("u/myprofile")}>
-              <div className="app-shortcut-card__icon profile-theme">
-                <ProfileIcon func={() => {}} />
-              </div>
-              <div className="app-shortcut-card__body">
-                <h3>My Profile</h3>
-                <p>Customize your profile picture, bio, details, and personal preferences.</p>
-              </div>
-            </div>
+            
 
             <div className="app-shortcut-card glass clickable" onClick={() => navigate("/call")}>
               <div className="app-shortcut-card__icon call-theme">

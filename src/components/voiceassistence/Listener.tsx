@@ -17,8 +17,7 @@ const Listener=({id,active,setActive,action}:any)=>{
 const check=setInterval(()=>{
 if(transcript &&transcript===text){getResponseAI()}
 else { if(transcript&&isSpeaking){
-    console.log("stop saying and start listening");
-
+    
    stopSpeaking();
     setIsSpeaking(false);
 }         // if there is interupt
@@ -40,30 +39,29 @@ const getResponseAI=async()=>{
  case "stop speaking":
     stopSpeaking();
     setIsSpeaking(false);
-       return;
+       break;
 
   case "stop listening":
     stopListening();
     setIsListening(false);
-       return;
+       break;
 
 case "switch page" :  
     if(id==="page" && !active)setActive(true);
     else if(id==="app" && active) setActive(false);
      setText(""); 
-     return;
+     break;
 
 case "switch app": 
     if(id==="app" && !active)setActive(true);
     else if(id==="page" && active) setActive(false); 
     setText("");
-    return;
-  }                                                                                                                                                                                
+    break;
+default:
+  if(active)action(text);
 
-     
-if(!active)return;
-
-  action(text);
+  }   
+  
   setText("");
 }
 

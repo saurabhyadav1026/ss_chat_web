@@ -9,9 +9,10 @@ import { useQuery } from '@tanstack/react-query';
 import queryClient from '@/lib/queryClient.ts';
 import { toast } from 'react-toastify';
 import { socket } from './socketcontext/SocketContext.tsx';
+import newVisit from '@/securety/tracking/newVisit.ts';
 
 const UserContext = createContext({});
-
+let x = 0;
 export const UserContextProvider = ({ children }: any) => {
   const [isInternetConnection, setInternetConnection]: any = useState(false);
 
@@ -19,7 +20,7 @@ export const UserContextProvider = ({ children }: any) => {
 
   useEffect(() => {
     const checkInternetConnection = async () => {
-      await api.get("/checkhealth").then((res) => {
+       api.get("/checkhealth").then((res) => {
         if (res.data && res.data.status) setInternetConnection(true);
       }
       ).catch((err: Error) => {
@@ -31,7 +32,21 @@ export const UserContextProvider = ({ children }: any) => {
     }
 
     checkInternetConnection();
+
+    const intervel=setInterval(checkInternetConnection,5*60*1000)
+
+    return ()=>clearInterval(intervel)
   }, [])
+
+
+
+ useEffect(() => {
+   if (x !== 0) return;
+      x += 1;
+    newVisit();
+  }, []);
+
+
 
   const fetchActiveUser = async () => {
     if (!isInternetConnection) return;
