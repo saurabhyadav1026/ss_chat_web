@@ -41,7 +41,7 @@ const ChatPage = () => {
 
   const { page2Id } = useParams();
   const { activeUser ,isInternetConnection}: any = useContext(UserContext);
-  const { updateChatRoom ,activeChat , setActiveFriendChatRoomId}: any = useContext(ChatsListContext);
+  const { updateChatRoom ,activeChat , setActiveFriendChatRoomId ,refreshFriendsChatsList}: any = useContext(ChatsListContext);
   const { startCall }: any = useContext(CallContext);
   const [isLive,setIsLive]=useState<Boolean>(false);
   const chatPageRef = useRef<HTMLDivElement | null>(null);
@@ -128,6 +128,10 @@ console.log(message)
 
 
 
+useEffect(()=>{
+setIsLive(activeChat?activeChat.isLive:false)
+},[activeChat])
+
 
   /*  observer for lazy fetching  */
   useEffect(() => {
@@ -154,9 +158,8 @@ console.log(message)
 
   useEffect(()=>{
 const setLive=(data:any)=>{
-
-  setIsLive(true)
-
+  if(activeChat._id===data.roomId){setIsLive(true)}
+  
 }
 
 socket.on("u/chats/setLive",setLive);
@@ -168,10 +171,7 @@ return ()=>{socket.off("u/chats/setLive",setLive)}
 
   useEffect(()=>{
 const setOffLive=(data:any)=>{
-
-  if(activeChat._id===data.roomId){
-    toast.info("offline hai bhai")
-  }
+if(data.roomId===activeChat._id)setIsLive(false)
 }
 
 socket.on("setOffLive",setOffLive);
@@ -387,16 +387,16 @@ return ()=>{socket.off("setOffLive",setOffLive)}
 
   /* ======== */
 
-  const toBack=()=>{
+  const back=()=>{
     socket.emit("u/chats/setOffLive",{roomId:activeChat._id});
-    navigate("/u/chats")
+   
   }
 
 
 
   return <>
     <div className="chat-page">
-      <TopNav isLive={activeChat?activeChat.isLive:false} activeChat={activeChat && activeChat.receiver?activeChat.receiver: {}} topNavOptions={topNavOptions} toBack="/u/chats" />
+      <TopNav  isLive={isLive} activeChat={activeChat && activeChat.receiver?activeChat.receiver: {}} topNavOptions={topNavOptions} back={back} toBack="/u/chats" />
 
       <div className="chat-screen">
         <div className="chat-thread">

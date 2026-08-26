@@ -88,7 +88,7 @@ queryClient.invalidateQueries({queryKey:["activeChat",activeFriendChatRoomId]})
             getNextPageParam: (lastPage) => lastPage.hasMore ? lastPage.nextPage + 1 : undefined
         })
 
-    const updateChatsList = async() => {
+    const refreshFriendsChatsList = async() => {
         if (isInternetConnection) { await queryClient.invalidateQueries({ queryKey: ["chatsList"] })
        
         }
@@ -170,13 +170,13 @@ queryClient.invalidateQueries({queryKey:["activeChat",activeFriendChatRoomId]})
 
 
     useEffect(() => {
-        updateChatsList();
+        refreshFriendsChatsList();
         refreshAIchatList();
     }, [activeUser])
 
 
   useEffect(() => {
-        updateChatsList();
+        refreshFriendsChatsList();
         refreshAIchatList();
     }, [])
 
@@ -206,7 +206,7 @@ queryClient.invalidateQueries({queryKey:["activeChat",activeFriendChatRoomId]})
 
     // to set the chatlist   yani chatroom  by getfriendList or getchatList
 
-    return < ChatsListContext.Provider value={{ chatsList, updateChatRoom, aiChatsList,activeChat , refreshAIchatList,setActiveFriendChatRoomId}}>{children}</ChatsListContext.Provider>
+    return < ChatsListContext.Provider value={{ chatsList, updateChatRoom, aiChatsList,activeChat ,refreshFriendsChatsList, refreshAIchatList,setActiveFriendChatRoomId}}>{children}</ChatsListContext.Provider>
 }
 
 export default ChatsListContext;

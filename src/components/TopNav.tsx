@@ -8,7 +8,7 @@ const TopNav = (props: any) => {
 
   return (
     <div className="chat-topbar">
-      <button type="button" className="chat-topbar__back" onClick={() => navigate(props.toBack)}>
+      <button type="button" className="chat-topbar__back" onClick={() => {if(props.back)props.back();navigate(props.toBack)}}>
         &larr;
       </button>
 
@@ -24,7 +24,7 @@ const TopNav = (props: any) => {
             <h3 className="chat-topbar__title" onClick={() => navigate(`/u/chats/profile/${props.activeChat.username}`)}>
               {props.activeChat.name}
             </h3>
-            <div>{props.isLive?"border:5px solid green":props.activeChat.isUserActive?"border:5px solid blue":""}</div>
+    
           </div>
         </div>
       ) : (

@@ -28,6 +28,7 @@ useEffect(()=>{
           console.log("Error: "+err.message);
           toast.error("Something Error: try again later.");
           navigate("/user/login")
+            setIsLoading(false)
         })
 },[])
 
