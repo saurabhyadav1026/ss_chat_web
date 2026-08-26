@@ -27,7 +27,7 @@ useEffect(()=>{
         }).catch((err:Error)=>{
           console.log("Error: "+err.message);
           toast.error("Something Error: try again later.");
-          navigate("/")
+          navigate("/user/login")
         })
 },[])
 
