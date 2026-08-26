@@ -6,7 +6,7 @@ const THEME_STORAGE_KEY = "ssapp_theme";
 type ThemeMode = "dark" | "light";
 
 const getInitialTheme = (): ThemeMode => {
-  if (typeof window === "undefined") return "dark";
+  if (typeof window === "undefined") return "light";
 
   const savedTheme = window.localStorage.getItem(THEME_STORAGE_KEY);
   if (savedTheme === "dark" || savedTheme === "light") return savedTheme;

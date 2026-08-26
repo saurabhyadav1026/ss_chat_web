@@ -123,7 +123,7 @@ const Home = () => {
               </div>
             </div>
 
-            
+       {/*      
 
             <div className="app-shortcut-card glass clickable" onClick={() => navigate("/call")}>
               <div className="app-shortcut-card__icon call-theme">
@@ -133,7 +133,7 @@ const Home = () => {
                 <h3>Telephony Connection</h3>
                 <p>Connect immediately over fully secured local and network voice call sessions.</p>
               </div>
-            </div>
+            </div> */}
           </section>
 
           {/* Developer Space */}

@@ -31,6 +31,8 @@ const VoiceAssistancepage = () => {
 
   return (
     <div className="voice-assistant-shell">
+      <h3>Sorry! We are updating.......</h3>
+      <h5>So, Currently voice feature  is not availble.</h5>
       {/* Exit back routing button */}
     {/*   <button className="voice-back-btn" onClick={() => navigate("/")}>
         <ArrowLeft size={18} />
@@ -40,7 +42,7 @@ const VoiceAssistancepage = () => {
       <div className="voice-assistant-card">
         {/* Large Centered Microphone button */}
         <div className="voice-page-mic-wrapper">
-          <Listener id={"page"} active={active} setActive={setActive} action={action} />
+         {/*  <Listener id={"page"} active={active} setActive={setActive} action={action} /> */}
         </div>
       </div>
     </div>

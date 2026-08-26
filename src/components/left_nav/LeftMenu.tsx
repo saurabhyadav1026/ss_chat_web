@@ -5,6 +5,7 @@ import {  AiIcon, ChatIcon, FunIcon, SearchIcon, SettingIcon } from "../icons";
 import Listener from "../voiceassistence/Listener";
 import SpeakerContext from "@/voiceassistance/speaker/SpeakerContext";
 import ListenerContext from "@/voiceassistance/listener/ListenerContext";
+import { MicIcon } from "lucide-react";
 
 const LeftMenu = () => {
   const { activeUser,isInternetConnection }: any = useContext(UserContext);
@@ -83,11 +84,12 @@ border:"5px solid gray"
         </div>
 
         <div className="left-rail__item left-rail__item--static" >
-          {/* <span className="left-rail__glyph">
-          onClick={() => navigate("/voice")}
+           <span className="left-rail__glyph"
+          onClick={() => navigate("/voice")}>
             <MicIcon />
-          </span> */}
-          <Listener id={"app"}active={active} setActive={setActive} action={action} />
+          </span> 
+
+        {/*   <Listener id={"app"}active={active} setActive={setActive} action={action} /> */}
         
         </div>
 

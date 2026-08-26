@@ -1,12 +1,14 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../../api/api";
 import SearchBar from "../../left_nav/SearchBar";
+import UserContext from "@/contexts/UserContext";
 
 const SearchList = () => {
   const navigate = useNavigate();
   const [searchInput, setSearchInput]: any = useState("");
   const [searchList, setSearchList]: any = useState({});
+  const {activeUser}:any=useContext(UserContext);
 
 
 
@@ -32,20 +34,10 @@ const SearchList = () => {
 
 
 
-const getRoomIdByReceiverId=async(receiverId:any)=>{
-  let roomStatus=true;
-let roomId="";
+const getRoomIdByReceiverId=(receiverId:any)=>{
+ 
+return [activeUser._id,receiverId].sort().join("-");
 
-await api.get("/users/getroomidbyreceiverid",{params:{_id:receiverId}})
-          .then((res)=>{
-           roomId=res.data.roomId;
-          })
-          .catch((err)=>{
-            roomStatus=false;
-            console.log(err);
-          })
-          if(roomStatus)return {status:true,roomId:roomId};
-          else return {status:false};
         }
 
   return (
@@ -79,10 +71,7 @@ await api.get("/users/getroomidbyreceiverid",{params:{_id:receiverId}})
                   <button
                     type="button"
                     className="list-card__action list-card__action--primary"
-                    onClick={async () => {
-                      const t = await getRoomIdByReceiverId(u._id);
-                      if (t.status) navigate(`/u/chats/${t.roomId}`);
-                    }}
+                     onClick={() => navigate(`/u/chats/${getRoomIdByReceiverId(u._id)}`)}
                   >
                     Message
                   </button>

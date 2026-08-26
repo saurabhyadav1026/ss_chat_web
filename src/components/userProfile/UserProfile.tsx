@@ -5,13 +5,15 @@ import ChatContext from "../../contexts/chatscontext/AppVariablesContext";
 import "./user_profile_css.css";
 import UserLoading from "../loading-components/UserLoading";
 import { EllipsisVertical } from "lucide-react";
+import UserContext from "@/contexts/UserContext";
 
 const UserProfile = () => {
   const { setPicShow }: any = useContext(ChatContext);
   
   const [user, setUser]: any = useState({});
   const { username, page2Id } = useParams();
-  const [isLoading,setLoading]:any=useState(false)
+  const [isLoading,setLoading]:any=useState(false);
+  const {activeUser}:any=useContext(UserContext);
   const navigate = useNavigate();
 
 
@@ -21,6 +23,10 @@ const UserProfile = () => {
      setLoading(true)
     if (username)
      
+      if(username===activeUser.username){
+        navigate("/u/myprofile");
+        return;
+      }
       api.get("users/userprofile", { params: {username: username } })
         .then((res) => {
           if (res.data.status) setUser(res.data.user);
@@ -47,20 +53,9 @@ const UserProfile = () => {
 
 
 const getRoomIdByReceiverId=async(receiverId:any)=>{
-  let roomStatus=true;
-let roomId="";
+return [activeUser._id,receiverId].sort().join("-");
+}
 
-await api.get("/users/getroomidbyreceiverid",{params:{_id:receiverId}})
-          .then((res)=>{
-           roomId=res.data.roomId;
-          })
-          .catch((err)=>{
-            roomStatus=false;
-            console.log(err);
-          })
-          if(roomStatus)return {status:true,roomId:roomId};
-          else return {status:false};
-        }
 
 
   if(isLoading)return <UserLoading/>
@@ -96,19 +91,13 @@ else if(user._id) return (
             <div className="user-profile-actions">
               <button
                 className="user-profile-button user-profile-button--primary"
-                onClick={async () => {
-                  const t = await getRoomIdByReceiverId(user._id);
-                  if (t.status) navigate(`/u/chats/${t.roomId}`);
-                }}
+                onClick={() => navigate(`/u/chats/${getRoomIdByReceiverId(user._id)}`)}
               >
                 Message
               </button>
                  <button
                 className="user-profile-button user-profile-button--primary"
-                onClick={async () => {
-                  const t = await getRoomIdByReceiverId(user._id);
-                  if (t.status) navigate(`/u/chats/${t.roomId}`);
-                }}
+                 onClick={() => navigate(`/u/chats/${getRoomIdByReceiverId(user._id)}`)}
               >
                 Fallow
               </button>

@@ -20,8 +20,12 @@ import queryClient from "@/lib/queryClient.ts";
   
     if (roomId && roomId.slice(0, 3) !== "new") {
 
-      return await api.get("/users/getmessages", { params: { _id: roomId, cursor } })
-        .then(res => res.data.messages)
+      return await api.get("/users/getmessages", { params: { _id: roomId, cursor} })
+        .then(res => {
+          socket.emit("u/chats/setLive",{roomId})
+
+          return res.data.messages
+        })
         .catch(err => { throw new Error(err) })
     }
     else {
@@ -38,7 +42,8 @@ const ChatPage = () => {
   const { page2Id } = useParams();
   const { activeUser ,isInternetConnection}: any = useContext(UserContext);
   const { updateChatRoom ,activeChat , setActiveFriendChatRoomId}: any = useContext(ChatsListContext);
-  const { startCall }: any = useContext(CallContext)
+  const { startCall }: any = useContext(CallContext);
+  const [isLive,setIsLive]=useState<Boolean>(false);
   const chatPageRef = useRef<HTMLDivElement | null>(null);
 
   const messageLoaderRef = useRef(null)
@@ -49,7 +54,6 @@ const ChatPage = () => {
 
 
  useEffect(()=>{
-
 setActiveFriendChatRoomId(page2Id)
   },[page2Id])
 
@@ -57,7 +61,7 @@ setActiveFriendChatRoomId(page2Id)
     queryKey: ["messages", activeChat?._id],
     queryFn: ({ pageParam }) => fetchMessages(activeChat!._id, pageParam),
     initialPageParam: undefined,
-    getNextPageParam: (lastPage) => lastPage.hasMore ? lastPage.cursor : undefined,
+    getNextPageParam: (lastPage:any) => lastPage.hasMore ? lastPage.cursor : undefined,
     enabled:!!(activeChat && activeChat._id)
   })
 
@@ -148,6 +152,31 @@ console.log(message)
 
 
 
+  useEffect(()=>{
+const setLive=(data:any)=>{
+
+  setIsLive(true)
+
+}
+
+socket.on("u/chats/setLive",setLive);
+return ()=>{socket.off("u/chats/setLive",setLive)}
+  },[])
+
+
+  
+
+  useEffect(()=>{
+const setOffLive=(data:any)=>{
+
+  if(activeChat._id===data.roomId){
+    toast.info("offline hai bhai")
+  }
+}
+
+socket.on("setOffLive",setOffLive);
+return ()=>{socket.off("setOffLive",setOffLive)}
+  },[])
 
 
   const openProfile = () => {
@@ -255,8 +284,8 @@ console.log(message)
 
 
   const send = async (inputText: string) => {
-    if (!activeChat)
-      if (inputText.trim() === "") return;
+
+    if (!activeChat || inputText.trim() === "") return;
 
     const newMsgId = createTempMsgId();
     const msg: any = {
@@ -285,11 +314,12 @@ console.log(message)
 
   useEffect(() => {
     const receive = (data: any) => {
+    
       const { message } = data;
-      if (activeChat._id === message.roomId) {
-        addMessage(message);
+  
+     if(activeChat._id===message.roomId) addMessage(message);
 
-      }
+      
 
     }
   
@@ -303,7 +333,7 @@ console.log(message)
 
 
 
-
+ 
   useEffect(() => {
     socket.on("u/chats/messageSent", (data) => {
  
@@ -357,12 +387,16 @@ console.log(message)
 
   /* ======== */
 
+  const toBack=()=>{
+    socket.emit("u/chats/setOffLive",{roomId:activeChat._id});
+    navigate("/u/chats")
+  }
 
 
 
   return <>
     <div className="chat-page">
-      <TopNav activeChat={activeChat && activeChat.receiver?activeChat.receiver: {}} topNavOptions={topNavOptions} toBack="/u/chats" />
+      <TopNav isLive={activeChat?activeChat.isLive:false} activeChat={activeChat && activeChat.receiver?activeChat.receiver: {}} topNavOptions={topNavOptions} toBack="/u/chats" />
 
       <div className="chat-screen">
         <div className="chat-thread">
@@ -371,9 +405,7 @@ console.log(message)
             <div ref={messageLoaderRef}>
               {messageProperty.isFetchingNextPage
                 ? "Loading..."
-                : messageProperty.hasNextPage
-                  ? "Scroll for more"
-                  : "No more posts"}
+                : ""}
             </div>
            
 

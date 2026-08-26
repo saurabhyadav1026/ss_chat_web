@@ -12,7 +12,7 @@ const ChatsListContext = createContext({});
 
 
 const fetchActiveChat=async(roomId:any)=>{
-  //if(!isInternetConnection)return;
+ 
   return await api.get("users/getroombyroomid", { params: { _id: roomId ,socketId:socket.id} })
       .then((res) =>{ 
         if(res.data.status) return res.data.room
@@ -35,8 +35,8 @@ const fetchActiveChat=async(roomId:any)=>{
             .then(res => { return res.data })
             .catch(() => [])
     }
-    const fetchAiChatsList = async (page: number) => {
-        return await api.get("/ai/textassistance/rooms?page=" + page)
+    const fetchAiChatsList = async () => {
+        return await api.get("/ai/textassistance/rooms")
             .then(res => res.data)
             .catch(() => [])
     }
@@ -62,10 +62,13 @@ const {data:activeChat,...activeChatProperties}:any =useQuery({
   queryKey:["activeChat",activeFriendChatRoomId],
   queryFn:()=>fetchActiveChat(activeFriendChatRoomId),
   enabled:!!activeFriendChatRoomId
+
 })
 
 
-
+useEffect(()=>{
+queryClient.invalidateQueries({queryKey:["activeChat",activeFriendChatRoomId]})
+},[activeFriendChatRoomId])
 
 
   useEffect(() => {
@@ -91,17 +94,10 @@ const {data:activeChat,...activeChatProperties}:any =useQuery({
         }
     }
 
-    const { data: aiChatsList,
-        fetchNextPage: fetchNextAiChatPage,
-        hasNextPage: hasNextAiChatPage,
-        isFetchingNextPage: isAiChatListLoading }: any = useInfiniteQuery({
-            queryKey: ["aiChatsList"],
-            queryFn: ({ pageParam }) => fetchAiChatsList(pageParam),
-            initialPageParam: 1,
-            getNextPageParam: (lastPage) => lastPage.hasMore ? lastPage.nextPage + 1 : undefined
-        })
+    const { data: aiChatsList}: any = useQuery({  queryKey: ["aiChatsList"], queryFn:fetchAiChatsList})
 
-    const updateAiChatsList = () => {
+
+    const refreshAIchatList = () => {
         if (isInternetConnection) queryClient.invalidateQueries({ queryKey: ["chatsList"] })
     }
 
@@ -175,13 +171,13 @@ const {data:activeChat,...activeChatProperties}:any =useQuery({
 
     useEffect(() => {
         updateChatsList();
-        updateAiChatsList();
+        refreshAIchatList();
     }, [activeUser])
 
 
   useEffect(() => {
         updateChatsList();
-        updateAiChatsList();
+        refreshAIchatList();
     }, [])
 
 
@@ -210,7 +206,7 @@ const {data:activeChat,...activeChatProperties}:any =useQuery({
 
     // to set the chatlist   yani chatroom  by getfriendList or getchatList
 
-    return < ChatsListContext.Provider value={{ chatsList, updateChatRoom, aiChatsList,activeChat , setActiveFriendChatRoomId}}>{children}</ChatsListContext.Provider>
+    return < ChatsListContext.Provider value={{ chatsList, updateChatRoom, aiChatsList,activeChat , refreshAIchatList,setActiveFriendChatRoomId}}>{children}</ChatsListContext.Provider>
 }
 
 export default ChatsListContext;

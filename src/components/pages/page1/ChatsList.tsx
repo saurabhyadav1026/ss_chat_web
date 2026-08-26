@@ -59,6 +59,7 @@ const ChatsList = () => {
               >
                 <div className="list-card__title-row">
                   <span className="list-card__title">{receiver.name}</span>
+                  <span>{u.receiver.isUserActive?"Active":"Offline"}</span>
                   {u.unreadCount > 0 ? <span className="list-card__badge">{u.unreadCount}</span> : null}
                 </div>
 

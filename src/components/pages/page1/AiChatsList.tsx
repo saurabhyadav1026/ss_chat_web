@@ -9,10 +9,13 @@ const AiChatsList = () => {
   
     const [searchInput, setSearchInput]: any = useState("");
     const { activeUser }: any = useContext(UserContext);
-    const {aiChatsList}: any = useContext(ChatsListContext);
+    const {aiChatsList, refreshAIchatList}: any = useContext(ChatsListContext);
     const navigate = useNavigate();
     const [chatItems,setChatItems]:any=useState(Object.values(aiChatsList))
   
+    useEffect(()=>{
+refreshAIchatList();
+    },[])
   
   
 
