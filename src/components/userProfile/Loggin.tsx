@@ -7,34 +7,15 @@ import { toast } from "react-toastify";
 import { LucideLoaderPinwheel } from "lucide-react";
 const Loggin = () => {
   const navigate = useNavigate();
-const [isloading,setIsLoading]= useState(true);
+
 const {activeUser}:any=useContext(UserContext)
 
 useEffect(()=>{
-  if(activeUser && activeUser._id){
-     navigate("/u/chats");
-     return;
+  if(activeUser){
+    navigate("/u/myprofile")
   }
-  api.get("/users/verifyme")
-        .then((res: any) => {
-          if (res.data.status) {
-           navigate("/u/chats")
-          }
-          else{
-            setIsLoading(false)
-          }
-
-        }).catch((err:Error)=>{
-          console.log("Error: "+err.message);
-          toast.error("Something Error: try again later.");
-          navigate("/user/login")
-            setIsLoading(false)
-        })
-},[])
-
-
-
-  const { setActiveUser }: any = useContext(UserContext);
+},[activeUser])
+ 
 
   const verifyLoggin = async () => {
     const usname_: string = (document.getElementById("log_usname_input") as HTMLInputElement).value;
@@ -50,7 +31,7 @@ useEffect(()=>{
       .catch((err) => console.log(err));
 
     if (status) {
-      await setActiveUser();
+    
       toast.success("logging successfully");
       navigate("/");
     } else {
@@ -63,8 +44,7 @@ useEffect(()=>{
     try{  await api.post('/logging/googleAuthVerification',{token:res.credential}).
   then((res)=>{
     
-    if(res.data.status){status=true;
-             
+    if(res.data.status){status=true;           
       
     }
 else{
@@ -73,8 +53,7 @@ else{
 });
 
 if(status){
-   await setActiveUser();
-      navigate("/ ");
+        navigate("/ ");
 }
 }
 catch(e){
@@ -85,7 +64,7 @@ catch(e){
 
 
 
-if(isloading)return <LucideLoaderPinwheel/>
+
   return (
     <div className="auth-card">
       <div className="app_logo auth-logo" />
@@ -97,7 +76,7 @@ if(isloading)return <LucideLoaderPinwheel/>
       </div>
 
       <div className="auth-form">
-        <label className="auth-field">
+      {/*   <label className="auth-field">
           <span className="auth-label">Username</span>
           <input id="log_usname_input" className="auth-input" placeholder="Enter username" />
         </label>
@@ -113,7 +92,7 @@ if(isloading)return <LucideLoaderPinwheel/>
 
         <div className="auth-divider">or continue with</div>
 
-        <div className="d-flex justify-content-center">
+ */}        <div className="d-flex justify-content-center">
           <GoogleLogin onSuccess={verifygoogleLoggin} />
         </div>
       </div>

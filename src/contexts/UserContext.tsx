@@ -10,11 +10,13 @@ import queryClient from '@/lib/queryClient.ts';
 import { toast } from 'react-toastify';
 import { socket } from './socketcontext/SocketContext.tsx';
 import newVisit from '@/analysis/tracking/newVisit.ts';
+import { useNavigate } from 'react-router-dom';
 
 const UserContext = createContext({});
 let x = 0;
 export const UserContextProvider = ({ children }: any) => {
   const [isInternetConnection, setInternetConnection]: any = useState(false);
+  const navigate=useNavigate()
 
 
 
@@ -95,7 +97,8 @@ export const UserContextProvider = ({ children }: any) => {
       if (res.data.status) { await setActiveUser(); }
       else {
 
-        toast.success("Logout Successfully.")
+        toast.success("Logout Successfully.");
+        navigate("/user/login")
       }
     }
     ).catch((err: any) => {

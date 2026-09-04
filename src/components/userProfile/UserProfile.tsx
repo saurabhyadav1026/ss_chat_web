@@ -23,7 +23,7 @@ const UserProfile = () => {
      setLoading(true)
     if (username)
      
-      if(username===activeUser.username){
+      if(activeUser && username===activeUser.username){
         navigate("/u/myprofile");
         return;
       }

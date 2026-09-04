@@ -38,8 +38,9 @@ import queryClient from "@/lib/queryClient.ts";
 
 
 const ChatPage = () => {
+    const { page2Id } = useParams();
 
-  const { page2Id } = useParams();
+
   const { activeUser ,isInternetConnection}: any = useContext(UserContext);
   const { updateChatRoom ,activeChat , setActiveFriendChatRoomId ,refreshFriendsChatsList}: any = useContext(ChatsListContext);
   const { startCall }: any = useContext(CallContext);
@@ -53,9 +54,7 @@ const ChatPage = () => {
 
 
 
- useEffect(()=>{
-setActiveFriendChatRoomId(page2Id)
-  },[page2Id])
+
 
   const { data: messages, ...messageProperty }: any = useInfiniteQuery({
     queryKey: ["messages", activeChat?._id],
@@ -129,7 +128,8 @@ console.log(message)
 
 
 useEffect(()=>{
-setIsLive(activeChat?activeChat.isLive:false)
+ 
+setIsLive(activeChat? activeChat.isLive:false)
 },[activeChat])
 
 
@@ -152,31 +152,6 @@ setIsLive(activeChat?activeChat.isLive:false)
   }, [messageProperty.fetchNextPage, messageProperty.hasNextPage, messageProperty.isFetchingNextPage]);
 
 
-
-
-
-
-  useEffect(()=>{
-const setLive=(data:any)=>{
-  if(activeChat._id===data.roomId){setIsLive(true)}
-  
-}
-
-socket.on("u/chats/setLive",setLive);
-return ()=>{socket.off("u/chats/setLive",setLive)}
-  },[])
-
-
-  
-
-  useEffect(()=>{
-const setOffLive=(data:any)=>{
-if(data.roomId===activeChat._id)setIsLive(false)
-}
-
-socket.on("setOffLive",setOffLive);
-return ()=>{socket.off("setOffLive",setOffLive)}
-  },[])
 
 
   const openProfile = () => {
@@ -245,6 +220,8 @@ return ()=>{socket.off("setOffLive",setOffLive)}
     startCall(activeChat._id);
   }
 
+
+  /*  Top nav options */
   const topNavOptions = {
     "call": call,
     "Profile": openProfile,
@@ -259,7 +236,7 @@ return ()=>{socket.off("setOffLive",setOffLive)}
   }
 
 
-
+/*  To scroll up on message sent or receiv */
   useEffect(() => {
     const divRef = chatPageRef.current;
     if (divRef) {
@@ -271,18 +248,13 @@ return ()=>{socket.off("setOffLive",setOffLive)}
 
 
 
-
+/*  to clear type suggestion */
   useEffect(() => {
     keyHepler.clear();
   }, [activeChat])
 
 
-
-
-
-
-
-
+/* send message */
   const send = async (inputText: string) => {
 
     if (!activeChat || inputText.trim() === "") return;
@@ -310,8 +282,7 @@ return ()=>{socket.off("setOffLive",setOffLive)}
   };
 
 
-
-
+/*  on message receive */
   useEffect(() => {
     const receive = (data: any) => {
     
@@ -327,15 +298,13 @@ return ()=>{socket.off("setOffLive",setOffLive)}
     return () => {
       socket.off("u/chats/receiveMsg", receive);
     };
-  },[]);
+  },[activeChat]);
 
 
-
-
-
+/*  on  message sent */
  
   useEffect(() => {
-    socket.on("u/chats/messageSent", (data) => {
+    const sent=(data:any) => {
  
       if(activeChat._id?.slice(0,3)==="new" && activeChat._id.slice(3)===data.room.receiver._id){
   
@@ -352,13 +321,16 @@ return ()=>{socket.off("setOffLive",setOffLive)}
 
       }
 
-    });
+    }
+    socket.on("u/chats/messageSent", sent);
 
     return () => {
-      socket.off("u/chats/messageSent");
+      socket.off("u/chats/messageSent",sent);
     };
-  });
+  },[activeChat]);
 
+
+  /* on message not sent  */
   useEffect(() => {
     socket.on("u/chats/messageNOtSent", (data) => {
 
@@ -368,7 +340,7 @@ return ()=>{socket.off("setOffLive",setOffLive)}
     return () => {
       socket.off("u/chats/messageNotSent");
     };
-  });
+  },[]);
 
 
 
@@ -388,9 +360,45 @@ return ()=>{socket.off("setOffLive",setOffLive)}
   /* ======== */
 
   const back=()=>{
+   
     socket.emit("u/chats/setOffLive",{roomId:activeChat._id});
    
   }
+
+
+
+
+  
+
+/*   to emit Live*/
+
+  useEffect(()=>{
+const setLive=(data:any)=>{
+  if(activeChat._id===data.roomId){setIsLive(true)
+  
+  }
+  
+}
+
+socket.on("u/chats/setLive",setLive);
+return ()=>{socket.off("u/chats/setLive",setLive)}
+  },[activeChat])
+
+
+  
+/* to emit offLive */
+  useEffect(()=>{
+const setOffLive=(data:any)=>{
+if(data.roomId===activeChat._id){
+  setIsLive(false);
+  
+}
+}
+
+socket.on("u/chats/setOffLive",setOffLive);
+return ()=>{socket.off("u/chats/setOffLive",setOffLive)}
+  },[activeChat])
+
 
 
 

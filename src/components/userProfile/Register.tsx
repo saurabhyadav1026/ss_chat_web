@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../api/api";
 import { toast } from "react-toastify";
+import { GoogleLogin } from "@react-oauth/google";
 
 const Register = () => {
   const [isUsernameAvailble, setIsAvailbleUsername] = useState(false);
@@ -118,6 +119,31 @@ const Register = () => {
     );
   };
 
+
+    const verifygoogleLoggin = async (res: any) => {
+    let status=false;
+    try{  await api.post('/logging/googleAuthVerification',{token:res.credential}).
+  then((res)=>{
+    
+    if(res.data.status){status=true;
+             
+      
+    }
+else{
+  toast.warn("username or password is incorrect. 1");
+}
+});
+
+if(status){
+//   await setActiveUser();
+      navigate("/ ");
+}
+}
+catch(e){
+   toast.error("username or password is incorrect");
+}
+  }
+
   return (
     <div className="auth-card">
       <div className="app_logo auth-logo" />
@@ -129,7 +155,9 @@ const Register = () => {
       </div>
 
       <div className="auth-form">
-        <label className="auth-field">
+
+
+       {/*  <label className="auth-field">
           <span className="auth-label">Name</span>
           <input className="auth-input" name="name" onChange={updateUser} readOnly={isReadOnly} value={User.name} required />
         </label>
@@ -159,7 +187,14 @@ const Register = () => {
           Send OTP
         </button>
 
-        {otpDivVisibility ? <OtpDiv /> : null}
+        {otpDivVisibility ? <OtpDiv /> : null} */}
+
+
+ <div className="d-flex justify-content-center">
+          <GoogleLogin onSuccess={verifygoogleLoggin} />
+          <br/>
+        </div>
+
       </div>
 
       <div className="auth-link-row">

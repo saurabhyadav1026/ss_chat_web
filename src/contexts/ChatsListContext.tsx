@@ -1,5 +1,5 @@
 ﻿
-import { createContext, useContext, useEffect,useState } from 'react';
+import { createContext, useContext, useEffect,useMemo,useState } from 'react';
 import api from '../api/api';
 import UserContext from './UserContext';
 import queryClient from '@/lib/queryClient';
@@ -58,16 +58,18 @@ const [activeFriendChatRoomId, setActiveFriendChatRoomId]=useState<string|undefi
 
 
 
-const {data:activeChat,...activeChatProperties}:any =useQuery({
+/* const {data:activeChat,...activeChatProperties}:any =useQuery({
   queryKey:["activeChat",activeFriendChatRoomId],
   queryFn:()=>fetchActiveChat(activeFriendChatRoomId),
   enabled:!!activeFriendChatRoomId
 
 })
-
-
+ */
+/* 
 useEffect(()=>{
-queryClient.invalidateQueries({queryKey:["activeChat",activeFriendChatRoomId]})
+
+if(activeFriendChatRoomId && activeFriendChatRoomId!=="")queryClient.invalidateQueries({queryKey:["activeChat",activeFriendChatRoomId]})
+
 },[activeFriendChatRoomId])
 
 
@@ -75,7 +77,7 @@ queryClient.invalidateQueries({queryKey:["activeChat",activeFriendChatRoomId]})
    if(isInternetConnection && activeChat && activeChat._id?.slice(0,3)!=="new") queryClient.invalidateQueries({ queryKey: ["messages",activeChat._id] })
   }, [activeChat])
 
-
+ */
 
 
     const { data: chatsList,
@@ -87,6 +89,27 @@ queryClient.invalidateQueries({queryKey:["activeChat",activeFriendChatRoomId]})
             initialPageParam: 1,
             getNextPageParam: (lastPage) => lastPage.hasMore ? lastPage.nextPage + 1 : undefined
         })
+
+
+
+const activeChat=useMemo(()=>{
+if(!activeFriendChatRoomId || !chatsList)return null;
+ for (const page of chatsList.pages) {
+    if (page.rooms[activeFriendChatRoomId]) {
+      return page.rooms[activeFriendChatRoomId];
+    }
+  }
+  return null;
+},[activeUser,activeFriendChatRoomId , chatsList])
+
+
+
+
+  useEffect(() => {
+   if(isInternetConnection && activeChat && activeChat._id?.slice(0,3)!=="new") queryClient.invalidateQueries({ queryKey: ["messages",activeChat._id] })
+  }, [activeChat])
+
+
 
     const refreshFriendsChatsList = async() => {
         if (isInternetConnection) { await queryClient.invalidateQueries({ queryKey: ["chatsList"] })
@@ -168,6 +191,28 @@ queryClient.invalidateQueries({queryKey:["activeChat",activeFriendChatRoomId]})
 
 
 
+const updateReceiverStatus=async(roomId:string,isUserActive:boolean)=>{
+  await queryClient.setQueryData(["chatsList"], (oldData: any) => {
+    if(!oldData)return oldData;
+
+         const pages = oldData.pages.map((page: any, index: number) => {
+
+           if(! page.rooms[roomId])return page;
+           
+           return {...page ,rooms:{...page.rooms,[roomId]:{...page.rooms[roomId],receiver:{...page.rooms[roomId].receiver,isUserActive}}}}
+         })
+
+
+
+          return {
+            ...oldData,
+            pages
+        }
+
+  });   
+}
+
+
 
     useEffect(() => {
         refreshFriendsChatsList();
@@ -181,16 +226,15 @@ queryClient.invalidateQueries({queryKey:["activeChat",activeFriendChatRoomId]})
     }, [])
 
 
-
-    
+   
   useEffect(() => {
-    const receive = (data:any) => {
-    
+    const receive = (data:any) => {   
+       
             const { room ,message} = data;    
-      
-         updateChatRoom(room);   
+             updateChatRoom(room);          
           if(!activeChat || activeChat._id !==room._id ) {
             toast.info(room.receiver.name +": "+ message.text)
+            
           }
           
     }
@@ -199,14 +243,45 @@ queryClient.invalidateQueries({queryKey:["activeChat",activeFriendChatRoomId]})
     return () => {
       socket.off("u/chats/receiveMsgNotify",receive);
     };
-  },[]);
+  },[activeChat]);
  
+
+
+
+  useEffect(()=>{
+
+    const setOnline=async(data:any)=>{
+        
+await updateReceiverStatus(data.roomId,true)
+
+
+
+    }
+    socket.on("u/chats/setRoomReceiverActive",setOnline);
+      return ()=>{socket.off("u/chats/setRoomReceiverActive",setOnline)}
+
+  },[])
+
+    useEffect(()=>{
+
+    const setOffline=async(data:any)=>{
+     
+await updateReceiverStatus(data.roomId,false);
+
+    }
+    socket.on("u/chats/setRoomReceiverInActive",setOffline)
+    return ()=>{socket.off("u/chats/setRoomReceiverInActive",setOffline)}
+
+  },[])
+
+
+
 
 
 
     // to set the chatlist   yani chatroom  by getfriendList or getchatList
 
-    return < ChatsListContext.Provider value={{ chatsList, updateChatRoom, aiChatsList,activeChat ,refreshFriendsChatsList, refreshAIchatList,setActiveFriendChatRoomId}}>{children}</ChatsListContext.Provider>
+    return < ChatsListContext.Provider value={{ chatsList, updateChatRoom, updateReceiverStatus,aiChatsList,activeChat ,refreshFriendsChatsList, refreshAIchatList,setActiveFriendChatRoomId}}>{children}</ChatsListContext.Provider>
 }
 
 export default ChatsListContext;

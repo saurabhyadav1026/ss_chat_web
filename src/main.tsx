@@ -25,7 +25,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 const root = createRoot(document.getElementById('root')!);
 root.render(
   <StrictMode>
-    <PersistQueryClientProvider client={queryClient} persistOptions={persistOptions}>
+   {/*  <PersistQueryClientProvider client={queryClient} persistOptions={persistOptions}> */}
        <QueryClientProvider client={queryClient}>
     <BrowserRouter>
     <IKContext  publicKey={import.meta.env.VITE_MEDIA_PUBLIC_KEY} 
@@ -61,7 +61,7 @@ root.render(
     </BrowserRouter>
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
-    </PersistQueryClientProvider>
+    {/* </PersistQueryClientProvider> */}
   </StrictMode>
 )
 

@@ -2,7 +2,7 @@
 import { IKUpload } from "imagekitio-react";
 
 
-import { useContext,useState } from "react";
+import { useContext,useEffect,useState } from "react";
 import UserContext from "../../contexts/UserContext";
 import { useNavigate } from "react-router-dom";
 import api from "../../api/api";
@@ -14,9 +14,17 @@ import { toast } from "react-toastify";
 
 
     const navigate=useNavigate()
-const {activeUser, setActiveUser}:any=useContext(UserContext);
-const [tempUser,setTempUser]:any=useState({dp:activeUser.dp,name:activeUser.name,username:activeUser.username,about:activeUser.about});
+const {activeUser, setActiveUser,isUserLoading}:any=useContext(UserContext);
+const [tempUser,setTempUser]:any=useState({dp:null,name:"Loading....",about:"Loading...."});
 
+
+useEffect(()=>{
+if(activeUser){
+  console.log(isUserLoading)
+  console.log(activeUser)
+  setTempUser({dp:null,name:activeUser.name,about:activeUser.about})
+}
+},[activeUser])
 
 const saveProfile=()=>{
 
@@ -33,11 +41,13 @@ setActiveUser ((old:any)=>({...old,name:res.data.newname,about:res.data.newAbout
 }
 
 const changedp:any=async()=>{
-
- if(tempUser.dp.trim()===""||activeUser.dp===tempUser.dp)return;
+alert("oo")
+ if( !tempUser.dp )return;
   try{
+    const formdata=new FormData();
+    formdata.append("dp",tempUser.dp);
 
-    api.get("/users/updatedp",{params:{newDP:tempUser.dp}}).
+    api.post("/users/updatedp",formdata,{ headers: {    "Content-Type": "multipart/form-data" }}).
     then((res:any)=>{
       setActiveUser({...activeUser,["dp"]:res.data.newDP})
     })
@@ -67,21 +77,21 @@ const changedp:any=async()=>{
             <button className="user-profile-back" onClick={() => navigate(-1)}>
               Back
             </button>
-            <div className="user-profile-handle-chip">Edit @{activeUser.username}</div>
+            <div className="user-profile-handle-chip">Edit @{activeUser?activeUser.username:"Loading..."}</div>
            
           </div>
 
           <div className="user-profile-hero">
             <div className="d-flex flex-column align-items-center gap-3">
-              <img className="user-profile-avatar" src={tempUser.dp} alt="Profile" />
+              <img className="user-profile-avatar" src={tempUser.dp?URL.createObjectURL(tempUser.dp):activeUser?activeUser.dp:""} alt="Profile" />
               <div className="auth-otp edit-profile-upload w-100">
                 <span className="auth-label"></span>
-                <IKUpload
-                  fileName={activeUser._id + "_dp"}
-                  onSuccess={(res: any) => { setTempUser({...tempUser,["dp"]:res.url}); }}
-                  onError={(e: any) => { console.log(e); toast.error(e.message); }}
-                />
-
+               
+ <input
+        type="file"
+        accept="image/*"
+        onChange={(e) =>{ if(e && e.target && e.target.files)setTempUser({...tempUser,["dp"]:e.target.files[0]})}}
+      />
 <button className="user-profile-button user-profile-button--primary" onClick={() => changedp()}>
                   Save
                 </button>
@@ -102,10 +112,7 @@ const changedp:any=async()=>{
                 <input className="auth-input"  name="name" onChange={updateUser}value={tempUser.name} />
               </label>
 
-              <label className="auth-field">
-                <span className="auth-label">Username</span>
-                <input className="auth-input" name="username" readOnly={true} onChange={updateUser} value={tempUser.username} />
-              </label>
+   
 
               <label className="auth-field">
                 <span className="auth-label">About</span>

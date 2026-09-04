@@ -1,12 +1,21 @@
-import { useContext,  useEffect,  useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useContext,   useEffect,   useState } from "react";
+import { useNavigate, useParams,  } from "react-router-dom";
 import ChatsListContext from "../../../contexts/ChatsListContext";
 import SearchBar from "../../left_nav/SearchBar";
 const ChatsList = () => {
   const [searchInput, setSearchInput]: any = useState("");
-  const { chatsList, updateChatRoom}: any = useContext(ChatsListContext);
+  const { chatsList,setActiveFriendChatRoomId,updateReceiverStatus}: any = useContext(ChatsListContext);
   
+  const { page2Id } = useParams();
+
   const navigate = useNavigate();
+
+   useEffect(()=>{
+  setActiveFriendChatRoomId(page2Id)
+   
+    },[page2Id])
+
+
 
 
 
@@ -27,7 +36,7 @@ const ChatsList = () => {
       <SearchBar searchInput={searchInput} _placeholder="Search chats..." setSearchInput={setSearchInput} />
 
       <div className="list-panel__body scrollbar-only-rod">
-       {console.log(chatsList)}
+   
     { chatsList &&chatsList.pages && chatsList.pages[0].roomsIdList && chatsList.pages[0].roomsIdList.length ? (
           chatsList?.pages.map((page:any) => page.roomsIdList.map((id:any, i:number)=>{
             const u=page.rooms[id];
