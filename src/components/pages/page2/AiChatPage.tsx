@@ -27,7 +27,7 @@ if(res.data.status)setActiveRoomId(res.data.roomId);
 else navigate("/u/aichats/new")
   })
   .catch((err)=>{
-    console.log(err);
+    console.error(err);
     navigate("/u/aichats/new");
   })
     
@@ -62,7 +62,7 @@ else navigate("/u/aichats/new")
     if (activeRoomId && activeRoomId!=="new") {
      api.get("/ai/textassistance/messages",{params:{ roomId: activeRoomId}})
      .then(res=>{setMessages(res.data.messages); })
-     .catch(err=>console.log(err))
+     .catch(err=>console.error(err))
     }
     else if (activeRoomId==="new") {
       setMessages({});
@@ -88,7 +88,7 @@ else navigate("/u/aichats/new")
           return {...old,[res.data.message._id]:res.data.message}
         })
  */
-      }).catch(err=>console.log(err))
+      }).catch(err=>console.error(err))
     }
     else{
 
@@ -102,7 +102,7 @@ else navigate("/u/aichats/new")
           return {...old,[res.data.message._id]:res.data.message}
         })
 
-      }).catch(err=>console.log(err))
+      }).catch(err=>console.error(err))
 
 
 

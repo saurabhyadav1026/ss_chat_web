@@ -20,7 +20,7 @@ const ResetPassword = () => {
           if (!res.data.status) navigate("/");
         })
         .catch((err) => {
-          console.log(err);
+          console.error(err);
         });
     }
   }, [token]);

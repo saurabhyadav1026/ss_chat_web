@@ -23,7 +23,7 @@ useEffect(()=>{
 if(searchInput!==""){
   const rooms:any=[]
 Object.values(aiChatsList || {}).forEach((room:any)=>{
-  console.log(room)
+ 
 if(room.name.toLowerCase().includes(searchInput.toLowerCase()))rooms.push(room);
 })
 setChatItems(rooms)

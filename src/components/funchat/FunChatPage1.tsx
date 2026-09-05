@@ -114,8 +114,7 @@ return ()=>{funChatSocket.off("newroom")}
       <div className="list-panel__body scrollbar-only-rod">
         {chatItems.length ? (
           chatItems.map((u: any, i: any) => {
-            console.log(u)
-           
+                    
             const avatarUrl =  u.dp || u.roomDP || "";
             
             return<>

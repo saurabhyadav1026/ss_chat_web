@@ -75,7 +75,7 @@ export const verifyUser=async(username:any,password:any)=>{
    try  {await api.post(responser+'/verifyuser',{username:username,password:password})
                     .then((res)=>{rr=res.data})        
       
-    }catch(e:any){console.log(e)}
+    }catch(e:any){console.error(e)}
 return rr;
 
 }
@@ -126,7 +126,7 @@ export const sendToAI=async(activeuser:string,activechat:string,req:string)=>{
     }
 else try    {
   await api.post(responser+'/sendtoai?activeuser='+activeuser+'&&activechat='+activechat+'&&req='+req)
-}catch(e){console.log(e)}
+}catch(e){console.error(e)}
 }
 
 
@@ -168,12 +168,6 @@ export const getOtp=async (mail:string)=>{
 
 
 
-export const getMediaAuthinticator=async()=>{
-    console.log("we auth the imagekit")
-    let auth=await api.get('/get_authentiator');
-    return await auth.data;
-}
-
 
 export const setDp=async(imgurl:String)=>{
 
@@ -196,5 +190,5 @@ return data;
 
 export const  deletemsg=async(activeuser:string,activechat:string,time:string)=>{
     try{ await api(responser+'/deletemsg?activeuser='+activeuser+'&&activechat='+activechat+'&&time='+time)
-}catch(e){console.log(e)}
+}catch(e){console.error(e)}
     } 

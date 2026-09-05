@@ -21,7 +21,7 @@ const SearchList = () => {
         .get("/users/searchlist", { params: { input: searchInput } })
         .then((res: any) => setSearchList(res.data))
         .catch((err: any) => {
-          console.log(err);
+          console.error(err);
         });
     }
     else{

@@ -10,7 +10,7 @@ import { socket } from "../../../contexts/socketcontext/SocketContext.tsx";
 import ChatsListContext from "../../../contexts/ChatsListContext.tsx";
 import CallContext from "../../../contexts/CallContext.tsx";
 import { toast } from "react-toastify";
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery} from "@tanstack/react-query";
 import queryClient from "@/lib/queryClient.ts";
 
 
@@ -41,8 +41,8 @@ const ChatPage = () => {
     const { page2Id } = useParams();
 
 
-  const { activeUser ,isInternetConnection}: any = useContext(UserContext);
-  const { updateChatRoom ,activeChat , setActiveFriendChatRoomId ,refreshFriendsChatsList}: any = useContext(ChatsListContext);
+  const { activeUser }: any = useContext(UserContext);
+  const { updateChatRoom ,activeChat }: any = useContext(ChatsListContext);
   const { startCall }: any = useContext(CallContext);
   const [isLive,setIsLive]=useState<Boolean>(false);
   const chatPageRef = useRef<HTMLDivElement | null>(null);
@@ -86,8 +86,6 @@ const ChatPage = () => {
   const updateNewMessage = (message: any) => {
     queryClient.setQueryData(["messages", activeChat._id], (oldData: any) => {
       if (!oldData) return oldData;
-
-console.log(message)
       return {
         ...oldData,
         pages: oldData.pages.map((page: any, index: number) => {
@@ -163,7 +161,7 @@ setIsLive(activeChat? activeChat.isLive:false)
       api.get("/users/clearchat", { params: { roomId: activeChat._id } }).
         then((res) => {
           if (res.data.status) { };
-        }).catch((err) => console.log(err))
+        }).catch((err) => console.error(err))
     }
 
   }

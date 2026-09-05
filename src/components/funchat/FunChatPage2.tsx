@@ -68,7 +68,7 @@ useEffect(()=>{
 
   funChatSocket.on("receiveMsg",(data:any)=>{
 
-    console.log(data)
+  
 setMessages({...messages,[data._id]:data});
 setMessagesIdList([...messagesIdList,data._id] )
   })
@@ -163,7 +163,7 @@ setMessages((prev:any)=>{
               
                 { 
                     const u= messages[x];
-                    console.log(u)
+               
 
                return <React.Fragment key={u._id || i}>
               

@@ -34,8 +34,7 @@ export const CallContextProvider = ({ children }: any) => {
         const incomingCall = (data: any) => {
 
             setCallOffer(data.offer);
-            console.log("we get offer")
-            console.log(data.offer)
+           
             setActveCall(data.activeCall);
             setIsCallNotification(true)
         }

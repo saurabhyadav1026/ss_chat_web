@@ -11,24 +11,6 @@ const ChatsListContext = createContext({});
 
 
 
-const fetchActiveChat=async(roomId:any)=>{
- 
-  return await api.get("users/getroombyroomid", { params: { _id: roomId ,socketId:socket.id} })
-      .then((res) =>{ 
-        if(res.data.status) return res.data.room
-        else {
-      
-          return null;
-        }
-      }
-      )
-      .catch((err) =>{console.log(err);
-      
-          return null;
-      })
-}
-
-
 
     const fetchChatsList = async (page: number) => {
         return await api.get("/users/getchatslist?page=" + page)

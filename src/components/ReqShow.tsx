@@ -28,8 +28,7 @@ const ReqShow = (props: any) => {
   }, [dislikecolor]);
 
   const editReq = (r: any) => {
-    console.log(r)
-    return;
+      return;
   };
 
 

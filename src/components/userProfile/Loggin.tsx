@@ -1,10 +1,9 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect} from "react";
 import { GoogleLogin } from "@react-oauth/google";
 import { useNavigate } from "react-router-dom";
 import api from "../../api/api.ts";
 import UserContext from "../../contexts/UserContext.tsx";
 import { toast } from "react-toastify";
-import { LucideLoaderPinwheel } from "lucide-react";
 const Loggin = () => {
   const navigate = useNavigate();
 

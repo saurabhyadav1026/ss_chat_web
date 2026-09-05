@@ -35,7 +35,7 @@ const [isRequesting, setIsRequesting]=useState(false);
           toast.error("Invalid room code2 ");
         }
 }).catch(()=>{
-  console.log(error)
+  console.error(error)
   setIsRequesting(false);
 toast.error("Invalid room code 3");
 })

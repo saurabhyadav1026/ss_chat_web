@@ -32,7 +32,7 @@ const UserProfile = () => {
           if (res.data.status) setUser(res.data.user);
         })
         .catch((err) => {
-          console.log(err);
+          console.error(err);
         });
         setLoading(false)
   }, [username]);
@@ -46,7 +46,7 @@ const UserProfile = () => {
           if (res.data.status) setUser(res.data.user);
         })
         .catch((err) => {
-          console.log(err);
+          console.error(err);
         });
         setLoading(false)
   }, [page2Id]);

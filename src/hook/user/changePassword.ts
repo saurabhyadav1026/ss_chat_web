@@ -7,7 +7,7 @@ const responser:string=import.meta.env.VITE_API_KEY+'/users';
 let val;
     await axios.post(responser+"/create-new-password",{password:password})
         .then(res=>val=res.data)
-        .catch(err=>console.log(err))
+        .catch(err=>console.error(err))
 
         return val;
 

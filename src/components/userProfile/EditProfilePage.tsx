@@ -1,6 +1,4 @@
 
-import { IKUpload } from "imagekitio-react";
-
 
 import { useContext,useEffect,useState } from "react";
 import UserContext from "../../contexts/UserContext";
@@ -14,15 +12,13 @@ import { toast } from "react-toastify";
 
 
     const navigate=useNavigate()
-const {activeUser, setActiveUser,isUserLoading}:any=useContext(UserContext);
+const {activeUser, setActiveUser}:any=useContext(UserContext);
 const [tempUser,setTempUser]:any=useState({dp:null,name:"Loading....",about:"Loading...."});
 
 
 useEffect(()=>{
 if(activeUser){
-  console.log(isUserLoading)
-  console.log(activeUser)
-  setTempUser({dp:null,name:activeUser.name,about:activeUser.about})
+   setTempUser({dp:null,name:activeUser.name,about:activeUser.about})
 }
 },[activeUser])
 
@@ -36,7 +32,7 @@ setActiveUser ((old:any)=>({...old,name:res.data.newname,about:res.data.newAbout
 
   }).catch((err:any)=>{
   toast.error("Failed to upfdate profile.")
-    console.log(err)
+    console.error(err)
   })
 }
 
@@ -52,7 +48,7 @@ alert("oo")
       setActiveUser({...activeUser,["dp"]:res.data.newDP})
     })
   }catch(err){
-    console.log(err)
+    console.error(err)
   }
 }
 

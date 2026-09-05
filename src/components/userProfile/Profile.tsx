@@ -3,12 +3,13 @@ import { useNavigate } from "react-router-dom";
 import ChatContext from "../../contexts/chatscontext/AppVariablesContext";
 import UserContext from "../../contexts/UserContext";
 import { SettingIcon } from "../icons";
+import { Loader2Icon } from "lucide-react";
 
 const Profile = () => {
   const { setPicShow }: any = useContext(ChatContext);
   const { setLogout, activeUser}: any = useContext(UserContext);
 
-  
+  if(!activeUser)return<Loader2Icon/>
 
   const navigate = useNavigate();
 
@@ -19,6 +20,7 @@ const Profile = () => {
   const logOut = () => {
     if(setLogout())navigate("/user/login");
   };
+  
 
   return (
     <div className="user-profile-screen">

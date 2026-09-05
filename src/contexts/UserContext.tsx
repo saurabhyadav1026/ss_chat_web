@@ -27,7 +27,7 @@ export const UserContextProvider = ({ children }: any) => {
       }
       ).catch((err: Error) => {
         setInternetConnection(false);
-        console.log(err)
+        console.error(err)
         
       })
 
@@ -61,7 +61,7 @@ export const UserContextProvider = ({ children }: any) => {
 
       })
       .catch((err: any) => {
-        console.log(err)
+        console.error(err)
         return { username: 'sbhunk', name: "Loggin here", dp: "https://ik.imagekit.io/sbhtechhub/no_dp.jpg", loggin_token: "" }
       })
   }
@@ -85,7 +85,7 @@ export const UserContextProvider = ({ children }: any) => {
         if (res.data.status) {
           socket.auth = { token: res.data.token }
           socket.connect();
-          console.log(res.data.user);
+     
           return res.data.user;
         }
       })
@@ -102,7 +102,7 @@ export const UserContextProvider = ({ children }: any) => {
       }
     }
     ).catch((err: any) => {
-      console.log(err)
+      console.error(err)
       queryClient.removeQueries({ queryKey: ["activeuser"] });
       toast.info("No internet connection .so, Failed to logout completely , you should have to clear browser cookies for it.")
 

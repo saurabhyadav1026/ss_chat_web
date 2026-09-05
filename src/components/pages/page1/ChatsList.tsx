@@ -4,7 +4,7 @@ import ChatsListContext from "../../../contexts/ChatsListContext";
 import SearchBar from "../../left_nav/SearchBar";
 const ChatsList = () => {
   const [searchInput, setSearchInput]: any = useState("");
-  const { chatsList,setActiveFriendChatRoomId,updateReceiverStatus}: any = useContext(ChatsListContext);
+  const { chatsList,setActiveFriendChatRoomId}: any = useContext(ChatsListContext);
   
   const { page2Id } = useParams();
 
@@ -40,7 +40,7 @@ const ChatsList = () => {
     { chatsList &&chatsList.pages && chatsList.pages[0].roomsIdList && chatsList.pages[0].roomsIdList.length ? (
           chatsList?.pages.map((page:any) => page.roomsIdList.map((id:any, i:number)=>{
             const u=page.rooms[id];
-            console.log(u)
+     
             if(!u)return<></>
             const receiver = u.receiver || {};
             const avatarUrl = receiver.dp || u.dp || u.roomDP || "";

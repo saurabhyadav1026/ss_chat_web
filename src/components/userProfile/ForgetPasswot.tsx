@@ -14,7 +14,7 @@ const ForgetPassword = () => {
           else toast.warn("invalid email or not registered, try again with valid mail.");
         })
         .catch((err: any) => {
-          console.log(err);
+          console.error(err);
           toast.error("invalid email or not registered, try again with valid mail.");
         });
   };
